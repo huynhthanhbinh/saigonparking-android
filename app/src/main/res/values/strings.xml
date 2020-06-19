@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Places Project</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="google_maps_api">AIzaSyAzMtM_tq9piTrRzZ5J0e4fEdsnx5ZSOJ8</string>
+    <string name="title_activity_view_directions">Map</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="speech_prompt">Say something…</string>
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+</resources>

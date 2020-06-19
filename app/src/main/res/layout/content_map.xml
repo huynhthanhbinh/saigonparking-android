@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:menu="@menu/navigation_menu"
+        android:layout_gravity="start">
+    </android.support.design.widget.NavigationView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/myLayout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MapActivity"
+        tools:showIn="@layout/activity_map">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.vtb.parkingmap.support.TouchableSupportMapFragment" />
+
+
+        <com.skyfishjy.library.RippleBackground
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ripple_bg"
+            app:rb_color="#0099CC"
+            app:rb_radius="32dp"
+            app:rb_rippleAmount="4"
+            app:rb_duration="3000"
+            app:rb_scale="6">
+        </com.skyfishjy.library.RippleBackground>
+
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            style="@style/MaterialSearchBarLight"
+            app:mt_speechMode="true"
+            app:mt_hint="Search a place"
+            app:mt_maxSuggestionsCount="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchBar"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="40dp"
+            app:mt_navIconEnabled="true"
+            android:elevation="5dp"
+            android:outlineProvider="bounds"
+            app:mt_placeholder="Search a place"
+            android:imeOptions="actionDone" />
+
+        <Button
+            android:id="@+id/btn_find"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Find Parking Lot"
+            android:textColor="#FFFFFF"
+            android:background="#347474"
+            android:layout_margin="16dp"
+            android:textStyle="bold" />
+
+        <io.ghyeok.stickyswitch.widget.StickySwitch
+            android:id="@+id/sticky_switch_destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="104dp"
+            android:layout_marginRight="16dp"
+            app:ss_animationDuration="600"
+            app:ss_iconPadding="10dp"
+            app:ss_iconSize="20dp"
+            app:ss_leftIcon="@drawable/ic_off"
+            app:ss_rightIcon="@drawable/ic_on"
+            app:ss_sliderBackgroundColor="@color/colorSliderBackground"
+            app:ss_switchColor="#347474"
+            app:ss_textColor="@color/colorTextColor"
+            app:ss_textSize="12sp"
+            app:ss_animationType="curved" />
+
+        <io.ghyeok.stickyswitch.widget.StickySwitch
+            android:id="@+id/sticky_switch_draglocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="154dp"
+            android:layout_marginRight="16dp"
+            app:ss_animationDuration="600"
+            app:ss_iconPadding="10dp"
+            app:ss_iconSize="20dp"
+            app:ss_leftIcon="@drawable/ic_draglocation_on"
+            app:ss_rightIcon="@drawable/ic_draglocation_off"
+            app:ss_sliderBackgroundColor="@color/colorSliderBackground"
+            app:ss_switchColor="#347474"
+            app:ss_textColor="@color/colorTextColor"
+            app:ss_textSize="12sp"
+            app:ss_animationType="curved" />
+
+
+    </RelativeLayout>
+</android.support.v4.widget.DrawerLayout>
