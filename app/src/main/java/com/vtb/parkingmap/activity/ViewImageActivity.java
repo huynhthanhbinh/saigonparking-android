@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,7 +19,9 @@ import android.widget.Toast;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
-public class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
+import java.util.Objects;
+
+public final class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
     ImageView imgB;
     Button btnCamera;
     int REQUEST_CODE_CAMERA = 123;
@@ -32,7 +33,7 @@ public class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
         imgB = findViewById(R.id.imgViewB);
-        btnCamera = (Button) findViewById(R.id.btnImage);
+        btnCamera = findViewById(R.id.btnImage);
         Drawable drawable;
 
 
@@ -67,13 +68,7 @@ public class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
 //
 //        byte[] byteArray = baos.toByteArray();
 
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                ActivityCompat.requestPermissions(ViewImageActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
-            }
-        });
+        btnCamera.setOnClickListener(view -> ActivityCompat.requestPermissions(ViewImageActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA));
 
 
     }
@@ -92,14 +87,14 @@ public class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            bitmap = Bitmap.createScaledBitmap(bitmap, 1024, 768, false);
+            Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+            bitmap = Bitmap.createScaledBitmap(Objects.requireNonNull(bitmap), 1024, 768, false);
 
             int a = bitmap.getByteCount();
 
 
-            Bitmap scaledBitmap = scaleDown(bitmap, 500, true);
-            scaledBitmap = scaledBitmap.createScaledBitmap(bitmap, 1024, 768, false);
+            Bitmap scaledBitmap;
+            scaledBitmap = Bitmap.createScaledBitmap(bitmap, 1024, 768, false);
             int b = scaledBitmap.getByteCount();
 
 //            Toast.makeText(ViewImage.this, bitmap.getWidth() + " , " + bitmap.getHeight(), Toast.LENGTH_SHORT).show();
@@ -132,17 +127,14 @@ public class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
 //        return Bitmap.createScaledBitmap(getBitmap, width, height, false);
 //    }
 
-    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
-                                   boolean filter) {
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize, boolean filter) {
         float ratio = Math.min(
-                (float) maxImageSize / realImage.getWidth(),
-                (float) maxImageSize / realImage.getHeight());
-        int width = Math.round((float) ratio * realImage.getWidth());
-        int height = Math.round((float) ratio * realImage.getHeight());
+                maxImageSize / realImage.getWidth(),
+                maxImageSize / realImage.getHeight());
+        int width = Math.round(ratio * realImage.getWidth());
+        int height = Math.round(ratio * realImage.getHeight());
 
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
+        return Bitmap.createScaledBitmap(realImage, width, height, filter);
     }
 
 }

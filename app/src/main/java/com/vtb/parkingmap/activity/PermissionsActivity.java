@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,7 +24,9 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
-public class PermissionsActivity extends BaseSaigonParkingFragmentActivity {
+@SuppressLint("all")
+@SuppressWarnings("all")
+public final class PermissionsActivity extends BaseSaigonParkingFragmentActivity {
     //    SaigonParkingDatabase database ;
     private Button btnGrant;
 

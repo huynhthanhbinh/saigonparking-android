@@ -1,5 +1,6 @@
 package com.vtb.parkingmap.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,21 +10,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bht.parkingmap.api.proto.user.LoginRequest;
-import com.bht.parkingmap.api.proto.user.LoginResponseType;
-import com.bht.parkingmap.api.proto.user.UserRole;
-import com.vtb.parkingmap.Common;
+import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
+import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
+import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
+import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.grpc.StatusRuntimeException;
 import lombok.Getter;
 
+@SuppressLint("all")
+@SuppressWarnings("all")
 @Getter
-public class LoginActivity extends BaseSaigonParkingFragmentActivity {
+public final class LoginActivity extends BaseSaigonParkingFragmentActivity {
+
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    private AuthServiceGrpc.AuthServiceBlockingStub authServiceBlockingStub;
 
     @BindView(R.id.editusername)
     EditText _username;
@@ -37,6 +44,10 @@ public class LoginActivity extends BaseSaigonParkingFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        authServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
+                .getServiceStubs().getAuthServiceBlockingStub();
+
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -132,7 +143,7 @@ public class LoginActivity extends BaseSaigonParkingFragmentActivity {
     }
 
     public boolean validate() {
-        boolean valid = true;
+        boolean valid;
 
         String username = _username.getText().toString();
         String password = _passwordText.getText().toString();
@@ -153,37 +164,22 @@ public class LoginActivity extends BaseSaigonParkingFragmentActivity {
             return false;
         }
 
-        LoginResponseType loginResponseType = Common.userServiceBlockingStub
-                .validateLogin(LoginRequest.newBuilder()
-                        .setUsername(username)
-                        .setPassword(password)
-                        .setUserRole(UserRole.CUSTOMER)
-                        .build())
-                .getResponse();
+        ValidateRequest validateRequest = ValidateRequest.newBuilder()
+                .setUsername(username)
+                .setPassword(password)
+                .setRole(UserRole.CUSTOMER)
+                .build();
+        try {
+            ValidateResponse loginResponse = authServiceBlockingStub
+                    .validateUser(validateRequest);
+            valid = true;
 
-        Log.d("checkusernameandpassword", loginResponseType.toString());
+            Log.d("BachMap", "Sign-in successfully");
+            Log.d("BachMap", loginResponse.toString());
 
-        switch (loginResponseType) {
-            case SUCCESS:
-                valid = true;
-                _username.setError(null);
-                _passwordText.setError(null);
-                break;
-            case INCORRECT:
-                valid = false;
-                _passwordText.setError("Sai Mat Khau");
-
-                break;
-            case NON_EXIST:
-                valid = false;
-                _username.setError("Tai khoan khong ton tai");
-                break;
-            case INACTIVATED:
-                valid = false;
-                _username.setError("Tai khoan chua duoc kich hoat - can lien he tong dai ");
-                break;
-            default:
-                break;
+        } catch (StatusRuntimeException exception) {
+            valid = false;
+            Log.d("BachMap", exception.getMessage());
         }
 
         return valid;

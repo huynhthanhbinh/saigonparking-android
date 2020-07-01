@@ -16,10 +16,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
-import com.bht.parkingmap.api.util.ImageUtil;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 import com.vtb.parkingmap.models.Photos;
@@ -32,7 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public class PlaceDetailsActivity extends BaseSaigonParkingFragmentActivity {
+public final class PlaceDetailsActivity extends BaseSaigonParkingFragmentActivity {
 
     private ImageView imageView;
     private Photos photos;
@@ -138,7 +137,7 @@ public class PlaceDetailsActivity extends BaseSaigonParkingFragmentActivity {
                 break;
         }
 
-        if (!ImageUtil.isDecodedImageEmpty(imageData)) { // co hinh trong db --> load hinh moi
+        if (imageData.length != 0) { // co hinh trong db --> load hinh moi
             Bitmap imageParkingLot = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
             imageView.setImageBitmap(imageParkingLot);
         }
@@ -169,7 +168,7 @@ public class PlaceDetailsActivity extends BaseSaigonParkingFragmentActivity {
         ratingAverage = information.getRatingAverage();
         numberOfRating = information.getNumberOfRating();
 
-        imageData = ImageUtil.decodeImage(information.getImageData());
+        imageData = information.getImageData().toByteArray();
     }
 
     /**

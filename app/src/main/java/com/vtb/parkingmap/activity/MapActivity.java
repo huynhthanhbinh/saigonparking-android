@@ -32,10 +32,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
-import com.bht.parkingmap.api.proto.parkinglot.ScanningByRadiusRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -75,13 +76,13 @@ import com.google.protobuf.Int64Value;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.skyfishjy.library.RippleBackground;
-import com.vtb.parkingmap.Common;
-import com.vtb.parkingmap.ParkingListAdapter;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 import com.vtb.parkingmap.models.MyPlaces;
 import com.vtb.parkingmap.models.Results;
 import com.vtb.parkingmap.remotes.GoogleApiService;
+import com.vtb.parkingmap.support.ParkingListAdapter;
 import com.vtb.parkingmap.support.TouchableWrapper;
 
 import java.io.Serializable;
@@ -100,7 +101,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
+@SuppressLint("all")
+@SuppressWarnings("all")
+public final class MapActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
+
+    private GoogleApiService googleApiService;
+    private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     //biến lưu vị trí khi touch màn hình trước đó
     LatLng preNorthEast = null;
@@ -165,6 +171,9 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        googleApiService = ((SaigonParkingApplication) getApplicationContext()).getGoogleApiService();
+        parkingLotServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
+                .getServiceStubs().getParkingLotServiceBlockingStub();
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(
@@ -251,7 +260,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 ParkingLotResult selectedFromList = (ParkingLotResult) listView.getItemAtPosition(i);
-                parkingLot = Common.parkingLotServiceBlockingStub
+                parkingLot = parkingLotServiceBlockingStub
                         .getParkingLotById(Int64Value.newBuilder()
                                 .setValue(selectedFromList.getId())
                                 .build());
@@ -272,7 +281,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
 
             }
         });
-        mGoogleApiService = Common.getGoogleApiService();
+        mGoogleApiService = googleApiService;
 
         //Create place api
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapActivity.this);
@@ -350,7 +359,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
                                 if (option == 1) {
                                     try {
                                         Objects.requireNonNull(recommendedParkingLotResultList)
-                                                .addAll(Common.parkingLotServiceBlockingStub
+                                                .addAll(parkingLotServiceBlockingStub
                                                         .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
                                                                 .setLatitude(latLngOfPlace.latitude)
                                                                 .setLongitude(latLngOfPlace.longitude)
@@ -535,7 +544,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
                             if (option == 1) {
                                 try {
                                     Objects.requireNonNull(recommendedParkingLotResultList)
-                                            .addAll(Common.parkingLotServiceBlockingStub
+                                            .addAll(parkingLotServiceBlockingStub
                                                     .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
                                                             .setLatitude(latLngOfPlace.latitude)
                                                             .setLongitude(latLngOfPlace.longitude)
@@ -605,7 +614,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
             try {
 
                 Objects.requireNonNull(recommendedParkingLotResultList)
-                        .addAll(Common.parkingLotServiceBlockingStub
+                        .addAll(parkingLotServiceBlockingStub
                                 .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
                                         .setLatitude(mLastKnownLocation.getLatitude())
                                         .setLongitude(mLastKnownLocation.getLongitude())
@@ -781,7 +790,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
                     try {
 //                        Long loicuatoi = Long.parseLong(marker.getSnippet());
 //                        Log.d("Loicuatoi ",""+loicuatoi);
-                        parkingLot = Common.parkingLotServiceBlockingStub
+                        parkingLot = parkingLotServiceBlockingStub
                                 .getParkingLotById(Int64Value.newBuilder()
                                         .setValue(Long.parseLong(marker.getSnippet()))
                                         .build());
@@ -992,7 +1001,7 @@ public class MapActivity extends BaseSaigonParkingFragmentActivity implements On
                     preSouthWest = southWest;
 
                     try {
-                        Set<ParkingLotResult> differentSet = Common.parkingLotServiceBlockingStub
+                        Set<ParkingLotResult> differentSet = parkingLotServiceBlockingStub
                                 .getTopParkingLotInRegionOrderByDistanceWithoutName(ScanningByRadiusRequest.newBuilder()
                                         .setLatitude(center.latitude)
                                         .setLongitude(center.longitude)

@@ -16,7 +16,7 @@ import lombok.Getter;
  * Will be run first before all Activity classes
  */
 @Getter
-public class SaigonParkingApplication extends Application {
+public final class SaigonParkingApplication extends Application {
 
     private static Context applicationContext;
 

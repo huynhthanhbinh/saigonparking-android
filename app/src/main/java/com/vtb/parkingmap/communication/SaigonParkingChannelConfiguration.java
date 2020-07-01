@@ -3,8 +3,6 @@ package com.vtb.parkingmap.communication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.vtb.parkingmap.interceptor.SaigonParkingMobileInterceptor;
-
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;

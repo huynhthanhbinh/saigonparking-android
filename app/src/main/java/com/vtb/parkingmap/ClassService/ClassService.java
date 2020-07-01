@@ -19,7 +19,7 @@ import com.vtb.parkingmap.SaigonParkingApplication;
 import java.io.Serializable;
 
 
-public class ClassService extends Service {
+public final class ClassService extends Service {
 
     long idplacedetail;
     private Handler mHandler = new Handler();

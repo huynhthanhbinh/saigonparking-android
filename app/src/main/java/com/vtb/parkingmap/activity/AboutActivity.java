@@ -1,5 +1,6 @@
 package com.vtb.parkingmap.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,7 +16,9 @@ import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
 import java.util.ArrayList;
 
-public class AboutActivity extends BaseSaigonParkingFragmentActivity {
+@SuppressLint("all")
+@SuppressWarnings("all")
+public final class AboutActivity extends BaseSaigonParkingFragmentActivity {
     Button btnBack;
     ListView listView;
 

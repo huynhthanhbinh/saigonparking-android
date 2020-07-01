@@ -1,12 +1,15 @@
 package com.vtb.parkingmap.database;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
-public class SaigonParkingDatabase extends SQLiteOpenHelper {
+@SuppressLint("all")
+@SuppressWarnings("all")
+public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
     public SaigonParkingDatabase(@Nullable Context context,
                                  @Nullable String name,

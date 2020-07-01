@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +19,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import lombok.Getter;
 
+@SuppressLint("all")
+@SuppressWarnings("all")
 @Getter
-public class SignupActivity extends BaseSaigonParkingFragmentActivity {
+public final class SignupActivity extends BaseSaigonParkingFragmentActivity {
     private static final String TAG = "SignupActivity";
 
     @BindView(R.id.input_name)

@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,9 +20,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
-import com.bht.parkingmap.api.proto.parkinglot.ScanningByRadiusRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -34,12 +36,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.ClassService.ClassService;
-import com.vtb.parkingmap.Common;
-import com.vtb.parkingmap.ParkingListAdapter;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 import com.vtb.parkingmap.directionhelpers.FetchURL;
 import com.vtb.parkingmap.directionhelpers.TaskLoadedCallback;
+import com.vtb.parkingmap.support.ParkingListAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,8 +53,12 @@ import java.util.stream.Collectors;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 
+@SuppressLint("all")
+@SuppressWarnings("all")
+public final class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TaskLoadedCallback {
 
-public class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TaskLoadedCallback {
+    private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+
     private GoogleMap mMap;
     private View mapView;
     private MarkerOptions place1, place2, place3;
@@ -154,7 +160,8 @@ public class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        parkingLotServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
+                .getServiceStubs().getParkingLotServiceBlockingStub();
 
         Intent intent = getIntent();
         points = new ArrayList<>();
@@ -413,7 +420,7 @@ public class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity
             recommendedParkingLotResultList = new LinkedList<>();
 
             Objects.requireNonNull(recommendedParkingLotResultList)
-                    .addAll(Common.parkingLotServiceBlockingStub
+                    .addAll(parkingLotServiceBlockingStub
                             .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
                                     .setLatitude(placedetaillat)
                                     .setLongitude(placedetaillong)
@@ -456,7 +463,7 @@ public class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity
                 public void onClick(DialogInterface dialog, int which) {
                     ParkingLot parkingLot;
                     ParkingLotResult selectedFromList = (ParkingLotResult) adapter.getItem(which);
-                    parkingLot = Common.parkingLotServiceBlockingStub
+                    parkingLot = parkingLotServiceBlockingStub
                             .getParkingLotById(Int64Value.newBuilder()
                                     .setValue(selectedFromList.getId())
                                     .build());

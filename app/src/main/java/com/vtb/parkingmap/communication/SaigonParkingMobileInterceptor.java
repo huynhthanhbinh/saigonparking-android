@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.interceptor;
+package com.vtb.parkingmap.communication;
 
 import android.content.Context;
 

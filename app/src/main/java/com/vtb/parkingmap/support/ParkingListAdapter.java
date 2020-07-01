@@ -1,5 +1,6 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.support;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -10,7 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
+import com.vtb.parkingmap.R;
 
 import java.util.List;
 import java.util.Locale;
@@ -19,7 +21,8 @@ import java.util.Objects;
 /**
  * Created by User on 3/14/2017.
  */
-
+@SuppressLint("all")
+@SuppressWarnings("all")
 public class ParkingListAdapter extends ArrayAdapter<ParkingLotResult> {
 
     private static final String TAG = "ParkingListAdapter";
