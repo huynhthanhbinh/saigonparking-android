@@ -22,7 +22,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
     private static final String REFRESH_TOKEN_KEY = "refresh_token";
 
     @Getter
-    private Map<String, String> keyValueMap;
+    private Map<String, String> keyValueMap = new HashMap<>();
 
     public SaigonParkingDatabase(@Nullable Context context,
                                  @Nullable String name,
@@ -60,6 +60,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 " SP_KEY NVARCHAR(100) PRIMARY KEY, " +
                 " SP_VALUE NVARCHAR(1000) " +
                 " )");
+        keyValueMap = getAllRows();
     }
 
     public void saveNewLoginInformation(String username, String accessToken, String refreshToken) {

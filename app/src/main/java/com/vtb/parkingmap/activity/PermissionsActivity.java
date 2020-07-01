@@ -1,7 +1,6 @@
 package com.vtb.parkingmap.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,9 +23,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
-@SuppressLint("all")
-@SuppressWarnings("all")
-public final class PermissionsActivity extends BaseSaigonParkingFragmentActivity {
+public class PermissionsActivity extends BaseSaigonParkingFragmentActivity {
     //    SaigonParkingDatabase database ;
     private Button btnGrant;
 
@@ -40,9 +37,16 @@ public final class PermissionsActivity extends BaseSaigonParkingFragmentActivity
         setContentView(R.layout.activity_permissions);
 
         if (ContextCompat.checkSelfPermission(PermissionsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
-            finish();
-            return;
+
+            if (saigonParkingDatabase.getKeyValueMap().size() == 3) { /* BachMap moi vao */
+                startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+                finish();
+                return;
+            } else { /* BachMapKoChoVao */
+                startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
+                finish();
+                return;
+            }
         }
 
         btnGrant = findViewById(R.id.btn_grant);
