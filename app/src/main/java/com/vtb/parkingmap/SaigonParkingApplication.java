@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
+import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 import com.vtb.parkingmap.remotes.RetrofitBuilder;
 
@@ -22,6 +23,7 @@ public final class SaigonParkingApplication extends Application {
 
     private static Context applicationContext;
 
+    private SaigonParkingExceptionHandler saigonParkingExceptionHandler = new SaigonParkingExceptionHandler(this);
     private SaigonParkingDatabase saigonParkingDatabase = new SaigonParkingDatabase(this, "saigonparking.sqlite", null, 1);
     private SaigonParkingServiceStubs serviceStubs = new SaigonParkingServiceStubs(this);
     private GoogleApiService googleApiService = RetrofitBuilder.builder("https://maps.googleapis.com/").create(GoogleApiService.class);

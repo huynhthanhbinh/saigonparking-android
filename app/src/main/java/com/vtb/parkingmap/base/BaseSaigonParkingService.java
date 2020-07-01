@@ -5,6 +5,7 @@ import android.app.Service;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
+import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 
 /**
@@ -14,6 +15,7 @@ import com.vtb.parkingmap.remotes.GoogleApiService;
  */
 public abstract class BaseSaigonParkingService extends Service {
 
+    protected SaigonParkingExceptionHandler saigonParkingExceptionHandler;
     protected SaigonParkingDatabase saigonParkingDatabase;
     protected SaigonParkingServiceStubs serviceStubs;
     protected GoogleApiService googleApiService;
@@ -21,6 +23,7 @@ public abstract class BaseSaigonParkingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        saigonParkingExceptionHandler = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingExceptionHandler();
         saigonParkingDatabase = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingDatabase();
         serviceStubs = ((SaigonParkingApplication) getApplicationContext()).getServiceStubs();
         googleApiService = ((SaigonParkingApplication) getApplicationContext()).getGoogleApiService();

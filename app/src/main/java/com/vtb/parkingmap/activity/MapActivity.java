@@ -96,6 +96,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
+import io.grpc.StatusRuntimeException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -382,6 +383,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                         ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(a));
                                         listView.setAdapter(adapter);
 
+                                    } catch (StatusRuntimeException exception) {
+                                        saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
                                     } catch (Exception e) {
                                         Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
@@ -565,6 +568,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                     }
                                     ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
                                     listView.setAdapter(adapter);
+                                } catch (StatusRuntimeException exception) {
+                                    saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
                                 } catch (Exception e) {
                                     Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
@@ -640,6 +645,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 listView.setAdapter(adapter);
 
 
+            } catch (StatusRuntimeException exception) {
+                saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
             } catch (Exception e) {
 
                 Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -802,6 +809,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                         }
                         startActivity(intent);
 
+                    } catch (StatusRuntimeException exception) {
+                        saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
                     } catch (Exception e) {
                         Toast.makeText(MapActivity.this, "co loi load thong tin" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d("loicuatoi", e.getCause() + "" + Long.parseLong(marker.getSnippet()));
@@ -1013,6 +1022,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                         setAllMarkerParkingLot(differentSet);
                         parkingLotResultSet.addAll(differentSet);
 
+                    } catch (StatusRuntimeException exception) {
+                        saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
                     } catch (Exception e) {
                         Toast.makeText(MapActivity.this, "ERROR keo man hinh" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
