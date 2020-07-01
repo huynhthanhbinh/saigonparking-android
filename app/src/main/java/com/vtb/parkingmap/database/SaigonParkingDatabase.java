@@ -15,6 +15,12 @@ import lombok.Getter;
 
 @SuppressLint("all")
 @SuppressWarnings("all")
+/**
+ *
+ * Implement all necessary database queries
+ *
+ * @author bvt
+ */
 public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
     private static final String USERNAME_KEY = "username";

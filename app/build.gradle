@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.iteyes.placesproject"
+        applicationId "com.saigonparking.mobile"
         minSdkVersion 24
         targetSdkVersion 27
         versionCode 1

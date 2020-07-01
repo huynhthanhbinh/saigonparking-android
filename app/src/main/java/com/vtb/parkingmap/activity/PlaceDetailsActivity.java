@@ -20,7 +20,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
 
@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public final class PlaceDetailsActivity extends BaseSaigonParkingFragmentActivity {
+public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private ImageView imageView;
     private Photos photos;

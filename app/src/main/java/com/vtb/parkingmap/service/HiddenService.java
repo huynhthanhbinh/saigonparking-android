@@ -1,8 +1,7 @@
-package com.vtb.parkingmap.ClassService;
+package com.vtb.parkingmap.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -14,12 +13,12 @@ import android.widget.Toast;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.SaigonParkingApplication;
+import com.vtb.parkingmap.base.BaseSaigonParkingService;
 
 import java.io.Serializable;
 
 
-public final class ClassService extends Service {
+public final class HiddenService extends BaseSaigonParkingService {
 
     long idplacedetail;
     private Handler mHandler = new Handler();
@@ -30,8 +29,7 @@ public final class ClassService extends Service {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        parkingLotServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
-                .getServiceStubs().getParkingLotServiceBlockingStub();
+        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
     }
 
     private Runnable mToastRunnable = new Runnable() {
@@ -39,9 +37,9 @@ public final class ClassService extends Service {
         public void run() {
 
             if (parkingLotServiceBlockingStub.checkAvailability(Int64Value.of(idplacedetail)).getValue()) {
-                Toast.makeText(ClassService.this, "Còn chỗ nha " + idplacedetail, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HiddenService.this, "Còn chỗ nha " + idplacedetail, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(ClassService.this, "Hết chỗ rồi " + idplacedetail, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HiddenService.this, "Hết chỗ rồi " + idplacedetail, Toast.LENGTH_SHORT).show();
                 addNotification();
                 Intent intent = new Intent();
                 intent.setAction("dialogFlag.Broadcast");
@@ -61,9 +59,9 @@ public final class ClassService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(ClassService.this, "Stop Service", Toast.LENGTH_SHORT).show();
+        Toast.makeText(HiddenService.this, "Stop Service", Toast.LENGTH_SHORT).show();
         mHandler.removeCallbacks(mToastRunnable);
-        Intent myIntent = new Intent(ClassService.this, ClassService.class);
+        Intent myIntent = new Intent(HiddenService.this, HiddenService.class);
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
         stopService(myIntent);
         super.onDestroy();

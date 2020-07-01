@@ -14,6 +14,8 @@ import lombok.Getter;
 /**
  * Entry point of android application
  * Will be run first before all Activity classes
+ *
+ * @author bht
  */
 @Getter
 public final class SaigonParkingApplication extends Application {

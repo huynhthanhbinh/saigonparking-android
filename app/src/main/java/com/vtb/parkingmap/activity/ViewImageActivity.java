@@ -17,11 +17,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import java.util.Objects;
 
-public final class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
+public final class ViewImageActivity extends BaseSaigonParkingActivity {
     ImageView imgB;
     Button btnCamera;
     int REQUEST_CODE_CAMERA = 123;

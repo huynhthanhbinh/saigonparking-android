@@ -18,6 +18,11 @@ import io.grpc.android.AndroidChannelBuilder;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import lombok.Getter;
 
+/**
+ * Channel Configuration for GRPC communication
+ *
+ * @author bht
+ */
 public final class SaigonParkingChannelConfiguration {
 
     private final Context applicationContext;

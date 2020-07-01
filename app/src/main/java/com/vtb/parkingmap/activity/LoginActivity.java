@@ -15,8 +15,7 @@ import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.SaigonParkingApplication;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +25,7 @@ import lombok.Getter;
 @SuppressLint("all")
 @SuppressWarnings("all")
 @Getter
-public final class LoginActivity extends BaseSaigonParkingFragmentActivity {
+public final class LoginActivity extends BaseSaigonParkingActivity {
 
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -45,8 +44,7 @@ public final class LoginActivity extends BaseSaigonParkingFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        authServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
-                .getServiceStubs().getAuthServiceBlockingStub();
+        authServiceBlockingStub = serviceStubs.getAuthServiceBlockingStub();
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);

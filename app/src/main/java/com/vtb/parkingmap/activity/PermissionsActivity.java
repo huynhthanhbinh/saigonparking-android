@@ -21,9 +21,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
-public class PermissionsActivity extends BaseSaigonParkingFragmentActivity {
+public class PermissionsActivity extends BaseSaigonParkingActivity {
     //    SaigonParkingDatabase database ;
     private Button btnGrant;
 

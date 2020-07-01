@@ -17,6 +17,8 @@ import lombok.Getter;
  * Please be aware of 2 types of stub:
  * + stub:         asynchronous stub
  * + blockingStub:  synchronous stub
+ *
+ * @author bht
  */
 @Getter
 public final class SaigonParkingServiceStubs {

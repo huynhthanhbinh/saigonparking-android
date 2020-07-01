@@ -20,6 +20,8 @@ import lombok.AllArgsConstructor;
  * Before every request be sent,
  * Interceptor will intercept the request
  * For example: add Authorization Header into each request
+ *
+ * @author bht
  */
 @AllArgsConstructor
 public final class SaigonParkingMobileInterceptor implements ClientInterceptor {

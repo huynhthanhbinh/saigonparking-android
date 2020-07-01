@@ -35,12 +35,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 import com.google.protobuf.Int64Value;
-import com.vtb.parkingmap.ClassService.ClassService;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.SaigonParkingApplication;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.directionhelpers.FetchURL;
 import com.vtb.parkingmap.directionhelpers.TaskLoadedCallback;
+import com.vtb.parkingmap.service.HiddenService;
 import com.vtb.parkingmap.support.ParkingListAdapter;
 
 import java.io.Serializable;
@@ -55,7 +54,7 @@ import io.ghyeok.stickyswitch.widget.StickySwitch;
 
 @SuppressLint("all")
 @SuppressWarnings("all")
-public final class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TaskLoadedCallback {
 
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
@@ -160,8 +159,7 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentAc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parkingLotServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
-                .getServiceStubs().getParkingLotServiceBlockingStub();
+        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
 
         Intent intent = getIntent();
         points = new ArrayList<>();
@@ -201,7 +199,7 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentAc
         IntentFilter filter = new IntentFilter("dialogFlag.Broadcast");
         registerReceiver(broadcast, filter);
         //Start service
-        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, ClassService.class);
+        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, HiddenService.class);
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
         startService(myIntent);
 
@@ -406,7 +404,7 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentAc
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, ClassService.class);
+        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, HiddenService.class);
         unregisterReceiver(broadcast);
         stopService(myIntent);
     }
@@ -515,7 +513,7 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentAc
     @Override
     protected void onResume() {
         super.onResume();
-        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, ClassService.class);
+        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, HiddenService.class);
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
         startService(myIntent);
     }

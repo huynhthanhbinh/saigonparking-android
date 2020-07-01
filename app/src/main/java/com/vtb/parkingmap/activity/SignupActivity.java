@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +22,7 @@ import lombok.Getter;
 @SuppressLint("all")
 @SuppressWarnings("all")
 @Getter
-public final class SignupActivity extends BaseSaigonParkingFragmentActivity {
+public final class SignupActivity extends BaseSaigonParkingActivity {
     private static final String TAG = "SignupActivity";
 
     @BindView(R.id.input_name)

@@ -77,8 +77,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.skyfishjy.library.RippleBackground;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.SaigonParkingApplication;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.models.MyPlaces;
 import com.vtb.parkingmap.models.Results;
 import com.vtb.parkingmap.remotes.GoogleApiService;
@@ -103,9 +102,8 @@ import retrofit2.Response;
 
 @SuppressLint("all")
 @SuppressWarnings("all")
-public final class MapActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
+public final class MapActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
 
-    private GoogleApiService googleApiService;
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     //biến lưu vị trí khi touch màn hình trước đó
@@ -171,9 +169,8 @@ public final class MapActivity extends BaseSaigonParkingFragmentActivity impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        googleApiService = ((SaigonParkingApplication) getApplicationContext()).getGoogleApiService();
-        parkingLotServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
-                .getServiceStubs().getParkingLotServiceBlockingStub();
+
+        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(

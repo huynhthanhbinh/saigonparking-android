@@ -63,8 +63,8 @@
             android:name=".activity.MapActivity"
             android:label="@string/title_activity_map"
             android:theme="@style/AppTheme.TransparentTheme" />
-        <service android:name=".ClassService.ClassService">
-        </service>
+
+        <service android:name=".service.HiddenService"></service>
     </application>
 
 </manifest>

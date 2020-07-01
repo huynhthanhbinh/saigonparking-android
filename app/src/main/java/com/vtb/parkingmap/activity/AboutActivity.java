@@ -12,13 +12,13 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import java.util.ArrayList;
 
 @SuppressLint("all")
 @SuppressWarnings("all")
-public final class AboutActivity extends BaseSaigonParkingFragmentActivity {
+public final class AboutActivity extends BaseSaigonParkingActivity {
     Button btnBack;
     ListView listView;
 
