@@ -175,7 +175,8 @@ public final class LoginActivity extends BaseSaigonParkingFragmentActivity {
             valid = true;
 
             Log.d("BachMap", "Sign-in successfully");
-            Log.d("BachMap", loginResponse.toString());
+
+            saigonParkingDatabase.saveNewLoginInformation(username, loginResponse.getAccessToken(), loginResponse.getRefreshToken());
 
         } catch (StatusRuntimeException exception) {
             valid = false;

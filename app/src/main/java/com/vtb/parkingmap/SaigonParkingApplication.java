@@ -31,6 +31,6 @@ public final class SaigonParkingApplication extends Application {
         Log.d("BachMap", "onCreate: SaigonParkingApplication");
 
         /* Init all configurations for android mobile apps */
-        // ...
+        saigonParkingDatabase.createDatabaseIfNotExist();
     }
 }
