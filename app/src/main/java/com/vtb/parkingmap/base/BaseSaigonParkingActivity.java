@@ -1,5 +1,6 @@
 package com.vtb.parkingmap.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,5 +30,17 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
         saigonParkingDatabase = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingDatabase();
         serviceStubs = ((SaigonParkingApplication) getApplicationContext()).getServiceStubs();
         googleApiService = ((SaigonParkingApplication) getApplicationContext()).getGoogleApiService();
+    }
+
+    public void reload() {
+        overridePendingTransition(0, 0);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
+    public void changeActivity(Class<? extends BaseSaigonParkingActivity> nextActivityClass) {
+        startActivity(new Intent(this, nextActivityClass));
     }
 }

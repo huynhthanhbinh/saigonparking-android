@@ -23,10 +23,10 @@ public final class SaigonParkingApplication extends Application {
 
     private static Context applicationContext;
 
-    private SaigonParkingExceptionHandler saigonParkingExceptionHandler = new SaigonParkingExceptionHandler(this);
     private SaigonParkingDatabase saigonParkingDatabase = new SaigonParkingDatabase(this, "saigonparking.sqlite", null, 1);
     private SaigonParkingServiceStubs serviceStubs = new SaigonParkingServiceStubs(this);
     private GoogleApiService googleApiService = RetrofitBuilder.builder("https://maps.googleapis.com/").create(GoogleApiService.class);
+    private SaigonParkingExceptionHandler saigonParkingExceptionHandler = new SaigonParkingExceptionHandler(this);
 
     @Override
     public void onCreate() {

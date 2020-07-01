@@ -3,7 +3,13 @@ package com.vtb.parkingmap.handler;
 import android.content.Context;
 import android.util.Log;
 
+import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
+import com.google.protobuf.Empty;
+import com.vtb.parkingmap.SaigonParkingApplication;
+import com.vtb.parkingmap.activity.PermissionsActivity;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
+import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
+import com.vtb.parkingmap.database.SaigonParkingDatabase;
 
 import io.grpc.StatusRuntimeException;
 
@@ -16,9 +22,13 @@ import io.grpc.StatusRuntimeException;
 public final class SaigonParkingExceptionHandler {
 
     private final Context applicationContext;
+    private SaigonParkingDatabase saigonParkingDatabase;
+    private SaigonParkingServiceStubs saigonParkingServiceStubs;
 
     public SaigonParkingExceptionHandler(Context applicationContext) {
         this.applicationContext = applicationContext;
+        saigonParkingDatabase = ((SaigonParkingApplication) applicationContext).getSaigonParkingDatabase();
+        saigonParkingServiceStubs = ((SaigonParkingApplication) applicationContext).getServiceStubs();
     }
 
     public void handleCommunicationException(StatusRuntimeException exception, BaseSaigonParkingActivity currentActivity) {
@@ -28,17 +38,43 @@ public final class SaigonParkingExceptionHandler {
                         internalErrorCode, currentActivity.getClass().getSimpleName()));
 
         if ("SPE#00001".equals(internalErrorCode)) {
-            handleExpiredToken();
+            handleExpiredToken(currentActivity);
         } else {
-            handleUnknownException();
+            handleUnknownException(currentActivity);
         }
     }
 
-    private void handleExpiredToken() {
+    private void handleExpiredToken(BaseSaigonParkingActivity currentActivity) {
         Log.d("BachMap", "onHandleExpiredToken");
+        saigonParkingDatabase.deleteAccessToken();
+
+        try {
+            RefreshTokenResponse refreshTokenResponse = saigonParkingServiceStubs
+                    .getAuthServiceBlockingStub().generateNewToken(Empty.getDefaultInstance());
+
+            if (!refreshTokenResponse.getRefreshToken().isEmpty()) {
+                saigonParkingDatabase.updateRefreshToken(refreshTokenResponse.getRefreshToken());
+            }
+
+            saigonParkingDatabase.saveNewAccessToken(refreshTokenResponse.getAccessToken());
+            //currentActivity.reload();
+
+        } catch (StatusRuntimeException exception) {
+            String internalErrorCode = exception.getStatus().getDescription();
+
+            /* refresh token is expired or refresh token is invalid */
+            if ("SPE#00001".equals(internalErrorCode) || "SPE#00007".equals(internalErrorCode)) {
+
+                /* BachMap xoa het database cu nha !!! */
+                saigonParkingDatabase.emptyTable();
+
+                /* BachMap bat user dang nhap lai: back to login activity */
+                currentActivity.changeActivity(PermissionsActivity.class);
+            }
+        }
     }
 
-    private void handleUnknownException() {
+    private void handleUnknownException(BaseSaigonParkingActivity currentActivity) {
         Log.d("BachMap", "onHandleUnknownException");
     }
 }

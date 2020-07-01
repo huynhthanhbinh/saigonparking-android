@@ -108,6 +108,34 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 .format("DELETE FROM SAIGON_PARKING_TABLE WHERE SP_KEY= '%s'", key));
     }
 
+    public void deleteAccessToken() {
+        deleteRow(ACCESS_TOKEN_KEY);
+        keyValueMap = getAllRows();
+        keyValueMap.forEach((key, value) ->
+                Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
+    }
+
+    public void updateRefreshToken(String newRefreshToken) {
+        updateRow(REFRESH_TOKEN_KEY, newRefreshToken);
+        keyValueMap = getAllRows();
+        keyValueMap.forEach((key, value) ->
+                Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
+    }
+
+    public void saveNewAccessToken(String newAccessToken) {
+        insertRow(ACCESS_TOKEN_KEY, newAccessToken);
+        keyValueMap = getAllRows();
+        keyValueMap.forEach((key, value) ->
+                Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
+    }
+
+    public void emptyTable() {
+        queryData("DELETE FROM SAIGON_PARKING_TABLE WHERE SP_KEY <> ''");
+        keyValueMap = getAllRows();
+        keyValueMap.forEach((key, value) ->
+                Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
+    }
+
     private Map<String, String> getAllRows() {
         Cursor cursor = getWritableDatabase()
                 .rawQuery("SELECT * FROM SAIGON_PARKING_TABLE", null);
