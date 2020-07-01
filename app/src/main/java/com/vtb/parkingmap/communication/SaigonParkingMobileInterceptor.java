@@ -5,6 +5,8 @@ import android.content.Context;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 
+import java.util.Map;
+
 import io.grpc.CallOptions;
 import io.grpc.Channel;
 import io.grpc.ClientCall;
@@ -44,6 +46,25 @@ public final class SaigonParkingMobileInterceptor implements ClientInterceptor {
 
     private String getCurrentToken() {
         SaigonParkingDatabase database = ((SaigonParkingApplication) applicationContext).getSaigonParkingDatabase();
-        return "";
+
+        Map<String, String> keyValueMap = database.getKeyValueMap();
+        boolean hasAccessToken = keyValueMap.containsKey(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+        boolean hasRefreshToken = keyValueMap.containsKey(SaigonParkingDatabase.REFRESH_TOKEN_KEY);
+
+        /* 2 cases:
+         - already logout, not login yet --> all row had been deleted from database
+         - ExpiredRefreshTokenException --> log out user and delete all rows from database */
+        if (database.getKeyValueMap().size() == 0 || !hasRefreshToken) {
+            return "";
+        }
+
+        /* ExpiredAccessTokenException --> delete old accessToken */
+        /* accessToken was expired and had already been deleted --> sendRefreshToken */
+        if (!hasAccessToken) {
+            return keyValueMap.get(SaigonParkingDatabase.REFRESH_TOKEN_KEY);
+        }
+
+        /* has accessToken and accessToken is valid */
+        return keyValueMap.get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
     }
 }

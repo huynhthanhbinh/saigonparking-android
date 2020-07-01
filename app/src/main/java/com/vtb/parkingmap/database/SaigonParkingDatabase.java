@@ -21,13 +21,13 @@ import lombok.Getter;
  *
  * @author bvt
  */
+@Getter
 public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
     private static final String USERNAME_KEY = "username";
-    private static final String ACCESS_TOKEN_KEY = "access_token";
-    private static final String REFRESH_TOKEN_KEY = "refresh_token";
+    public static final String ACCESS_TOKEN_KEY = "access_token";
+    public static final String REFRESH_TOKEN_KEY = "refresh_token";
 
-    @Getter
     private Map<String, String> keyValueMap = new HashMap<>();
 
     public SaigonParkingDatabase(@Nullable Context context,
