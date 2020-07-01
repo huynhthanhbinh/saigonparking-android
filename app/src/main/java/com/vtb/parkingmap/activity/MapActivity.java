@@ -1,4 +1,4 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
@@ -75,7 +75,10 @@ import com.google.protobuf.Int64Value;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.skyfishjy.library.RippleBackground;
-import com.vtb.parkingmap.base.BaseParkingMapFragmentActivity;
+import com.vtb.parkingmap.Common;
+import com.vtb.parkingmap.ParkingListAdapter;
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 import com.vtb.parkingmap.models.MyPlaces;
 import com.vtb.parkingmap.models.Results;
 import com.vtb.parkingmap.remotes.GoogleApiService;
@@ -97,7 +100,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapActivity extends BaseParkingMapFragmentActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
+public class MapActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
 
     //biến lưu vị trí khi touch màn hình trước đó
     LatLng preNorthEast = null;

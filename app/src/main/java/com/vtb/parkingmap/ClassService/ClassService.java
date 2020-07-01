@@ -11,9 +11,10 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.google.protobuf.Int64Value;
-import com.vtb.parkingmap.Common;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 
 import java.io.Serializable;
 
@@ -23,16 +24,21 @@ public class ClassService extends Service {
     long idplacedetail;
     private Handler mHandler = new Handler();
 
+    ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        parkingLotServiceBlockingStub = ((SaigonParkingApplication) getApplicationContext())
+                .getServiceStubs().getParkingLotServiceBlockingStub();
     }
 
     private Runnable mToastRunnable = new Runnable() {
         @Override
         public void run() {
-            if (Common.parkingLotServiceBlockingStub.checkAvailability(Int64Value.of(idplacedetail)).getValue()) {
+
+            if (parkingLotServiceBlockingStub.checkAvailability(Int64Value.of(idplacedetail)).getValue()) {
                 Toast.makeText(ClassService.this, "Còn chỗ nha " + idplacedetail, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(ClassService.this, "Hết chỗ rồi " + idplacedetail, Toast.LENGTH_SHORT).show();

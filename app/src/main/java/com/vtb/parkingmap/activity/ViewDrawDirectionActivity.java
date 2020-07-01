@@ -1,15 +1,18 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +34,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.ClassService.ClassService;
-import com.vtb.parkingmap.base.BaseParkingMapFragmentActivity;
+import com.vtb.parkingmap.Common;
+import com.vtb.parkingmap.ParkingListAdapter;
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 import com.vtb.parkingmap.directionhelpers.FetchURL;
 import com.vtb.parkingmap.directionhelpers.TaskLoadedCallback;
 
@@ -46,7 +52,7 @@ import java.util.stream.Collectors;
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 
 
-public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public class ViewDrawDirectionActivity extends BaseSaigonParkingFragmentActivity implements OnMapReadyCallback, TaskLoadedCallback {
     private GoogleMap mMap;
     private View mapView;
     private MarkerOptions place1, place2, place3;
@@ -94,11 +100,11 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
 //            Toast.makeText(ViewDrawDirection.this, "" + distance, Toast.LENGTH_SHORT).show();
             place1 = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("My Location");
             if (distance < 500 && flag_distance500 == 1) {
-                Toast.makeText(ViewDrawDirection.this, "Đã đến nơi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewDrawDirectionActivity.this, "Đã đến nơi", Toast.LENGTH_SHORT).show();
                 if (myposition3lat != tmp) {
                     double distancewalk = SphericalUtil.computeDistanceBetween(new LatLng(myposition3lat, myposition3long), new LatLng(place2.getPosition().latitude, place2.getPosition().longitude));
                     if (distancewalk < 500) {
-                        new FetchURL(ViewDrawDirection.this).execute(getUrl(place1.getPosition(), place3.getPosition(), "walking"), "walking");
+                        new FetchURL(ViewDrawDirectionActivity.this).execute(getUrl(place1.getPosition(), place3.getPosition(), "walking"), "walking");
                     } else {
                         flag_distance500 = 0;
                     }
@@ -106,13 +112,13 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
                 flag_reached = 0;
             }
             if (flag_distance500 == 1 && flag_reached == 0 && myposition3lat != tmp) {
-                new FetchURL(ViewDrawDirection.this).execute(getUrl(place1.getPosition(), place3.getPosition(), "walking"), "walking");
+                new FetchURL(ViewDrawDirectionActivity.this).execute(getUrl(place1.getPosition(), place3.getPosition(), "walking"), "walking");
             }
             if (flag_Find_Destination == 0 && flag_reached == 1) {
                 mLastLocation.set(location);
-                new FetchURL(ViewDrawDirection.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+                new FetchURL(ViewDrawDirectionActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
             } else if (flag_Find_Destination == 1 && flag_distance500 == 0) {
-                new FetchURL(ViewDrawDirection.this).execute(getUrl(place1.getPosition(), place3.getPosition(), "walking"), "walking");
+                new FetchURL(ViewDrawDirectionActivity.this).execute(getUrl(place1.getPosition(), place3.getPosition(), "walking"), "walking");
             }
             if (flag_reached == 0 && flag_Find_Destination == 0 && myposition3lat != tmp) {
                 currentPolyline.remove();
@@ -188,7 +194,7 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
         IntentFilter filter = new IntentFilter("dialogFlag.Broadcast");
         registerReceiver(broadcast, filter);
         //Start service
-        Intent myIntent = new Intent(ViewDrawDirection.this, ClassService.class);
+        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, ClassService.class);
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
         startService(myIntent);
 
@@ -198,7 +204,7 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
         getDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ViewDrawDirection.this, "Test Service", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewDrawDirectionActivity.this, "Test Service", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -235,17 +241,17 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
             public void onSelectedChange(@NonNull StickySwitch.Direction direction, @NonNull String text) {
                 if (myposition3lat != tmp) {
                     if (stickySwitchDestination.getDirection() == StickySwitch.Direction.RIGHT && flag_reached == 1) {
-                        Toast.makeText(ViewDrawDirection.this, "Please reach Parking Plot!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewDrawDirectionActivity.this, "Please reach Parking Plot!", Toast.LENGTH_SHORT).show();
                         stickySwitchDestination.setDirection(StickySwitch.Direction.LEFT);
                     } else if (stickySwitchDestination.getDirection() == StickySwitch.Direction.RIGHT && flag_reached == 0) {
-                        new FetchURL(ViewDrawDirection.this).execute(getUrl(place2.getPosition(), place3.getPosition(), "walking"), "walking");
+                        new FetchURL(ViewDrawDirectionActivity.this).execute(getUrl(place2.getPosition(), place3.getPosition(), "walking"), "walking");
                         flag_Find_Destination = 1;
                     } else if (stickySwitchDestination.getDirection() == StickySwitch.Direction.LEFT && flag_reached == 0) {
                         stickySwitchDestination.setDirection(StickySwitch.Direction.RIGHT);
                     }
                 } else {
                     if (stickySwitchDestination.getDirection() == StickySwitch.Direction.RIGHT) {
-                        Toast.makeText(ViewDrawDirection.this, "Please open option Find Destination!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewDrawDirectionActivity.this, "Please open option Find Destination!", Toast.LENGTH_SHORT).show();
                         stickySwitchDestination.setDirection(StickySwitch.Direction.LEFT);
                     }
                 }
@@ -265,6 +271,26 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setCompassEnabled(false);
@@ -354,7 +380,7 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Toast.makeText(ViewDrawDirection.this, "Running old Stage", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ViewDrawDirectionActivity.this, "Running old Stage", Toast.LENGTH_SHORT).show();
         placedetaillat = savedInstanceState.getDouble("oldplace2lat");
         placedetaillong = savedInstanceState.getDouble("oldplace2long");
 
@@ -373,7 +399,7 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Intent myIntent = new Intent(ViewDrawDirection.this, ClassService.class);
+        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, ClassService.class);
         unregisterReceiver(broadcast);
         stopService(myIntent);
     }
@@ -409,16 +435,16 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
                 a.set(i, parkingLotResult);
             }
 
-            adapter = new ParkingListAdapter(ViewDrawDirection.this, R.layout.adapter_view_layout, sortParkingLotResultList(a));
+            adapter = new ParkingListAdapter(ViewDrawDirectionActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(a));
 
-            AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewDrawDirection.this);
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewDrawDirectionActivity.this);
             builderSingle.setIcon(R.drawable.ic_draglocation_on);
             builderSingle.setTitle("Bãi xe hết chỗ");
 
             builderSingle.setNegativeButton("Về màn hình chính", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(ViewDrawDirection.this, MapActivity.class);
+                    Intent intent = new Intent(ViewDrawDirectionActivity.this, MapActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
@@ -434,7 +460,7 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
                             .getParkingLotById(Int64Value.newBuilder()
                                     .setValue(selectedFromList.getId())
                                     .build());
-                    Intent intent = new Intent(ViewDrawDirection.this, PlaceDetailsActivity.class);
+                    Intent intent = new Intent(ViewDrawDirectionActivity.this, PlaceDetailsActivity.class);
                     Intent intent_placedetail = new Intent();
                     intent_placedetail.setAction("parkinglot_broadcast");
                     intent_placedetail.putExtra("parkinglot_broadcast", (Serializable) parkingLot);
@@ -482,7 +508,7 @@ public class ViewDrawDirection extends BaseParkingMapFragmentActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        Intent myIntent = new Intent(ViewDrawDirection.this, ClassService.class);
+        Intent myIntent = new Intent(ViewDrawDirectionActivity.this, ClassService.class);
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
         startService(myIntent);
     }

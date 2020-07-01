@@ -1,4 +1,4 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
 
 import android.app.ProgressDialog;
@@ -11,12 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vtb.parkingmap.base.BaseParkingMapFragmentActivity;
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lombok.Getter;
 
-public class SignupActivity extends BaseParkingMapFragmentActivity {
+@Getter
+public class SignupActivity extends BaseSaigonParkingFragmentActivity {
     private static final String TAG = "SignupActivity";
 
     @BindView(R.id.input_name)

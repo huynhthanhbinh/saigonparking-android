@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapActivity"
+    tools:context=".activity.MapActivity"
     app:umanoDragView="@id/dragview"
     app:umanoScrollableView="@id/listview"
     android:layout_gravity="bottom"

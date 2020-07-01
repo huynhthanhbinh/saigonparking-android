@@ -1,4 +1,4 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,7 +20,8 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
 import com.bht.parkingmap.api.util.ImageUtil;
-import com.vtb.parkingmap.base.BaseParkingMapFragmentActivity;
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
 
@@ -31,7 +32,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public class PlaceDetailsActivity extends BaseParkingMapFragmentActivity {
+public class PlaceDetailsActivity extends BaseSaigonParkingFragmentActivity {
 
     private ImageView imageView;
     private Photos photos;
@@ -189,7 +190,7 @@ public class PlaceDetailsActivity extends BaseParkingMapFragmentActivity {
             return;
         }
 
-        Intent intent = new Intent(PlaceDetailsActivity.this, ViewDrawDirection.class);
+        Intent intent = new Intent(PlaceDetailsActivity.this, ViewDrawDirectionActivity.class);
         intent.putExtra("placedetaillat", (Serializable) latitude);
         intent.putExtra("placedetaillong", (Serializable) longitude);
         intent.putExtra("mylatfromplacedetail", (Serializable) mylat);
@@ -259,7 +260,7 @@ public class PlaceDetailsActivity extends BaseParkingMapFragmentActivity {
     public class Broadcast extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(ViewDrawDirection.Broadcast.class.getSimpleName(), "Đã nhận được broadcast");
+            Log.d(ViewDrawDirectionActivity.Broadcast.class.getSimpleName(), "Đã nhận được broadcast");
             parkingLot = (ParkingLot) intent.getSerializableExtra("parkinglot_broadcast");
             mylat = (double) intent.getSerializableExtra("myLat_broadcast");
             mylong = (double) intent.getSerializableExtra("myLong_broadcast");

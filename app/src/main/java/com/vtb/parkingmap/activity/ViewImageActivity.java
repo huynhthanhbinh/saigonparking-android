@@ -1,4 +1,4 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -11,14 +11,16 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class ViewImage extends AppCompatActivity {
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
+
+public class ViewImageActivity extends BaseSaigonParkingFragmentActivity {
     ImageView imgB;
     Button btnCamera;
     int REQUEST_CODE_CAMERA = 123;
@@ -69,7 +71,7 @@ public class ViewImage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                ActivityCompat.requestPermissions(ViewImage.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+                ActivityCompat.requestPermissions(ViewImageActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
             }
         });
 

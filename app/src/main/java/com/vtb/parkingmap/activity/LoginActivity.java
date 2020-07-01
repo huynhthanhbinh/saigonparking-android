@@ -1,4 +1,4 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +12,16 @@ import android.widget.Toast;
 import com.bht.parkingmap.api.proto.user.LoginRequest;
 import com.bht.parkingmap.api.proto.user.LoginResponseType;
 import com.bht.parkingmap.api.proto.user.UserRole;
-import com.vtb.parkingmap.base.BaseParkingMapFragmentActivity;
+import com.vtb.parkingmap.Common;
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lombok.Getter;
 
-public class LoginActivity extends BaseParkingMapFragmentActivity {
+@Getter
+public class LoginActivity extends BaseSaigonParkingFragmentActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 

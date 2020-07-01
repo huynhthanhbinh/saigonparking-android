@@ -1,4 +1,4 @@
-package com.vtb.parkingmap;
+package com.vtb.parkingmap.activity;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -19,19 +20,24 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-import com.vtb.parkingmap.base.BaseParkingMapFragmentActivity;
+import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.base.BaseSaigonParkingFragmentActivity;
 
-public class PermissionsActivity extends BaseParkingMapFragmentActivity {
-
+public class PermissionsActivity extends BaseSaigonParkingFragmentActivity {
+    //    SaigonParkingDatabase database ;
     private Button btnGrant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("BachMap", String.format("onCreate: %s, isSaigonParkingDatabaseInitialized: %b",
+                getClass().getSimpleName(), saigonParkingDatabase != null));
+
         setContentView(R.layout.activity_permissions);
 
         if (ContextCompat.checkSelfPermission(PermissionsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+            startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
             finish();
             return;
         }
