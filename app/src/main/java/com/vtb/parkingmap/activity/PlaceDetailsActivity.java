@@ -20,13 +20,13 @@ import android.widget.Toast;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.google.gson.Gson;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -36,11 +36,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import lombok.SneakyThrows;
+import lombok.ToString;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+import okio.ByteString;
 
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
@@ -65,7 +68,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private TextView txtStatus;
     private TextView txtphone;
     private ImageView iconType;
-    private TextView txtlastupdate;
+    private TextView output;
     private TextView txtXemChiTiet;
     private Broadcast broadcast;
 
@@ -97,6 +100,52 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     //websocket
     private static final URI WEB_SOCKET_LOCAL_URI = URI.create("ws://192.168.0.103:8000/contact");
     private WebSocket webSocket;
+    private OkHttpClient client;
+
+    private final class EchoWebSocketListener extends WebSocketListener {
+        private static final int NORMAL_CLOSURE_STATUS = 1000;
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+
+        }
+
+        @ToString
+        private class BachMap {
+            private String message;
+        }
+
+        @SneakyThrows
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            JSONObject jsonObject = new JSONObject(text);
+
+
+            output("Receiving : " + jsonObject.getString("message"));
+
+            BachMap bachMap = new Gson().fromJson(text, BachMap.class);
+            Log.d("BachMap", bachMap.toString());
+            Log.d("BachMap", bachMap.message);
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
+            output("Receiving bytes : " + bytes.hex());
+        }
+
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
+            output("Closing : " + code + " / " + reason);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            output("Error : " + t.getMessage());
+            Log.d("BachMap", t.getMessage());
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +153,13 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Log.d("khongbiloi", "Nhan du lieu");
         setContentView(R.layout.activity_place_details);
         init();
-        initiateSocketConnection();
+//        initiateSocketConnection();
         //lam hotel
 //        Bundle bundle = getIntent().getExtras();
+        //
+        client = new OkHttpClient();
+
+        //
         broadcast = new Broadcast();
         IntentFilter filter = new IntentFilter("parkinglot_broadcast");
         registerReceiver(broadcast, filter);
@@ -133,7 +186,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         btnimgshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickShowDistanceOnMap(view);
+                start();
             }
         });
 
@@ -290,7 +343,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         txtStatus = findViewById(R.id.txtStatus);
         txtphone = findViewById(R.id.txtphone);
         iconType = findViewById(R.id.iconType);
-        txtlastupdate = findViewById(R.id.txtlastupdate);
+        output = findViewById(R.id.txtlastupdate);
         txtXemChiTiet = findViewById(R.id.txtXemChiTiet);
     }
 
@@ -337,46 +390,35 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .url("ws://192.168.0.103:8000/contact")
                 .addHeader("Authorization", token)
                 .build();
-        webSocket = client.newWebSocket(request, new SocketListener());
+//        webSocket = client.newWebSocket(request, new SocketListener());
 
     }
 
-    private class SocketListener extends WebSocketListener {
-
-        @Override
-        public void onOpen(WebSocket webSocket, Response response) {
-            super.onOpen(webSocket, response);
-            Log.d("BachMap", "thanh cong");
-
-            runOnUiThread(() -> {
-                Toast.makeText(PlaceDetailsActivity.this,
-                        "Socket Connection Successful!",
-                        Toast.LENGTH_SHORT).show();
+    private void start() {
+        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+        Request request = new Request.Builder()
+                .url("ws://192.168.1.105:8000/contact")
+                .addHeader("Authorization", token)
 
 
-            });
+                .build();
+        EchoWebSocketListener listener = new EchoWebSocketListener();
+        WebSocket ws = client.newWebSocket(request, listener);
 
-        }
-
-        @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            super.onMessage(webSocket, text);
-            Log.d("BachMap", "that bai");
-            runOnUiThread(() -> {
-
-                try {
-                    JSONObject jsonObject = new JSONObject(text);
-                    jsonObject.put("isSent", false);
+//        client.dispatcher().executorService().shutdown();
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            });
-
-        }
     }
+
+    private void output(String txt) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                output.setText(output.getText().toString() + "\n\n" + txt);
+            }
+        });
+    }
+
 
     // làm về hotel
 

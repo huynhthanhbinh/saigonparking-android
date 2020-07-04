@@ -24,7 +24,7 @@ android {
         debug {
             applicationIdSuffix ".d"
             buildConfigField "String", "WEBSOCKET_PREFIX", '"ws://"'
-            buildConfigField "String", "GATEWAY_HOST", '"192.168.0.103"'
+            buildConfigField "String", "GATEWAY_HOST", '"192.168.1.105"'
             buildConfigField "Integer", "GATEWAY_GRPC_PORT", "9080"
             buildConfigField "Integer", "GATEWAY_HTTP_PORT", "8000"
         }
@@ -52,7 +52,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-plus:16.0.0'
     implementation 'org.projectlombok:lombok:1.18.12'
     implementation 'com.iarcuschin:simpleratingbar:0.1.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.1'
+    implementation 'javax.websocket:javax.websocket-all:1.1'
+
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
