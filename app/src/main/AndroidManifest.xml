@@ -25,6 +25,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+        <activity android:name=".activity.RatingActivity"></activity>
+        <activity android:name=".activity.CommentRatingActivity" />
         <activity
             android:name=".activity.ViewDrawDirectionActivity"
             android:theme="@style/AppTheme.TransparentTheme.ViewDraw" />
@@ -64,7 +66,7 @@
             android:label="@string/title_activity_map"
             android:theme="@style/AppTheme.TransparentTheme" />
 
-        <service android:name=".service.HiddenService"></service>
+        <service android:name=".service.HiddenService" />
     </application>
 
 </manifest>

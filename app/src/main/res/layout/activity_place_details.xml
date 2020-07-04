@@ -245,7 +245,8 @@
                                 android:text="Xem chi tiet danh gia"
                                 android:textColor="#fff"
                                 android:textSize="14sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:onClick="funcXemChiTietDanhGia" />
 
                         </LinearLayout>
 

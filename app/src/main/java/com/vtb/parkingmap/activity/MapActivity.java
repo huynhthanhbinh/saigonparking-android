@@ -22,6 +22,7 @@ import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -103,7 +104,7 @@ import retrofit2.Response;
 
 @SuppressLint("all")
 @SuppressWarnings("all")
-public final class MapActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener {
+public final class MapActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener, NavigationView.OnNavigationItemSelectedListener {
 
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
@@ -199,6 +200,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         //navigation menu panel
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         materialSearchBar = findViewById(R.id.searchBar);
         btnFind = findViewById(R.id.btn_find);
         rippleBg = findViewById(R.id.ripple_bg);
@@ -1050,6 +1052,29 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
         return false;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_logout:
+                saigonParkingDatabase.emptyTable();
+                Intent intent = new Intent(MapActivity.this, PermissionsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.nav_account:
+                Toast.makeText(MapActivity.this, "ERROR keo man hinh2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_history:
+                Toast.makeText(MapActivity.this, "ERROR keo man hinh3", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_setting:
+                Toast.makeText(MapActivity.this, "ERROR keo man hinh4", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
     }
 
     //click vào bãi xe sẽ lấy id của bãi xe đó

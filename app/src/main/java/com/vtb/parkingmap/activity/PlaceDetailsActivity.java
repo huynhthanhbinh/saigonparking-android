@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,19 +22,34 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
+import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.net.URI;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+
+
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private ImageView imageView;
+    private ImageView btnimgdirection;
+    private ImageView btnimgshow;
+    private ImageView btnimgphone;
     private Photos photos;
     private TextView textViewName;
     private TextView textViewRating;
@@ -50,6 +66,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private TextView txtphone;
     private ImageView iconType;
     private TextView txtlastupdate;
+    private TextView txtXemChiTiet;
     private Broadcast broadcast;
 
     // variable
@@ -77,6 +94,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private double ratingAverage;
     private int numberOfRating;
     private byte[] imageData;
+    //websocket
+    private static final URI WEB_SOCKET_LOCAL_URI = URI.create("ws://192.168.0.103:8000/contact");
+    private WebSocket webSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +104,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Log.d("khongbiloi", "Nhan du lieu");
         setContentView(R.layout.activity_place_details);
         init();
+        initiateSocketConnection();
         //lam hotel
 //        Bundle bundle = getIntent().getExtras();
         broadcast = new Broadcast();
@@ -100,6 +121,22 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Log.d("khongbiloi", "Nhan du lieu 2");
 
         processParkingLot();
+        //ping ping client
+
+        btnimgdirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                onClickDrawDirection(view);
+            }
+        });
+        btnimgshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickShowDistanceOnMap(view);
+            }
+        });
+
     }
 
     private void processParkingLot() {
@@ -148,6 +185,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         ratingBar.setRating((float) ratingAverage);
         textViewAddress.setText(address);
         textViewAvailability.setText(String.format(Locale.ENGLISH, "%d/%d", availableSlot, totalSlot));
+        txtStatus.setText("Active");
     }
 
     private void assignParkingLotFields() {
@@ -209,12 +247,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
      */
     private void onClickShowDistanceOnMap(View view) {
 
-//        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
-//        Log.d("TestDiaDiemMapChiDuong", " " + latitude + longitude);
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//
-//        startActivity(mapIntent);
 
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
@@ -223,11 +255,26 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Time currentTime = Time.valueOf(currentDateTimeString);
         Time closingTime = Time.valueOf(closingHour);
 
-        Toast.makeText(PlaceDetailsActivity.this, "Không còn nhận xe nhé" + currentTime + ' ' + closingTime, Toast.LENGTH_SHORT).show();
+        boolean check = (currentTime.getTime() + deltaHour * 60 * 60) - closingTime.getTime() > 0;
+
+        if (check) {
+            Toast.makeText(PlaceDetailsActivity.this, " Quá giờ rồi Không còn nhận xe nhé", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+        Log.d("TestDiaDiemMapChiDuong", " " + latitude + longitude);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+
+        startActivity(mapIntent);
+
     }
 
     private void init() {
         imageView = findViewById(R.id.imageView);
+        btnimgdirection = findViewById(R.id.imgdirection);
+        btnimgshow = findViewById(R.id.imgshow);
+        btnimgphone = findViewById(R.id.imgphone);
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);
         linearLayoutShowDistanceOnMap = findViewById(R.id.linearLayoutShowDistanceOnMap);
@@ -244,7 +291,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         txtphone = findViewById(R.id.txtphone);
         iconType = findViewById(R.id.iconType);
         txtlastupdate = findViewById(R.id.txtlastupdate);
+        txtXemChiTiet = findViewById(R.id.txtXemChiTiet);
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -254,6 +303,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    public void funcXemChiTietDanhGia(View view) {
+        Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
+        intent.putExtra("idplacedetail", (Serializable) id);
+        startActivity(intent);
+        Toast.makeText(PlaceDetailsActivity.this, "hết giờ nha  ", Toast.LENGTH_SHORT).show();
     }
 
     public class Broadcast extends BroadcastReceiver {
@@ -267,9 +324,59 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             position3long = intent.getDoubleExtra("postion3long_broadcast", 1234);
             Log.d("khongbiloi", "" + parkingLot);
             processParkingLot();
+
+
         }
     }
 
+    private void initiateSocketConnection() {
+//        BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ':' + BuildConfig.GATEWAY_HTTP_PORT
+        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("ws://192.168.0.103:8000/contact")
+                .addHeader("Authorization", token)
+                .build();
+        webSocket = client.newWebSocket(request, new SocketListener());
+
+    }
+
+    private class SocketListener extends WebSocketListener {
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+            super.onOpen(webSocket, response);
+            Log.d("BachMap", "thanh cong");
+
+            runOnUiThread(() -> {
+                Toast.makeText(PlaceDetailsActivity.this,
+                        "Socket Connection Successful!",
+                        Toast.LENGTH_SHORT).show();
+
+
+            });
+
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            super.onMessage(webSocket, text);
+            Log.d("BachMap", "that bai");
+            runOnUiThread(() -> {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(text);
+                    jsonObject.put("isSent", false);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+        }
+    }
 
     // làm về hotel
 

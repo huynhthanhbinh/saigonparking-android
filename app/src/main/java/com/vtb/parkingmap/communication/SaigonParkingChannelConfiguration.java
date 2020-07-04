@@ -3,6 +3,8 @@ package com.vtb.parkingmap.communication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import com.vtb.parkingmap.BuildConfig;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -35,23 +37,36 @@ public final class SaigonParkingChannelConfiguration {
     @Getter
     private ManagedChannel managedChannel;
 
+    @SuppressWarnings("ConstantConditions")
     private ManagedChannel initSaigonParkingChannel() {
         SaigonParkingMobileInterceptor interceptor = new SaigonParkingMobileInterceptor(applicationContext);
 
         try {
-            return OkHttpChannelBuilder
-                    .forAddress("saigonparking.wtf", 9081)
-                    .maxInboundMessageSize(10 * 1024 * 1024)
-                    .maxInboundMetadataSize(2 * 1020 * 1024)
-                    .idleTimeout(30000, TimeUnit.MILLISECONDS)
-                    .sslSocketFactory(getSocketFactory())
-                    .useTransportSecurity()
-                    .intercept(interceptor)
-                    .build();
+            if ("saigonparking.wtf".equals(BuildConfig.GATEWAY_HOST)) {
+                return OkHttpChannelBuilder
+                        .forAddress(BuildConfig.GATEWAY_HOST, 9081)
+                        .maxInboundMessageSize(10 * 1024 * 1024)
+                        .maxInboundMetadataSize(2 * 1020 * 1024)
+                        .idleTimeout(30000, TimeUnit.MILLISECONDS)
+                        .sslSocketFactory(getSocketFactory())
+                        .useTransportSecurity()
+                        .intercept(interceptor)
+                        .build();
+            } else {
+                return AndroidChannelBuilder
+                        .forAddress(BuildConfig.GATEWAY_HOST, 9080)
+                        .maxInboundMessageSize(10 * 1024 * 1024)
+                        .maxInboundMetadataSize(2 * 1020 * 1024)
+                        .idleTimeout(30000, TimeUnit.MILLISECONDS)
+                        .usePlaintext()
+                        .intercept(interceptor)
+                        .build();
+            }
+
 
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             return AndroidChannelBuilder
-                    .forAddress("saigonparking.wtf", 9080)
+                    .forAddress(BuildConfig.GATEWAY_HOST, 9080)
                     .maxInboundMessageSize(10 * 1024 * 1024)
                     .maxInboundMetadataSize(2 * 1020 * 1024)
                     .idleTimeout(30000, TimeUnit.MILLISECONDS)
