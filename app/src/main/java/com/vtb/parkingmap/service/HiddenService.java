@@ -17,12 +17,14 @@ import com.vtb.parkingmap.base.BaseSaigonParkingService;
 
 import java.io.Serializable;
 
+import io.grpc.StatusRuntimeException;
+
 
 public final class HiddenService extends BaseSaigonParkingService {
 
     long idplacedetail;
     private Handler mHandler = new Handler();
-
+    private boolean isAvailable = true;
     ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
@@ -35,8 +37,14 @@ public final class HiddenService extends BaseSaigonParkingService {
     private Runnable mToastRunnable = new Runnable() {
         @Override
         public void run() {
+            try {
+                isAvailable = parkingLotServiceBlockingStub.checkAvailability(Int64Value.of(idplacedetail)).getValue();
+            } catch (StatusRuntimeException exception) {
+                saigonParkingExceptionHandler.handleCommunicationException(exception, HiddenService.this);
+            }
 
-            if (parkingLotServiceBlockingStub.checkAvailability(Int64Value.of(idplacedetail)).getValue()) {
+
+            if (isAvailable) {
                 Toast.makeText(HiddenService.this, "Còn chỗ nha " + idplacedetail, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(HiddenService.this, "Hết chỗ rồi " + idplacedetail, Toast.LENGTH_SHORT).show();

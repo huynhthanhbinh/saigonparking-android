@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.handler;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.util.Log;
 
 import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
@@ -31,20 +32,20 @@ public final class SaigonParkingExceptionHandler {
         saigonParkingServiceStubs = ((SaigonParkingApplication) applicationContext).getServiceStubs();
     }
 
-    public void handleCommunicationException(StatusRuntimeException exception, BaseSaigonParkingActivity currentActivity) {
+    public void handleCommunicationException(StatusRuntimeException exception, ContextWrapper currentActivityOrService) {
         String internalErrorCode = exception.getStatus().getDescription();
         Log.d("BachMap", String
                 .format("onHandleCommunicationException: %s, currentActivity: %s",
-                        internalErrorCode, currentActivity.getClass().getSimpleName()));
+                        internalErrorCode, currentActivityOrService.getClass().getSimpleName()));
 
         if ("SPE#00001".equals(internalErrorCode)) {
-            handleExpiredToken(currentActivity);
+            handleExpiredToken(currentActivityOrService);
         } else {
-            handleUnknownException(currentActivity);
+            handleUnknownException(currentActivityOrService);
         }
     }
 
-    private void handleExpiredToken(BaseSaigonParkingActivity currentActivity) {
+    private void handleExpiredToken(ContextWrapper currentActivityOrService) {
         Log.d("BachMap", "onHandleExpiredToken");
         saigonParkingDatabase.deleteAccessToken();
 
@@ -69,12 +70,14 @@ public final class SaigonParkingExceptionHandler {
                 saigonParkingDatabase.emptyTable();
 
                 /* BachMap bat user dang nhap lai: back to login activity */
-                currentActivity.changeActivity(PermissionsActivity.class);
+                if (currentActivityOrService instanceof BaseSaigonParkingActivity) {
+                    ((BaseSaigonParkingActivity) currentActivityOrService).changeActivity(PermissionsActivity.class);
+                }
             }
         }
     }
 
-    private void handleUnknownException(BaseSaigonParkingActivity currentActivity) {
+    private void handleUnknownException(ContextWrapper currentActivityOrService) {
         Log.d("BachMap", "onHandleUnknownException");
     }
 }
