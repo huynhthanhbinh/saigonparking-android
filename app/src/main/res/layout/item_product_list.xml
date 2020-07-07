@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
+
 
     android:orientation="vertical">
 
@@ -15,7 +14,7 @@
         android:id="@+id/tv_name"
         android:text="Name"
         android:textSize="20dp"
-        android:textColor="#00a7f5" />
+        android:textColor="#FF5722" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,4 +39,16 @@
         android:text="lastupdated"
         android:textSize="16dp"
         android:textColor="#000" />
+
+    <RatingBar
+        android:id="@+id/ratingBar1"
+        style="?android:attr/ratingBarStyleSmall"
+
+        android:progressTint="#F44336"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:rating="3" />
+
 </LinearLayout>

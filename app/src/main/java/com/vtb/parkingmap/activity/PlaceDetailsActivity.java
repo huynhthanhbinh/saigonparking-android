@@ -101,51 +101,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private static final URI WEB_SOCKET_LOCAL_URI = URI.create("ws://192.168.0.103:8000/contact");
     private WebSocket webSocket;
     private OkHttpClient client;
-
-    private final class EchoWebSocketListener extends WebSocketListener {
-        private static final int NORMAL_CLOSURE_STATUS = 1000;
-
-        @Override
-        public void onOpen(WebSocket webSocket, Response response) {
-
-        }
-
-        @ToString
-        private class BachMap {
-            private String message;
-        }
-
-        @SneakyThrows
-        @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            JSONObject jsonObject = new JSONObject(text);
-
-
-            output("Receiving : " + jsonObject.getString("message"));
-
-            BachMap bachMap = new Gson().fromJson(text, BachMap.class);
-            Log.d("BachMap", bachMap.toString());
-            Log.d("BachMap", bachMap.message);
-        }
-
-        @Override
-        public void onMessage(WebSocket webSocket, ByteString bytes) {
-            output("Receiving bytes : " + bytes.hex());
-        }
-
-        @Override
-        public void onClosing(WebSocket webSocket, int code, String reason) {
-            webSocket.close(NORMAL_CLOSURE_STATUS, null);
-            output("Closing : " + code + " / " + reason);
-        }
-
-        @Override
-        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-            output("Error : " + t.getMessage());
-            Log.d("BachMap", t.getMessage());
-        }
-    }
-
+    private WebSocket ws;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +143,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             @Override
             public void onClick(View view) {
                 start();
+            }
+        });
+        btnimgphone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PlaceDetailsActivity.this, ChatActivity.class);
+
+                startActivity(intent);
             }
         });
 
@@ -394,20 +358,64 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     }
 
+    private final class EchoWebSocketListener extends WebSocketListener {
+        private static final int NORMAL_CLOSURE_STATUS = 1000;
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+
+        }
+
+        @ToString
+        private class BachMap {
+            private String message;
+        }
+
+        @SneakyThrows
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            JSONObject jsonObject = new JSONObject(text);
+
+
+            output("Receiving : " + jsonObject.getString("message"));
+
+            BachMap bachMap = new Gson().fromJson(text, BachMap.class);
+//            Log.d("BachMap", bachMap.toString());
+            Log.d("BachMap", bachMap.message);
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
+            output("Receiving bytes : " + bytes.hex());
+        }
+
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
+            output("Closing : " + code + " / " + reason);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            output("Error : " + t.getMessage());
+            Log.d("BachMap", t.getMessage());
+        }
+    }
+
     private void start() {
         String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         Request request = new Request.Builder()
-                .url("ws://192.168.1.105:8000/contact")
+                .url("ws://192.168.0.102:8000/contact")
                 .addHeader("Authorization", token)
 
 
                 .build();
         EchoWebSocketListener listener = new EchoWebSocketListener();
-        WebSocket ws = client.newWebSocket(request, listener);
+        ws = client.newWebSocket(request, listener);
 
-//        client.dispatcher().executorService().shutdown();
+        client.dispatcher().executorService().shutdown();
 
-
+        ws.send("xin chao Bach Dep Trai");
     }
 
     private void output(String txt) {

@@ -102,7 +102,12 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
         //Init adapter
         adapter = new ProductListAdapter(getApplicationContext(), mProductList);
         lvProduct.setAdapter(adapter);
-        txtcount.setText(String.valueOf((pagenumber * 10) + "/" + String.valueOf(countallrating)));
+        if (countallrating != 0) {
+            txtcount.setText(String.valueOf((pagenumber * 10) + "/" + String.valueOf(countallrating)));
+        } else {
+            txtcount.setText(String.valueOf((0) + "/" + String.valueOf(countallrating)));
+        }
+
         lvProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -192,7 +197,17 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
             //Send the result to Handle
             Message msg = mHandler.obtainMessage(1, lstResult);
             mHandler.sendMessage(msg);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if ((pagenumber * 10) > countallrating) {
+                        txtcount.setText(String.valueOf((countallrating) + "/" + String.valueOf(countallrating)));
+                    } else {
+                        txtcount.setText(String.valueOf((pagenumber * 10) + "/" + String.valueOf(countallrating)));
+                    }
 
+                }
+            });
         }
     }
 }

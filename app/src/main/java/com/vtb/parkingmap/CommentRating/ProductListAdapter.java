@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.vtb.parkingmap.R;
@@ -53,11 +54,13 @@ public class ProductListAdapter extends BaseAdapter {
         View v = View.inflate(mContext, R.layout.item_product_list, null);
         TextView tvUsername = (TextView) v.findViewById(R.id.tv_name);
         TextView tvRating = (TextView) v.findViewById(R.id.tv_price);
+        RatingBar ratingBar = (RatingBar) v.findViewById(R.id.ratingBar1);
         TextView tvComment = (TextView) v.findViewById(R.id.tv_description);
         TextView tvLastupdated = (TextView) v.findViewById(R.id.tv_lastupdated);
         //Set text for TextView
         tvUsername.setText(mProductList.get(position).getUsername());
         tvRating.setText(String.valueOf(mProductList.get(position).getRating()) + " ngôi sao");
+        ratingBar.setRating(Float.valueOf(mProductList.get(position).getRating()));
         tvComment.setText(mProductList.get(position).getComment());
         tvLastupdated.setText(mProductList.get(position).getLastUpdated());
         //Save product id to tag
