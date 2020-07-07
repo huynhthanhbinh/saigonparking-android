@@ -10,33 +10,44 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
+import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
+import com.bht.saigonparking.api.grpc.contact.NotificationContent;
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
+import com.vtb.parkingmap.BuildConfig;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 
+import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+import okio.ByteString;
 
 public class ChatActivity extends BaseSaigonParkingActivity implements TextWatcher {
 
     private String name;
     private WebSocket webSocket;
-    private String SERVER_PATH = "ws://192.168.0.103:8000/contact";
+    private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
     private EditText messageEdit;
     private View sendBtn, pickImgBtn;
     private RecyclerView recyclerView;
@@ -123,25 +134,69 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
 
         }
 
+        @SneakyThrows
         @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            super.onMessage(webSocket, text);
-
+        public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
+            SaigonParkingMessage message = SaigonParkingMessage.parseFrom(bytes.toByteArray());
             runOnUiThread(() -> {
-
                 try {
-                    JSONObject jsonObject = new JSONObject(text);
-                    jsonObject.put("isSent", false);
+                    switch (message.getType()) {
+                        case NOTIFICATION:
+                            NotificationContent notificationContent = NotificationContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "Ket qua:" + notificationContent);
+                            break;
+                        case TEXT_MESSAGE:
+                            TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "1" + textMessageContent);
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("tenbaixe", textMessageContent.getSender());
+                            jsonObject.put("message", textMessageContent.getMessage());
+                            jsonObject.put("isSent", false);
 
-                    messageAdapter.addItem(jsonObject);
+                            messageAdapter.addItem(jsonObject);
 
-                    recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                            recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
 
-                } catch (JSONException e) {
+
+                            break;
+                        case BOOKING_ACCEPTANCE:
+                            BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
+                            break;
+                        case BOOKING_REJECT:
+                            BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
+                            break;
+                        case IMAGE:
+
+                            break;
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             });
+
+
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            super.onMessage(webSocket, text);
+
+//            runOnUiThread(() -> {
+//
+//                try {
+//                    JSONObject jsonObject = new JSONObject(text);
+//                    jsonObject.put("isSent", false);
+//
+//                    messageAdapter.addItem(jsonObject);
+//
+//                    recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            });
 
         }
     }
@@ -165,10 +220,27 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
 
             JSONObject jsonObject = new JSONObject();
             try {
+
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 jsonObject.put("name", name);
                 jsonObject.put("message", messageEdit.getText().toString());
 
-                webSocket.send(jsonObject.toString());
+                TextMessageContent textMessageContent = TextMessageContent.newBuilder()
+                        .setSender("taolabach")
+                        .setMessage(messageEdit.getText().toString())
+                        .build();
+
+                SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+                        .setSenderId(3)
+                        .setReceiverId(14)
+                        .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
+                        .setType(SaigonParkingMessage.Type.TEXT_MESSAGE)
+                        .setTimestamp(timestamp.toString())
+                        .setContent(textMessageContent.toByteString())
+                        .build();
+
+                webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+
 
                 jsonObject.put("isSent", true);
                 messageAdapter.addItem(jsonObject);

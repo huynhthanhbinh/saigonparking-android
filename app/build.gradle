@@ -24,7 +24,7 @@ android {
         debug {
             applicationIdSuffix ".d"
             buildConfigField "String", "WEBSOCKET_PREFIX", '"ws://"'
-            buildConfigField "String", "GATEWAY_HOST", '"192.168.0.103"'
+            buildConfigField "String", "GATEWAY_HOST", '"ylas2712.ddns.net"'
             buildConfigField "Integer", "GATEWAY_GRPC_PORT", "9080"
             buildConfigField "Integer", "GATEWAY_HTTP_PORT", "8000"
         }
