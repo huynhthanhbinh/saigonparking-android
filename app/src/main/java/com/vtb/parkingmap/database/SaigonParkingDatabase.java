@@ -24,9 +24,13 @@ import lombok.Getter;
 @Getter
 public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
-    private static final String USERNAME_KEY = "username";
+    public static final String USERNAME_KEY = "username";
     public static final String ACCESS_TOKEN_KEY = "access_token";
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
+
+    //BOOKING
+    public static final String BOOKINGID_KEY = "bookingid";
+
 
     private Map<String, String> keyValueMap = new HashMap<>();
 

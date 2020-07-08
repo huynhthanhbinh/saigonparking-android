@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,10 +18,20 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
+import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
+import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
+import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
+import com.bht.saigonparking.api.grpc.contact.NotificationContent;
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.google.gson.Gson;
+import com.google.protobuf.Int64Value;
+import com.vtb.parkingmap.BuildConfig;
+import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
@@ -32,6 +43,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.net.URI;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -53,6 +65,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private ImageView btnimgdirection;
     private ImageView btnimgshow;
     private ImageView btnimgphone;
+    private ImageView btnimgcancel;
     private Photos photos;
     private TextView textViewName;
     private TextView textViewRating;
@@ -102,6 +115,12 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private WebSocket webSocket;
     private OkHttpClient client;
     private WebSocket ws;
+    private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
+    private RecyclerView recyclerView;
+
+    private MessageAdapter messageAdapter;
+    private String bookingid = null;
+    private String bookingreject = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +128,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Log.d("khongbiloi", "Nhan du lieu");
         setContentView(R.layout.activity_place_details);
         init();
-//        initiateSocketConnection();
+        initiateSocketConnection();
         //lam hotel
 //        Bundle bundle = getIntent().getExtras();
         //
@@ -131,7 +150,12 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         processParkingLot();
         //ping ping client
-
+        btnimgcancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelbooking();
+            }
+        });
         btnimgdirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +166,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         btnimgshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start();
+                sendbooking();
             }
         });
         btnimgphone.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +191,12 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private void initEventListeners() {
         linearLayoutShowDistanceOnMap.setOnClickListener(this::onClickShowDistanceOnMap);
         linearLayoutDrawDirection.setOnClickListener(this::onClickDrawDirection);
+        linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelbooking();
+            }
+        });
     }
 
     private void loadFormData() {
@@ -290,7 +320,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private void init() {
         imageView = findViewById(R.id.imageView);
         btnimgdirection = findViewById(R.id.imgdirection);
+        btnimgcancel = findViewById(R.id.imgcancel);
         btnimgshow = findViewById(R.id.imgshow);
+
+
         btnimgphone = findViewById(R.id.imgphone);
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);
@@ -347,14 +380,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void initiateSocketConnection() {
-//        BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ':' + BuildConfig.GATEWAY_HTTP_PORT
         String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("ws://192.168.0.103:8000/contact")
+                .url(SERVER_PATH)
                 .addHeader("Authorization", token)
                 .build();
-//        webSocket = client.newWebSocket(request, new SocketListener());
+        EchoWebSocketListener listener = new EchoWebSocketListener();
+        webSocket = client.newWebSocket(request, listener);
 
     }
 
@@ -384,9 +417,59 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             Log.d("BachMap", bachMap.message);
         }
 
+        @SneakyThrows
         @Override
         public void onMessage(WebSocket webSocket, ByteString bytes) {
-            output("Receiving bytes : " + bytes.hex());
+            SaigonParkingMessage message = SaigonParkingMessage.parseFrom(bytes.toByteArray());
+            runOnUiThread(() -> {
+                try {
+                    switch (message.getType()) {
+                        case NOTIFICATION:
+                            NotificationContent notificationContent = NotificationContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "Ket qua:" + notificationContent);
+                            break;
+                        case TEXT_MESSAGE:
+                            TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "1" + textMessageContent);
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("tenbaixe", textMessageContent.getSender());
+                            jsonObject.put("message", textMessageContent.getMessage());
+                            jsonObject.put("isSent", false);
+
+                            messageAdapter.addItem(jsonObject);
+
+                            recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+
+
+                            break;
+                        case BOOKING_ACCEPTANCE:
+                            BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
+                            bookingid = bookingAcceptanceContent.getBookingId();
+                            Log.d("BachMap", "1 : BOOKING ACC: " + bookingAcceptanceContent.getBookingId());
+                            bookingid = bookingAcceptanceContent.getBookingId();
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    btnimgshow.setVisibility(View.INVISIBLE);
+                                    btnimgcancel.setVisibility(View.VISIBLE);
+                                }
+                            });
+                            break;
+                        case BOOKING_REJECT:
+                            BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
+                            break;
+                        case IMAGE:
+
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
         }
 
         @Override
@@ -403,19 +486,19 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void start() {
-        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
-        Request request = new Request.Builder()
-                .url("ws://192.168.0.102:8000/contact")
-                .addHeader("Authorization", token)
-
-
-                .build();
-        EchoWebSocketListener listener = new EchoWebSocketListener();
-        ws = client.newWebSocket(request, listener);
-
-        client.dispatcher().executorService().shutdown();
-
-        ws.send("xin chao Bach Dep Trai");
+//        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+//        Request request = new Request.Builder()
+//                .url("ws://192.168.0.102:8000/contact")
+//                .addHeader("Authorization", token)
+//
+//
+//                .build();
+//        EchoWebSocketListener listener = new EchoWebSocketListener();
+//        ws = client.newWebSocket(request, listener);
+//
+//        client.dispatcher().executorService().shutdown();
+//
+//        ws.send("xin chao Bach Dep Trai");
     }
 
     private void output(String txt) {
@@ -427,6 +510,57 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         });
     }
 
+    private void cancelbooking() {
+        long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
+                .setBookingId(bookingid)
+                .setReason("Khong thich dat nua")
+                .build();
+        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+                .setSenderId(3)
+                .setReceiverId(32)
+                .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
+                .setType(SaigonParkingMessage.Type.BOOKING_CANCELLATION)
+                .setTimestamp(timestamp.toString())
+                .setContent(bookingCancellationContent.toByteString())
+                .build();
+        webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                btnimgshow.setVisibility(View.VISIBLE);
+                btnimgcancel.setVisibility(View.INVISIBLE);
+
+            }
+        });
+        Log.d("BachMap", "Gửi request CAMCELATION");
+    }
+
+    private void sendbooking() {
+
+        long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
+                .setCustomerName(saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
+                .setCustomerLicense("9954")
+                .setAmountOfParkingHour(3)
+                .build();
+        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+                .setSenderId(3)
+                .setReceiverId(32)
+                .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
+                .setType(SaigonParkingMessage.Type.BOOKING_REQUEST)
+                .setTimestamp(timestamp.toString())
+                .setContent(bookingRequestContent.toByteString())
+                .build();
+        webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+        Log.d("BachMap", "Gửi request Booking");
+    }
 
     // làm về hotel
 

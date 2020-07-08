@@ -220,19 +220,19 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
 
             JSONObject jsonObject = new JSONObject();
             try {
-
+//                long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 jsonObject.put("name", name);
                 jsonObject.put("message", messageEdit.getText().toString());
 
                 TextMessageContent textMessageContent = TextMessageContent.newBuilder()
-                        .setSender("taolabach")
+                        .setSender(saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
                         .setMessage(messageEdit.getText().toString())
                         .build();
 
                 SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
                         .setSenderId(3)
-                        .setReceiverId(14)
+                        .setReceiverId(32)
                         .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
                         .setType(SaigonParkingMessage.Type.TEXT_MESSAGE)
                         .setTimestamp(timestamp.toString())

@@ -320,18 +320,6 @@
                     android:text="TYPE: "
                     android:textColor="#42b883"
                     android:textSize="14sp"
-                    android:id="@+id/imgdirection"
-                    android:src="@drawable/icon_direction2" />
-
-                <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:text="TYPE: "
-                    android:textColor="#42b883"
-                    android:textSize="14sp"
                     android:id="@+id/imgshow"
                     android:src="@drawable/icon_position2" />
 
@@ -344,10 +332,36 @@
                     android:text="TYPE: "
                     android:textColor="#42b883"
                     android:textSize="14sp"
+                    android:visibility="invisible"
+                    android:id="@+id/imgcancel"
+                    android:src="@drawable/icon_phone2" />
+                />
+
+                <ImageView
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="TYPE: "
+                    android:textColor="#42b883"
+                    android:textSize="14sp"
+
+                    android:id="@+id/imgdirection"
+                    android:src="@drawable/icon_direction2" />
+
+
+                <ImageView
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="TYPE: "
+                    android:textColor="#42b883"
+                    android:textSize="14sp"
                     android:id="@+id/imgphone"
                     android:src="@drawable/icon_phone2" />
-
-
                 />
 
 
