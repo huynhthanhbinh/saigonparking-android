@@ -16,6 +16,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.Getter;
@@ -44,6 +45,7 @@ public final class SaigonParkingApplication extends Application {
         Log.d("BachMap", "onCreate: SaigonParkingApplication");
 
         /* Init all configurations for android mobile apps */
+        Locale.setDefault(Locale.US);
         saigonParkingDatabase.createDatabaseIfNotExist();
 //        initWebSocketConnection();
     }
@@ -54,7 +56,7 @@ public final class SaigonParkingApplication extends Application {
         URI webSocketUri = URI.create(BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ':' + BuildConfig.GATEWAY_HTTP_PORT + "/contact");
         Log.d("BachMap", String.format("WebSocket URI: %s", webSocketUri));
 
-        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+        String token = saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         Map<String, String> httpHeaders = new HashMap<>();
         httpHeaders.put("Authorization", "Bearer " + token);
 

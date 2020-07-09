@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity.SaigonParkingDatabaseEntityBuilder;
+
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.Getter;
@@ -32,7 +35,8 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
     public static final String BOOKINGID_KEY = "bookingid";
 
 
-    private Map<String, String> keyValueMap = new HashMap<>();
+    private Map<String, String> authKeyValueMap = new HashMap<>();
+    private SaigonParkingDatabaseEntity bookingEntity;
 
     public SaigonParkingDatabase(@Nullable Context context,
                                  @Nullable String name,
@@ -40,6 +44,11 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                                  int version) {
 
         super(context, name, factory, version);
+    }
+
+    public SaigonParkingDatabaseEntity getCurrentBookingEntity() {
+        bookingEntity = getFirstRowOfBookingTable();
+        return bookingEntity;
     }
 
     //truy vấn không trả kết quả : CREATE , INSERT , UPDATE , DELETE
@@ -70,7 +79,20 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 " SP_KEY NVARCHAR(100) PRIMARY KEY, " +
                 " SP_VALUE NVARCHAR(1000) " +
                 " )");
-        keyValueMap = getAllRows();
+        authKeyValueMap = getAllRowsOfAuthTable();
+
+        queryData("CREATE TABLE IF NOT EXISTS SAIGON_PARKING_BOOKING ( " +
+                "PARKING_LOT_ID INTEGER PRIMARY KEY, " +
+                "PARKING_LOT_LAT REAL, " +
+                "PARKING_LOT_LNG REAL, " +
+                "TARGET_LAT REAL, " +
+                "TARGET_LNG REAL, " +
+                "CURRENT_LAT REAL, " +
+                "CURRENT_LNG REAL, " +
+                "MODE INTEGER " +
+                " )");
+
+        bookingEntity = getFirstRowOfBookingTable();
     }
 
     public void saveNewLoginInformation(String username, String accessToken, String refreshToken) {
@@ -92,8 +114,8 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
             insertRow(REFRESH_TOKEN_KEY, refreshToken);
         }
 
-        keyValueMap = getAllRows();
-        keyValueMap.forEach((key, value) ->
+        authKeyValueMap = getAllRowsOfAuthTable();
+        authKeyValueMap.forEach((key, value) ->
                 Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
     }
 
@@ -114,33 +136,33 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
     public void deleteAccessToken() {
         deleteRow(ACCESS_TOKEN_KEY);
-        keyValueMap = getAllRows();
-        keyValueMap.forEach((key, value) ->
+        authKeyValueMap = getAllRowsOfAuthTable();
+        authKeyValueMap.forEach((key, value) ->
                 Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
     }
 
     public void updateRefreshToken(String newRefreshToken) {
         updateRow(REFRESH_TOKEN_KEY, newRefreshToken);
-        keyValueMap = getAllRows();
-        keyValueMap.forEach((key, value) ->
+        authKeyValueMap = getAllRowsOfAuthTable();
+        authKeyValueMap.forEach((key, value) ->
                 Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
     }
 
     public void saveNewAccessToken(String newAccessToken) {
         insertRow(ACCESS_TOKEN_KEY, newAccessToken);
-        keyValueMap = getAllRows();
-        keyValueMap.forEach((key, value) ->
+        authKeyValueMap = getAllRowsOfAuthTable();
+        authKeyValueMap.forEach((key, value) ->
                 Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
     }
 
     public void emptyTable() {
         queryData("DELETE FROM SAIGON_PARKING_TABLE WHERE SP_KEY <> ''");
-        keyValueMap = getAllRows();
-        keyValueMap.forEach((key, value) ->
+        authKeyValueMap = getAllRowsOfAuthTable();
+        authKeyValueMap.forEach((key, value) ->
                 Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
     }
 
-    private Map<String, String> getAllRows() {
+    private Map<String, String> getAllRowsOfAuthTable() {
         Cursor cursor = getWritableDatabase()
                 .rawQuery("SELECT * FROM SAIGON_PARKING_TABLE", null);
 
@@ -151,5 +173,55 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
             keyValueHashMap.put(key, value);
         }
         return keyValueHashMap;
+    }
+
+    private SaigonParkingDatabaseEntity getFirstRowOfBookingTable() {
+        Cursor cursor = getWritableDatabase()
+                .rawQuery("SELECT " +
+                        "B.PARKING_LOT_ID, " +
+                        "B.PARKING_LOT_LAT, " +
+                        "B.PARKING_LOT_LNG, " +
+                        "B.TARGET_LAT, " +
+                        "B.TARGET_LNG, " +
+                        "B.CURRENT_LAT, " +
+                        "B.CURRENT_LNG, " +
+                        "B.MODE " +
+                        "FROM SAIGON_PARKING_BOOKING B " +
+                        "LIMIT 1 ", null);
+
+        SaigonParkingDatabaseEntityBuilder entity = SaigonParkingDatabaseEntity.builder();
+        if (cursor.moveToNext()) {
+            entity.id(cursor.getLong(0));
+            entity.latitude(cursor.getDouble(1));
+            entity.longitude(cursor.getDouble(2));
+            entity.position3lat(cursor.getDouble(3));
+            entity.position3long(cursor.getDouble(4));
+            entity.mylat(cursor.getDouble(5));
+            entity.mylong(cursor.getDouble(6));
+            entity.tmptype(cursor.getInt(7));
+        }
+        return entity.build();
+    }
+
+    public void InsertBookingTable(SaigonParkingDatabaseEntity saigonParkingDatabaseEntity) {
+        queryData(String.format(Locale.US,
+                "INSERT INTO SAIGON_PARKING_BOOKING VALUES(%d,%f,%f,%f,%f,%f,%f,%d)",
+                saigonParkingDatabaseEntity.getId(),
+                saigonParkingDatabaseEntity.getLatitude(),
+                saigonParkingDatabaseEntity.getLongitude(),
+                saigonParkingDatabaseEntity.getPosition3lat(),
+                saigonParkingDatabaseEntity.getPosition3long(),
+                saigonParkingDatabaseEntity.getMylat(),
+                saigonParkingDatabaseEntity.getMylong(),
+                saigonParkingDatabaseEntity.getTmptype()
+        ));
+
+        SaigonParkingDatabaseEntity entity = getFirstRowOfBookingTable();
+        Log.d("BachMap", "InsertBookingTable: " + entity);
+        bookingEntity = entity;
+    }
+
+    public void DeleteBookTable(long parkingLotId) {
+        queryData(String.format("DELETE FROM SAIGON_PARKING_BOOKING WHERE PARKING_LOT_ID = %d", parkingLotId));
     }
 }

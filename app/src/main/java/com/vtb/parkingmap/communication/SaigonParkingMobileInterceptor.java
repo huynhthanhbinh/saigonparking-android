@@ -47,14 +47,14 @@ public final class SaigonParkingMobileInterceptor implements ClientInterceptor {
     private String getCurrentToken() {
         SaigonParkingDatabase database = ((SaigonParkingApplication) applicationContext).getSaigonParkingDatabase();
 
-        Map<String, String> keyValueMap = database.getKeyValueMap();
+        Map<String, String> keyValueMap = database.getAuthKeyValueMap();
         boolean hasAccessToken = keyValueMap.containsKey(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         boolean hasRefreshToken = keyValueMap.containsKey(SaigonParkingDatabase.REFRESH_TOKEN_KEY);
 
         /* 2 cases:
          - already logout, not login yet --> all row had been deleted from database
          - ExpiredRefreshTokenException --> log out user and delete all rows from database */
-        if (database.getKeyValueMap().size() == 0 || !hasRefreshToken) {
+        if (database.getAuthKeyValueMap().size() == 0 || !hasRefreshToken) {
             return "";
         }
 

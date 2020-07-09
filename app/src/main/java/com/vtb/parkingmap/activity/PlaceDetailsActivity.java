@@ -35,6 +35,7 @@ import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
+import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
 
@@ -236,16 +237,19 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void assignParkingLotFields() {
-        id = parkingLot.getId();
-        type = parkingLot.getType();
-        latitude = parkingLot.getLatitude();
-        longitude = parkingLot.getLongitude();
-        openingHour = parkingLot.getOpeningHour();
-        closingHour = parkingLot.getClosingHour();
-        availableSlot = parkingLot.getAvailableSlot();
-        totalSlot = parkingLot.getTotalSlot();
 
-        ParkingLotInformation information = parkingLot.getInformation();
+        ParkingLot tmpparkinglot = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotById(Int64Value.of(parkingLot.getId()));
+
+        id = tmpparkinglot.getId();
+        type = tmpparkinglot.getType();
+        latitude = tmpparkinglot.getLatitude();
+        longitude = tmpparkinglot.getLongitude();
+        openingHour = tmpparkinglot.getOpeningHour();
+        closingHour = tmpparkinglot.getClosingHour();
+        availableSlot = tmpparkinglot.getAvailableSlot();
+        totalSlot = tmpparkinglot.getTotalSlot();
+
+        ParkingLotInformation information = tmpparkinglot.getInformation();
 
         name = information.getName();
         phone = information.getPhone();
@@ -380,7 +384,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void initiateSocketConnection() {
-        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+        String token = saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(SERVER_PATH)
@@ -447,6 +451,58 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                             bookingid = bookingAcceptanceContent.getBookingId();
                             Log.d("BachMap", "1 : BOOKING ACC: " + bookingAcceptanceContent.getBookingId());
                             bookingid = bookingAcceptanceContent.getBookingId();
+                            double tmp = 1234;
+
+                            Log.d("BachMap", "onMessage: BachMap vao ");
+                            SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity
+                                    .builder()
+                                    .id(id)
+                                    .latitude(latitude)
+                                    .longitude(longitude)
+                                    .mylat(mylat)
+                                    .mylong(mylong)
+                                    .position3lat(position3lat)
+                                    .position3long(position3long)
+                                    .tmptype(tmptype)
+                                    .build();
+
+
+                            Log.d("BachMap", bookingEntity.toString());
+                            saigonParkingDatabase.InsertBookingTable(bookingEntity);
+
+
+//                            if (position3lat != tmp) {
+//                                Log.d("BachMap", "onMessage: BachMap vao ");
+//                                SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity
+//                                        .builder()
+//                                        .id(id)
+//                                        .latitude(latitude)
+//                                        .longitude(longitude)
+//                                        .mylat(mylat)
+//                                        .mylong(mylong)
+//                                        .position3lat(position3lat)
+//                                        .position3long(position3long)
+//                                        .tmptype(tmptype)
+//                                        .build();
+//                                saigonParkingDatabase.InsertBookingTable(bookingEntity);
+//                            }
+//                            else
+//                            {
+//                                SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity
+//                                        .builder()
+//                                        .id(id)
+//                                        .latitude(latitude)
+//                                        .longitude(longitude)
+//                                        .mylat(mylat)
+//                                        .mylong(mylong)
+//                                        .position3lat(1234)
+//                                        .position3long(1234)
+//                                        .tmptype(tmptype)
+//                                        .build();
+//                                saigonParkingDatabase.InsertBookingTable(bookingEntity);
+//                            }
+
+
                             runOnUiThread(new Runnable() {
 
                                 @Override
@@ -527,6 +583,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .setContent(bookingCancellationContent.toByteString())
                 .build();
         webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+        //xử lý gọi database
+        saigonParkingDatabase.DeleteBookTable(id);
+
 
         runOnUiThread(new Runnable() {
 
@@ -546,7 +605,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
-                .setCustomerName(saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
+                .setCustomerName(saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
                 .setCustomerLicense("9954")
                 .setAmountOfParkingHour(3)
                 .build();

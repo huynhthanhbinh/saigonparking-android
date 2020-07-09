@@ -66,7 +66,7 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
     }
 
     private void initiateSocketConnection() {
-        String token = saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
+        String token = saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(SERVER_PATH)
@@ -226,7 +226,7 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
                 jsonObject.put("message", messageEdit.getText().toString());
 
                 TextMessageContent textMessageContent = TextMessageContent.newBuilder()
-                        .setSender(saigonParkingDatabase.getKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
+                        .setSender(saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
                         .setMessage(messageEdit.getText().toString())
                         .build();
 

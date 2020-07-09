@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -22,6 +23,9 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
+import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
+
+import java.io.Serializable;
 
 public class PermissionsActivity extends BaseSaigonParkingActivity {
     //    SaigonParkingDatabase database ;
@@ -37,16 +41,45 @@ public class PermissionsActivity extends BaseSaigonParkingActivity {
         setContentView(R.layout.activity_permissions);
 
         if (ContextCompat.checkSelfPermission(PermissionsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) { /* booking chua xoa trong db */
+                Log.d("BachMap", "con 1 hang trong booking table");
 
-            if (saigonParkingDatabase.getKeyValueMap().size() == 3) { /* BachMap moi vao */
-                startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+                ParkingLot parkingLot = ParkingLot.newBuilder()
+                        .setLatitude(saigonParkingDatabase.getBookingEntity().getLatitude())
+                        .setLongitude(saigonParkingDatabase.getBookingEntity().getLongitude())
+                        .setId(saigonParkingDatabase.getBookingEntity().getId())
+                        .build();
+
+
+                Log.d("BachMap", "doclen: " + saigonParkingDatabase.getBookingEntity().toString());
+                Log.d("BachMap", "" + saigonParkingDatabase.getBookingEntity().getMylat());
+                Log.d("BachMap", "" + saigonParkingDatabase.getBookingEntity().getLongitude());
+
+                Intent intent = new Intent(PermissionsActivity.this, PlaceDetailsActivity.class);
+                intent.putExtra("parkingLot", (Serializable) parkingLot);
+                intent.putExtra("myLat", (Serializable) saigonParkingDatabase.getBookingEntity().getMylat());
+                intent.putExtra("myLong", (Serializable) saigonParkingDatabase.getBookingEntity().getLongitude());
+
+                intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
+                intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
+
+                startActivity(intent);
                 finish();
                 return;
-            } else { /* BachMapKoChoVao */
-                startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
-                finish();
-                return;
+
+            } else {
+                if (saigonParkingDatabase.getAuthKeyValueMap().size() == 3) { /* BachMap moi vao */
+                    startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+                    finish();
+                    return;
+                } else { /* BachMapKoChoVao */
+                    startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
+                    finish();
+                    return;
+                }
             }
+
+
         }
 
         btnGrant = findViewById(R.id.btn_grant);
