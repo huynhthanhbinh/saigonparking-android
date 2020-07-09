@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,9 +167,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
             } else {
 
                 if (message.has("message")) {
-                    Log.d("BachMap", "2" + message);
+
                     ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
-                    messageHolder.nameTxt.setText(message.getString("tenbaixe"));
+                    messageHolder.nameTxt.setText(message.getString("name"));
                     messageHolder.messageTxt.setText(message.getString("message"));
 
                 } else {
