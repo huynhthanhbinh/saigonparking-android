@@ -20,6 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_MESSAGE_SENT = 0;
@@ -202,7 +204,31 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     public void addItem(JSONObject jsonObject) {
         messages.add(jsonObject);
+        if (Paper.book().read("historymessage") == null) {
+
+            Paper.book().write("historymessage", messages);
+        } else {
+            Paper.book().delete("historymessage");
+            Paper.book().write("historymessage", messages);
+        }
         notifyDataSetChanged();
     }
+
+    public void doLoadInitData(List<JSONObject> historymessage) {
+        if (historymessage != null) {
+            messages = historymessage;
+        }
+
+
+    }
+//    public void doDeleteHistoryMessage()
+//    {
+//        Log.d("abc",Paper.book().read("historymessage"));
+//        if(Paper.book().read("historymessage") != null)
+//        {
+//            Paper.book().delete("historymessage");
+//        }
+//
+//    }
 
 }

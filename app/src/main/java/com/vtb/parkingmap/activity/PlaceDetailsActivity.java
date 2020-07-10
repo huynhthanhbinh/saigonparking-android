@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import io.paperdb.Paper;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import okhttp3.OkHttpClient;
@@ -436,16 +437,19 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                             Log.d("BachMap", "Ket qua:" + notificationContent);
                             break;
                         case TEXT_MESSAGE:
-                            TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
-                            Log.d("BachMap", "1" + textMessageContent);
-                            JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("tenbaixe", textMessageContent.getSender());
-                            jsonObject.put("message", textMessageContent.getMessage());
-                            jsonObject.put("isSent", false);
+                            if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
+                                TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
+                                Log.d("BachMap", "1" + textMessageContent);
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("name", textMessageContent.getSender());
+                                jsonObject.put("message", textMessageContent.getMessage());
+                                jsonObject.put("isSent", false);
 
-                            messageAdapter.addItem(jsonObject);
+                                messageAdapter.addItem(jsonObject);
 
-                            recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                                recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+
+                            }
 
 
                             break;
@@ -590,7 +594,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable(parkingLot.getId());
 
-
+            //xóa history message
+            Paper.book().delete("historymessage");
             runOnUiThread(new Runnable() {
 
                 @Override

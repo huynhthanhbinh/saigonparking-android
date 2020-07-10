@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 
+import io.paperdb.Paper;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -144,12 +145,13 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
                         case NOTIFICATION:
                             NotificationContent notificationContent = NotificationContent.parseFrom(message.getContent());
                             Log.d("BachMap", "Ket qua:" + notificationContent);
+                            messageAdapter.doLoadInitData(Paper.book().read("historymessage"));
                             break;
                         case TEXT_MESSAGE:
                             TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
                             Log.d("BachMap", "1" + textMessageContent);
                             JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("tenbaixe", textMessageContent.getSender());
+                            jsonObject.put("name", textMessageContent.getSender());
                             jsonObject.put("message", textMessageContent.getMessage());
                             jsonObject.put("isSent", false);
 

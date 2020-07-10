@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import io.paperdb.Paper;
 import lombok.Getter;
 
 /**
@@ -48,6 +49,8 @@ public final class SaigonParkingApplication extends Application {
         Locale.setDefault(Locale.US);
         saigonParkingDatabase.createDatabaseIfNotExist();
 //        initWebSocketConnection();
+        //khởi tạo nơi lưu trữ dữ liệu historymessage
+        Paper.init(applicationContext);
     }
 
     private void initWebSocketConnection() {
