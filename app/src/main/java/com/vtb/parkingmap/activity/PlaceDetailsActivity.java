@@ -326,7 +326,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         btnimgdirection = findViewById(R.id.imgdirection);
         btnimgcancel = findViewById(R.id.imgcancel);
         btnimgshow = findViewById(R.id.imgshow);
-
+        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
+            btnimgshow.setVisibility(View.INVISIBLE);
+            btnimgcancel.setVisibility(View.VISIBLE);
+        }
 
         btnimgphone = findViewById(R.id.imgphone);
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
@@ -464,6 +467,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                                     .position3lat(position3lat)
                                     .position3long(position3long)
                                     .tmptype(tmptype)
+                                    .bookingid(bookingAcceptanceContent.getBookingId())
                                     .build();
 
 
@@ -568,35 +572,38 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private void cancelbooking() {
         long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
+        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
+                    .setBookingId(saigonParkingDatabase.getBookingEntity().getBookingid())
+                    .setReason("Khong thich dat nua")
+                    .build();
+            SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+                    .setSenderId(3)
+                    .setReceiverId(32)
+                    .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
+                    .setType(SaigonParkingMessage.Type.BOOKING_CANCELLATION)
+                    .setTimestamp(timestamp.toString())
+                    .setContent(bookingCancellationContent.toByteString())
+                    .build();
+            webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+            //xử lý gọi database
+            saigonParkingDatabase.DeleteBookTable(parkingLot.getId());
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
-                .setBookingId(bookingid)
-                .setReason("Khong thich dat nua")
-                .build();
-        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
-                .setSenderId(3)
-                .setReceiverId(32)
-                .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
-                .setType(SaigonParkingMessage.Type.BOOKING_CANCELLATION)
-                .setTimestamp(timestamp.toString())
-                .setContent(bookingCancellationContent.toByteString())
-                .build();
-        webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
-        //xử lý gọi database
-        saigonParkingDatabase.DeleteBookTable(id);
+
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    btnimgshow.setVisibility(View.VISIBLE);
+                    btnimgcancel.setVisibility(View.INVISIBLE);
+
+                }
+            });
+            Log.d("BachMap", "Gửi request CAMCELATION");
+        }
 
 
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                btnimgshow.setVisibility(View.VISIBLE);
-                btnimgcancel.setVisibility(View.INVISIBLE);
-
-            }
-        });
-        Log.d("BachMap", "Gửi request CAMCELATION");
     }
 
     private void sendbooking() {
