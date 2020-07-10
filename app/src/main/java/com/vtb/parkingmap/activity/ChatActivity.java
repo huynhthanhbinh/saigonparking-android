@@ -25,6 +25,7 @@ import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
+import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -148,16 +149,18 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
                             messageAdapter.doLoadInitData(Paper.book().read("historymessage"));
                             break;
                         case TEXT_MESSAGE:
-                            TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
-                            Log.d("BachMap", "1" + textMessageContent);
-                            JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("name", textMessageContent.getSender());
-                            jsonObject.put("message", textMessageContent.getMessage());
-                            jsonObject.put("isSent", false);
+                            if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
+                                TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
+                                Log.d("BachMap", "1" + textMessageContent);
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("name", textMessageContent.getSender());
+                                jsonObject.put("message", textMessageContent.getMessage());
+                                jsonObject.put("isSent", false);
 
-                            messageAdapter.addItem(jsonObject);
+                                messageAdapter.addItem(jsonObject);
 
-                            recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                                recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                            }
 
 
                             break;
