@@ -388,6 +388,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void initiateSocketConnection() {
+        //Khởi tạo Message Adapter để có thể gọi hàm
+        messageAdapter = new MessageAdapter(getLayoutInflater());
+
+        //
         String token = saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -447,7 +451,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
                                 messageAdapter.addItem(jsonObject);
 
-                                recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+//                                recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
 
                             }
 
