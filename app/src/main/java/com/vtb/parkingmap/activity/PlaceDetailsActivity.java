@@ -1,5 +1,8 @@
 package com.vtb.parkingmap.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +10,9 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -129,6 +134,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         super.onCreate(savedInstanceState);
         Log.d("khongbiloi", "Nhan du lieu");
         setContentView(R.layout.activity_place_details);
+        // tạo thông báo
+        createNotificationChannel();
+
         init();
         initiateSocketConnection();
         //lam hotel
@@ -439,6 +447,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                         case NOTIFICATION:
                             NotificationContent notificationContent = NotificationContent.parseFrom(message.getContent());
                             Log.d("BachMap", "Ket qua:" + notificationContent);
+
                             break;
                         case TEXT_MESSAGE:
                             if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
@@ -450,7 +459,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                                 jsonObject.put("isSent", false);
 
                                 messageAdapter.addItem(jsonObject);
-
+                                addNotification(textMessageContent.getSender(), textMessageContent.getMessage());
 //                                recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
 
                             }
@@ -635,6 +644,37 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .build();
         webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
         Log.d("BachMap", "Gửi request Booking");
+    }
+
+    public void addNotification(String name, String message) {
+        // Builds your notification
+        Intent notificationIntent = new Intent(this, ChatActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,
+                0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ID_Notification")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(name)
+                .setContentText(message)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setVibrate(new long[5])
+                .setAutoCancel(true)
+                .setContentIntent(contentIntent);
+        // Add as notification
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
+    }
+
+    //Tạo chanel thông báo (Dùng cho android api 26 trở lên)
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("ID_Notification", "TEST", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("THONG BAO HET CHO");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     // làm về hotel
