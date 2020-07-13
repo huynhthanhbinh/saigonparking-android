@@ -128,6 +128,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private MessageAdapter messageAdapter;
     private String bookingid = null;
     private String bookingreject = null;
+    private boolean flagbook = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,7 +338,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         btnimgshow = findViewById(R.id.imgshow);
         if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
             btnimgshow.setVisibility(View.INVISIBLE);
+            flagbook = false;
             btnimgcancel.setVisibility(View.VISIBLE);
+
         }
 
         btnimgphone = findViewById(R.id.imgphone);
@@ -536,6 +539,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                         case BOOKING_REJECT:
                             BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
                             Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
+                            flagbook = true;
                             break;
                         case IMAGE:
 
@@ -606,7 +610,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable(parkingLot.getId());
-
+            flagbook = true;
             //xóa history message
             Paper.book().delete("historymessage");
             runOnUiThread(new Runnable() {
@@ -625,25 +629,29 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void sendbooking() {
+        if (flagbook == true) {
+            long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
 
-        long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
+                    .setCustomerName(saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
+                    .setCustomerLicense("9954")
+                    .setAmountOfParkingHour(3)
+                    .build();
+            SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+                    .setSenderId(3)
+                    .setReceiverId(32)
+                    .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
+                    .setType(SaigonParkingMessage.Type.BOOKING_REQUEST)
+                    .setTimestamp(timestamp.toString())
+                    .setContent(bookingRequestContent.toByteString())
+                    .build();
+            webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+            flagbook = false;
+            Log.d("BachMap", "Gửi request Booking");
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
-                .setCustomerName(saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY))
-                .setCustomerLicense("9954")
-                .setAmountOfParkingHour(3)
-                .build();
-        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
-                .setSenderId(3)
-                .setReceiverId(32)
-                .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
-                .setType(SaigonParkingMessage.Type.BOOKING_REQUEST)
-                .setTimestamp(timestamp.toString())
-                .setContent(bookingRequestContent.toByteString())
-                .build();
-        webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
-        Log.d("BachMap", "Gửi request Booking");
+        }
+
     }
 
     public void addNotification(String name, String message) {
@@ -651,7 +659,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Intent notificationIntent = new Intent(this, ChatActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,
                 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ID_Notification")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setWhen(System.currentTimeMillis())
