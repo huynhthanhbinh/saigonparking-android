@@ -659,7 +659,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Intent notificationIntent = new Intent(this, ChatActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,
                 0, notificationIntent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ID_Notification")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setWhen(System.currentTimeMillis())
