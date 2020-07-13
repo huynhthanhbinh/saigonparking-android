@@ -1,9 +1,11 @@
 package com.vtb.parkingmap.activity;
 
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -655,24 +657,37 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     public void addNotification(String name, String message) {
+
         // Builds your notification
-        Intent notificationIntent = new Intent(this, ChatActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this,
-                0, notificationIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ID_Notification")
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(name)
-                .setContentText(message)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setVibrate(new long[5])
-                .setAutoCancel(true)
-                .setContentIntent(contentIntent);
-        // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+        ComponentName cn;
+        ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+
+        //noinspection deprecation
+        cn = am.getRunningTasks(1).get(0).topActivity;
+        String tmp = "com.vtb.parkingmap.activity.ChatActivity";
+        if (tmp.equals(cn.getShortClassName()) == false) {
+
+
+            Intent notificationIntent = new Intent(this, ChatActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(this,
+                    0, notificationIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ID_Notification")
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle(name)
+                    .setContentText(message)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setVibrate(new long[5])
+                    .setAutoCancel(true)
+                    .setContentIntent(contentIntent);
+            // Add as notification
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(0, builder.build());
+        }
+
+
     }
 
     //Tạo chanel thông báo (Dùng cho android api 26 trở lên)
