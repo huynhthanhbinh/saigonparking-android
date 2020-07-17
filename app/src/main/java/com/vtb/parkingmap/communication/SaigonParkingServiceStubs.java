@@ -3,6 +3,8 @@ package com.vtb.parkingmap.communication;
 import android.content.Context;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.contact.ContactServiceGrpc;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 
@@ -11,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
+ *
  * All service stubs of saigonparking system
  * ManagedChannel is private used only, cannot be accessed from outside !
  * <p>
@@ -32,6 +35,10 @@ public final class SaigonParkingServiceStubs {
     private UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
     private ParkingLotServiceGrpc.ParkingLotServiceStub parkingLotServiceStub;
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+    private ContactServiceGrpc.ContactServiceStub contactServiceStub;
+    private ContactServiceGrpc.ContactServiceBlockingStub contactServiceBlockingStub;
+    private BookingServiceGrpc.BookingServiceStub bookingServiceStub;
+    private BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
 
     public SaigonParkingServiceStubs(Context applicationContext) {
         saigonParkingChannel = new SaigonParkingChannelConfiguration(applicationContext).getManagedChannel();
@@ -45,5 +52,9 @@ public final class SaigonParkingServiceStubs {
         userServiceBlockingStub = UserServiceGrpc.newBlockingStub(saigonParkingChannel);
         parkingLotServiceStub = ParkingLotServiceGrpc.newStub(saigonParkingChannel);
         parkingLotServiceBlockingStub = ParkingLotServiceGrpc.newBlockingStub(saigonParkingChannel);
+        contactServiceStub = ContactServiceGrpc.newStub(saigonParkingChannel);
+        contactServiceBlockingStub = ContactServiceGrpc.newBlockingStub(saigonParkingChannel);
+        bookingServiceStub = BookingServiceGrpc.newStub(saigonParkingChannel);
+        bookingServiceBlockingStub = BookingServiceGrpc.newBlockingStub(saigonParkingChannel);
     }
 }
