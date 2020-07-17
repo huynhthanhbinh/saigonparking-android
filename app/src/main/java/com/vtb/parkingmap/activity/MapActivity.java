@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -76,6 +78,7 @@ import com.google.maps.android.SphericalUtil;
 import com.google.protobuf.Int64Value;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
+import com.mancj.slideup.SlideUp;
 import com.skyfishjy.library.RippleBackground;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
@@ -147,6 +150,17 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private ImageButton btnAbout;
     private ImageButton flagdrawdirect;
     private final int RECOGNIZER_REQ_CODE = 100; //code activity result speech
+
+
+    //other locations
+    private SlideUp slideUp;
+    private View dim;
+    private View slideView;
+    private FloatingActionButton fab;
+    private ImageView imgbtnrestaurant;
+    private ImageView imgbtnhospital;
+    private ImageView imgbtnGasStation;
+
 
 
     private RippleBackground rippleBg;
@@ -392,8 +406,17 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                     }
                                 }
                                 if (option == 2) {
-                                    nearbyPlaces("market");
+                                    nearbyPlaces("restaurant");
+
                                 }
+//                                if (option == 3) {
+//                                    nearbyPlaces("hospital");
+//
+//                                }
+//                                if (option == 4) {
+//                                    nearbyPlaces("gas station");
+//
+//                                }
                             }
                         }
                     }).addOnFailureListener(e -> {
@@ -577,7 +600,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                 }
                             }
                             if (option == 2) {
-                                nearbyPlaces("market");
+                                nearbyPlaces("restaurant");
                             }
                         }
                     }
@@ -658,6 +681,100 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             new Handler().postDelayed(() -> rippleBg.stopRippleAnimation(), 3000);
 
         });
+
+
+        //Tạo nút other locations
+        slideView = findViewById(R.id.slideView);
+        dim = findViewById(R.id.dim);
+
+        slideUp = new SlideUp(slideView);
+        slideUp.hideImmediately();
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slideUp.animateIn();
+                fab.hide();
+            }
+        });
+        imgbtnrestaurant = findViewById(R.id.imgrestaurant);
+        imgbtnrestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearbyPlaces("restaurant");
+                slideUp.animateOut();
+                if (recommendedParkingLotResultList != null ) {
+                    recommendedParkingLotResultList.clear();
+
+                }
+                parkingLotResultSet.clear();
+                if (mMap != null) {
+                    mMap.clear();
+                }
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                Toast.makeText(MapActivity.this, "Da Bam", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        imgbtnhospital = findViewById(R.id.imghospital);
+        imgbtnhospital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearbyPlaces("hospital");
+                slideUp.animateOut();
+                if (recommendedParkingLotResultList != null ) {
+                    recommendedParkingLotResultList.clear();
+                }
+                parkingLotResultSet.clear();
+                if (mMap != null) {
+                    mMap.clear();
+                }
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                Toast.makeText(MapActivity.this, "Da Bam", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        imgbtnGasStation = findViewById(R.id.imgGasStation);
+        imgbtnGasStation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearbyPlaces("gas_station");
+                slideUp.animateOut();
+                if (recommendedParkingLotResultList != null ) {
+                    recommendedParkingLotResultList.clear();
+                }
+                parkingLotResultSet.clear();
+                if (mMap != null) {
+                    mMap.clear();
+                }
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                Toast.makeText(MapActivity.this, "Da Bam", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+        slideUp.setSlideListener(new SlideUp.SlideListener() {
+            @Override
+            public void onSlideDown(float v) {
+                dim.setAlpha(1 - (v / 100));
+            }
+
+            @Override
+            public void onVisibilityChanged(int i) {
+                if (i == View.GONE) {
+                    fab.show();
+                }
+
+            }
+        });
     }
 
     private List<ParkingLotResult> sortParkingLotResultList(List<ParkingLotResult> parkingLotResultList) {
@@ -689,7 +806,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         }
         if (type.equals(ParkingLotType.STREET)) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.makerstreet));
-        }
+    }
+
         markerOptions.snippet(String.valueOf(parkingLotResult.getId()));
         marker = mMap.addMarker(markerOptions);
     }
@@ -931,6 +1049,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                         myPlaces = response.body();
                         if (response.isSuccessful()) {
                             for (int i = 0; i < response.body().getResults().length; i++) {
+
+
                                 MarkerOptions markerOptions = new MarkerOptions();
                                 Results googlePlace = response.body().getResults()[i];
                                 double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
@@ -942,11 +1062,11 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                 markerOptions.title(placeName);
 
                                 if (placeType.equals("hospital")) {
-                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                                } else if (placeType.equals("market")) {
-                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_hospital));
+                                } else if (placeType.equals("gas_station")) {
+                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_gas_pump));
                                 } else if (placeType.equals("restaurant")) {
-                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_restaurant));
                                 } else {
                                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                                 }

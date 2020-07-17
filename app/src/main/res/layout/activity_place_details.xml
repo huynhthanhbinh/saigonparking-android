@@ -212,7 +212,7 @@
 
                             <TextView
                                 android:id="@+id/textViewRating"
-                                android:layout_width="wrap_content"
+                                android:layout_width="40dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="5dp"
@@ -346,6 +346,7 @@
                     android:text="TYPE: "
                     android:textColor="#42b883"
                     android:textSize="14sp"
+                    android:visibility="invisible"
 
                     android:id="@+id/imgdirection"
                     android:src="@drawable/icon_direction2" />
@@ -360,6 +361,8 @@
                     android:text="TYPE: "
                     android:textColor="#42b883"
                     android:textSize="14sp"
+                    android:visibility="invisible"
+
                     android:id="@+id/imgphone"
                     android:src="@drawable/icon_phone2" />
                 />

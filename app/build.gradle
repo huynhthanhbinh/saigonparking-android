@@ -37,6 +37,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven {url 'https://jitpack.io'}
 }
 
 dependencies {
@@ -82,6 +83,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.github.GwonHyeok:StickySwitch:0.0.16'
+    implementation 'com.github.mancj:SlideUp-Android:1.0-beta'
     //setup API
     implementation files('libs/saigonparking-official-api.jar')
 

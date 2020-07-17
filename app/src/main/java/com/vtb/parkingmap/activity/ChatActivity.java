@@ -55,7 +55,7 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
     private RecyclerView recyclerView;
     private int IMAGE_REQUEST_ID = 1;
     private MessageAdapter messageAdapter;
-
+    private long id ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +63,8 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
 
 //        name = getIntent().getStringExtra("name");
         name = "VU TUONG BACH";
+        Intent intent = getIntent();
+        id = (long) intent.getSerializableExtra("idparkinglot");
         initiateSocketConnection();
 
     }
@@ -236,8 +238,8 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
                         .build();
 
                 SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
-                        .setSenderId(3)
-                        .setReceiverId(32)
+
+                        .setReceiverId(id)
                         .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
                         .setType(SaigonParkingMessage.Type.TEXT_MESSAGE)
                         .setTimestamp(timestamp.toString())

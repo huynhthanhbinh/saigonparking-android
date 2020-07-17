@@ -21,6 +21,6 @@ public final class SaigonParkingDatabaseEntity {
     private long id;
     private double position3lat;
     private double position3long;
-    private String bookingid;
+    private long bookingid;
     public static final SaigonParkingDatabaseEntity DEFAULT_INSTANCE = SaigonParkingDatabaseEntity.builder().build();
 }
