@@ -208,7 +208,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
     public void InsertBookingTable(SaigonParkingDatabaseEntity saigonParkingDatabaseEntity) {
         queryData(String.format(Locale.US,
-                "INSERT INTO SAIGON_PARKING_BOOKING VALUES(%d,%f,%f,%f,%f,%f,%f,%d,'%s')",
+                "INSERT OR REPLACE INTO SAIGON_PARKING_BOOKING VALUES(%d,%f,%f,%f,%f,%f,%f,%d,'%s')",
                 saigonParkingDatabaseEntity.getId(),
                 saigonParkingDatabaseEntity.getLatitude(),
                 saigonParkingDatabaseEntity.getLongitude(),
@@ -225,10 +225,10 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
         bookingEntity = entity;
     }
 
-    public void DeleteBookTable(long parkingLotId) {
+    public void DeleteBookTable() {
 
         Log.d("BachMap", getFirstRowOfBookingTable().toString());
-        queryData(String.format("DELETE FROM SAIGON_PARKING_BOOKING WHERE PARKING_LOT_ID = %d", parkingLotId));
+        queryData("DELETE FROM SAIGON_PARKING_BOOKING");
         Log.d("BachMap", getFirstRowOfBookingTable().toString());
     }
 }

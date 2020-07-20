@@ -80,7 +80,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private ImageView imageView;
     private ImageView btnimgdirection;
     private ImageView btnimgshow;
-    private ImageView btnimgphone;
+    private ImageView btnimgchat;
     private ImageView btnimgcancel;
     private Photos photos;
     private TextView textViewName;
@@ -199,7 +199,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
             }
         });
-        btnimgphone.setOnClickListener(new View.OnClickListener() {
+        btnimgchat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -213,6 +213,20 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     }
 
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//
+//        unregisterReceiver(broadcast);
+//    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcast);
+    }
+
     private boolean onCheckParkingLotOnline() {
         Log.d("BachMap", "parking lot id: " + id);
 
@@ -220,7 +234,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .checkParkingLotOnlineByParkingLotId(Int64Value.of(id)).getValue();
 
         if (!isParkingLotOnline) {
-            Toast.makeText(PlaceDetailsActivity.this, "Bãi xe chưa mở cửa!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PlaceDetailsActivity.this, "Bãi xe không khả dụng!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -263,7 +277,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cancelbooking();
+//                cancelbooking();
             }
         });
     }
@@ -394,14 +408,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         btnimgdirection = findViewById(R.id.imgdirection);
         btnimgcancel = findViewById(R.id.imgcancel);
         btnimgshow = findViewById(R.id.imgshow);
-        btnimgphone = findViewById(R.id.imgphone);
+        btnimgchat = findViewById(R.id.imgchat);
         //đã có dự lieu booking
         if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
             // hien nut cancel + chat + huong di bai xe ( flagbook = false )
             btnimgshow.setVisibility(View.INVISIBLE);
             flagbook = false;
             btnimgcancel.setVisibility(View.VISIBLE);
-            btnimgphone.setVisibility(View.VISIBLE);
+            btnimgchat.setVisibility(View.VISIBLE);
             btnimgdirection.setVisibility(View.VISIBLE);
 
         }
@@ -410,7 +424,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             // hien nut booking thoi
             btnimgshow.setVisibility(View.VISIBLE);
             flagbook = true;
-            btnimgphone.setVisibility(View.INVISIBLE);
+            btnimgchat.setVisibility(View.INVISIBLE);
             btnimgdirection.setVisibility(View.INVISIBLE);
             btnimgcancel.setVisibility(View.INVISIBLE);
         }
@@ -598,7 +612,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                                     btnimgshow.setVisibility(View.INVISIBLE);
                                     btnimgcancel.setVisibility(View.VISIBLE);
                                     btnimgdirection.setVisibility(View.VISIBLE);
-                                    btnimgphone.setVisibility(View.VISIBLE);
+                                    btnimgchat.setVisibility(View.VISIBLE);
                                 }
                             });
                             break;
@@ -619,7 +633,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                                     btnimgshow.setVisibility(View.VISIBLE);
                                     btnimgcancel.setVisibility(View.INVISIBLE);
                                     btnimgdirection.setVisibility(View.INVISIBLE);
-                                    btnimgphone.setVisibility(View.INVISIBLE);
+                                    btnimgchat.setVisibility(View.INVISIBLE);
                                 }
                             });
                             break;
@@ -689,7 +703,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .build();
             webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
             //xử lý gọi database
-            saigonParkingDatabase.DeleteBookTable(parkingLot.getId());
+            saigonParkingDatabase.DeleteBookTable();
             flagbook = true;
             //xóa history message
             Paper.book().delete("historymessage");
@@ -700,10 +714,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     btnimgshow.setVisibility(View.VISIBLE);
                     btnimgcancel.setVisibility(View.INVISIBLE);
                     btnimgdirection.setVisibility(View.INVISIBLE);
-                    btnimgphone.setVisibility(View.INVISIBLE);
+                    btnimgchat.setVisibility(View.INVISIBLE);
                 }
             });
-            Log.d("BachMap", "Gửi request CAMCELATION");
+//            btnimgshow.setEnabled(true);
+//            btnimgcancel.setEnabled(false);
+//            btnimgdirection.setEnabled(false);
+//            btnimgphone.setEnabled(false);
+//            Log.d("BachMap", "Gửi request CAMCELATION");
         }
 
 

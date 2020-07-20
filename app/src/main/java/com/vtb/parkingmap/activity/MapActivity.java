@@ -1188,7 +1188,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 Toast.makeText(MapActivity.this, "ERROR keo man hinh2", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_history:
-                Toast.makeText(MapActivity.this, "ERROR keo man hinh3", Toast.LENGTH_SHORT).show();
+                Intent intenthistory = new Intent(MapActivity.this, HistoryActivity.class);
+                startActivity(intenthistory);
                 break;
             case R.id.nav_setting:
                 Toast.makeText(MapActivity.this, "ERROR keo man hinh4", Toast.LENGTH_SHORT).show();

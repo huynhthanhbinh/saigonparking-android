@@ -334,7 +334,7 @@
                     android:textSize="14sp"
                     android:visibility="invisible"
                     android:id="@+id/imgcancel"
-                    android:src="@drawable/icon_phone2" />
+                    android:src="@drawable/icon_cancel" />
                 />
 
                 <ImageView
@@ -363,8 +363,8 @@
                     android:textSize="14sp"
                     android:visibility="invisible"
 
-                    android:id="@+id/imgphone"
-                    android:src="@drawable/icon_phone2" />
+                    android:id="@+id/imgchat"
+                    android:src="@drawable/icon_chat" />
                 />
 
 

@@ -27,7 +27,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.ChatActivity"></activity>
+        <activity android:name=".activity.HistoryActivity"></activity>
+        <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.MainChatActivity" />
         <activity android:name=".activity.RatingActivity" />
         <activity android:name=".activity.CommentRatingActivity" />

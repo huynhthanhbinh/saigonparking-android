@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="120">
+
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Booking ID: "
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/textView1"
+        android:layout_weight="40" />
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Tên bãi xe: "
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/textView2"
+        android:layout_weight="40" />
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Biển số: "
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/textView3"
+        android:layout_weight="40" />
+
+
+</LinearLayout>
