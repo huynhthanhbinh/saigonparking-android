@@ -32,7 +32,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
 
     //BOOKING
-    public static final String BOOKINGID_KEY = "bookingid";
+    public static final String BOOKINGID_KEY = "bookingId";
 
 
     private Map<String, String> authKeyValueMap = new HashMap<>();
@@ -90,7 +90,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 "CURRENT_LAT REAL, " +
                 "CURRENT_LNG REAL, " +
                 "MODE INTEGER, " +
-                "BOOKING_ID NVARCHAR(1000) " +
+                "BOOKING_ID VARCHAR(36) " +
                 " )");
 
         bookingEntity = getFirstRowOfBookingTable();
@@ -201,7 +201,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
             entity.mylat(cursor.getDouble(5));
             entity.mylong(cursor.getDouble(6));
             entity.tmptype(cursor.getInt(7));
-            entity.bookingid(cursor.getLong(8));
+            entity.bookingId(cursor.getString(8));
         }
         return entity.build();
     }
@@ -217,7 +217,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 saigonParkingDatabaseEntity.getMylat(),
                 saigonParkingDatabaseEntity.getMylong(),
                 saigonParkingDatabaseEntity.getTmptype(),
-                saigonParkingDatabaseEntity.getBookingid()
+                saigonParkingDatabaseEntity.getBookingId()
         ));
 
         SaigonParkingDatabaseEntity entity = getFirstRowOfBookingTable();

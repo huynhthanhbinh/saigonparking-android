@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/textGrid"
-                android:text="DỊCH VỤ"
+                android:text="SERVICE"
                 android:textSize="34sp"
                 android:textColor="@android:color/black"
                 android:layout_centerInParent="true"
@@ -40,30 +40,28 @@
 
         <GridLayout
             android:id="@+id/mainGrid"
-            android:columnCount="3"
-            android:rowCount="3"
+            android:columnCount="2"
+            android:rowCount="4"
             android:alignmentMode="alignMargins"
             android:columnOrderPreserved="false"
             android:layout_weight="10"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="14dp"
-            >
+            android:padding="14dp">
 
             <!-- Row 1 -->
 
             <!-- Column 1 -->
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -75,14 +73,14 @@
                     <ImageView
                         android:src="@drawable/icon_parkinglot"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Bãi Đậu"
+                        android:text="Parking"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -92,16 +90,15 @@
 
             <!-- Column 2 -->
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -114,14 +111,14 @@
                         android:id="@+id/imgGasStation"
                         android:src="@drawable/gas_pump"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Trạm Xăng"
+                        android:text="Fuel Station"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -134,16 +131,15 @@
 
             <!-- Column 1 -->
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -155,14 +151,14 @@
                     <ImageView
                         android:src="@drawable/icon_carwash"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Rửa Xe"
+                        android:text="Car Wash"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -172,16 +168,15 @@
 
             <!-- Column 2 -->
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -193,14 +188,14 @@
                     <ImageView
                         android:src="@drawable/icon_carfix"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Sửa Xe"
+                        android:text="Garage"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -208,59 +203,18 @@
 
             </android.support.v7.widget.CardView>
 
-
-            <!-- Row 2 -->
-
-            <!-- Column 1 -->
-            <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
-
-                <LinearLayout
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:src="@drawable/icon_battery"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
-
-                    <TextView
-                        android:text="Ắc Quy"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
 
             <!-- Column 2 -->
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -272,14 +226,14 @@
                     <ImageView
                         android:src="@drawable/tire"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Vá Lốp"
+                        android:text="Tire Patch"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -288,16 +242,15 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -309,14 +262,14 @@
                     <ImageView
                         android:src="@drawable/icon_car_repair"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Cứu Hộ"
+                        android:text="Wrecker"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -325,16 +278,15 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -347,14 +299,14 @@
                         android:id="@+id/imgrestaurant"
                         android:src="@drawable/icon_restaurant"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Nhà Hàng"
+                        android:text="Restaurant"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -363,16 +315,15 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -385,24 +336,20 @@
                         android:id="@+id/imghospital"
                         android:src="@drawable/icon_hospital"
                         android:layout_gravity="center_horizontal"
-                        android:layout_width="120px"
-                        android:layout_height="120px" />
+                        android:layout_width="100px"
+                        android:layout_height="100px" />
 
                     <TextView
-                        android:text="Bệnh Viện"
+                        android:text="Hospital"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-
-
-
 
 
         </GridLayout>

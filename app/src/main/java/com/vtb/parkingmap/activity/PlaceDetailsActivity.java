@@ -1,7 +1,6 @@
 package com.vtb.parkingmap.activity;
 
 import android.app.ActivityManager;
-import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,11 +16,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.view.KeyEventDispatcher;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,8 +67,6 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
-
-import static android.view.KeyEvent.KEYCODE_BACK;
 
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
@@ -135,7 +130,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private RecyclerView recyclerView;
 
     private MessageAdapter messageAdapter;
-    private long bookingid;
+    private String bookingId;
     private String bookingreject = null;
     private boolean flagbook = true;
 
@@ -171,14 +166,11 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         processParkingLot();
         //ping ping client
-        btnimgcancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancelbooking();
-                onBackPressed();
-
-            }
-        });
+//        btnimgcancel.setOnClickListener(view -> {
+//            cancelbooking();
+//            onBackPressed();
+//
+//        });
         btnimgdirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -195,10 +187,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
                     showAlertDialog(view);
                 }
-//                sendbooking();
 
             }
         });
+
         btnimgchat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,29 +226,29 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .checkParkingLotOnlineByParkingLotId(Int64Value.of(id)).getValue();
 
         if (!isParkingLotOnline) {
-            Toast.makeText(PlaceDetailsActivity.this, "Bãi xe không khả dụng!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PlaceDetailsActivity.this, "Parking are not available!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    public void showAlertDialog(View v){
+    public void showAlertDialog(View v) {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Xác nhận booking");
-        alert.setMessage("Bạn có muốn tiếp tục booking bãi xe?");
-        alert.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+        alert.setTitle("Booking Confirm");
+        alert.setMessage("Do you want to book this parking lot?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               sendbooking();
-                Toast.makeText(PlaceDetailsActivity.this, "Booking thành công!", Toast.LENGTH_SHORT).show();
-                onBackPressed();
+                sendbooking();
+                Toast.makeText(PlaceDetailsActivity.this, "Booking successfully!", Toast.LENGTH_SHORT).show();
+
             }
         });
-        alert.setNegativeButton("Hủy bỏ", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(PlaceDetailsActivity.this, "Hủy bỏ thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlaceDetailsActivity.this, "Cancel booking successfully!", Toast.LENGTH_SHORT).show();
             }
         });
         alert.create().show();
@@ -311,7 +303,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         textViewName.setText(name);
         linearLayoutRating.setVisibility(View.VISIBLE);
-        textViewRating.setText(String.format(Locale.US,"%.2f",ratingAverage));
+        textViewRating.setText(String.format(Locale.US, "%.2f", ratingAverage));
         ratingBar.setRating((float) ratingAverage);
         textViewAddress.setText(address);
         textViewAvailability.setText(String.format(Locale.ENGLISH, "%d/%d", availableSlot, totalSlot));
@@ -360,7 +352,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             return;
         }
 
-        Intent intent = new Intent(PlaceDetailsActivity.this, ViewDrawDirectionActivity.class);
+        Intent intent = new Intent(PlaceDetailsActivity.this, BookingActivity.class);
         intent.putExtra("placedetaillat", (Serializable) latitude);
         intent.putExtra("placedetaillong", (Serializable) longitude);
         intent.putExtra("mylatfromplacedetail", (Serializable) mylat);
@@ -410,25 +402,22 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         btnimgshow = findViewById(R.id.imgshow);
         btnimgchat = findViewById(R.id.imgchat);
         //đã có dự lieu booking
-        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
-            // hien nut cancel + chat + huong di bai xe ( flagbook = false )
-            btnimgshow.setVisibility(View.INVISIBLE);
-            flagbook = false;
-            btnimgcancel.setVisibility(View.VISIBLE);
-            btnimgchat.setVisibility(View.VISIBLE);
-            btnimgdirection.setVisibility(View.VISIBLE);
-
-        }
-        else
-        {//chua co
-            // hien nut booking thoi
-            btnimgshow.setVisibility(View.VISIBLE);
-            flagbook = true;
-            btnimgchat.setVisibility(View.INVISIBLE);
-            btnimgdirection.setVisibility(View.INVISIBLE);
-            btnimgcancel.setVisibility(View.INVISIBLE);
-        }
-
+//        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
+//            // hien nut cancel + chat + huong di bai xe ( flagbook = false )
+//            btnimgshow.setVisibility(View.INVISIBLE);
+//            flagbook = false;
+//            btnimgcancel.setVisibility(View.VISIBLE);
+//            btnimgchat.setVisibility(View.VISIBLE);
+//            btnimgdirection.setVisibility(View.VISIBLE);
+//
+//        } else {//chua co
+//            // hien nut booking thoi
+//            btnimgshow.setVisibility(View.VISIBLE);
+//            flagbook = true;
+//            btnimgchat.setVisibility(View.INVISIBLE);
+//            btnimgdirection.setVisibility(View.INVISIBLE);
+//            btnimgcancel.setVisibility(View.INVISIBLE);
+//        }
 
 
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
@@ -449,8 +438,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         output = findViewById(R.id.txtlastupdate);
         txtXemChiTiet = findViewById(R.id.txtXemChiTiet);
     }
-
-
 
 
     public void funcXemChiTietDanhGia(View view) {
@@ -549,9 +536,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                             break;
                         case BOOKING_ACCEPTANCE:
                             BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
-                            bookingid = bookingAcceptanceContent.getBookingId();
+                            bookingId = bookingAcceptanceContent.getBookingId();
                             Log.d("BachMap", "1 : BOOKING ACC: " + bookingAcceptanceContent.getBookingId());
-                            bookingid = bookingAcceptanceContent.getBookingId();
+                            bookingId = bookingAcceptanceContent.getBookingId();
                             double tmp = 1234;
 
                             Log.d("BachMap", "onMessage: BachMap vao ");
@@ -565,7 +552,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                                     .position3lat(position3lat)
                                     .position3long(position3long)
                                     .tmptype(tmptype)
-                                    .bookingid(bookingAcceptanceContent.getBookingId())
+                                    .bookingId(bookingAcceptanceContent.getBookingId())
                                     .build();
 
 
@@ -605,37 +592,57 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 //                            }
 
 
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    btnimgshow.setVisibility(View.INVISIBLE);
-                                    btnimgcancel.setVisibility(View.VISIBLE);
-                                    btnimgdirection.setVisibility(View.VISIBLE);
-                                    btnimgchat.setVisibility(View.VISIBLE);
-                                }
-                            });
+//                            runOnUiThread(new Runnable() {
+//
+//                                @Override
+//                                public void run() {
+//                                    btnimgshow.setVisibility(View.INVISIBLE);
+//                                    btnimgcancel.setVisibility(View.VISIBLE);
+//                                    btnimgdirection.setVisibility(View.VISIBLE);
+//                                    btnimgchat.setVisibility(View.VISIBLE);
+//                                }
+//                            });
                             break;
                         case BOOKING_PROCESSING:
                             BookingProcessingContent bookingProcessingContent = BookingProcessingContent.parseFrom(message.getContent());
-                            Log.d("BachMap","Tai ID: " + bookingProcessingContent.getBookingId());
+                            Log.d("BachMap", "Tai ID: " + bookingProcessingContent.getBookingId());
+                            /* open Booking Activity + send bookingProcessingContent to Booking Activity */
+                            Intent intent = new Intent(PlaceDetailsActivity.this, BookingActivity.class);
+
+                            intent.putExtra("parkingLot", (Serializable) parkingLot);
+                            intent.putExtra("placedetaillat", (Serializable) latitude);
+                            intent.putExtra("placedetaillong", (Serializable) longitude);
+                            intent.putExtra("mylatfromplacedetail", (Serializable) mylat);
+                            intent.putExtra("mylongfromplacedetail", (Serializable) mylong);
+                            intent.putExtra("placedetailtype", (Serializable) tmptype);
+                            intent.putExtra("idplacedetail", (Serializable) id);
+                            double tai = 1234;
+                            if (position3lat != tai) {
+                                intent.putExtra("position3lat", (Serializable) position3lat);
+                                intent.putExtra("position3long", (Serializable) position3long);
+                            }
+
+
+                            intent.putExtra("bookingProcessingContent", bookingProcessingContent);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                             break;
                         case BOOKING_REJECT:
                             BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
                             Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
-                            Toast.makeText(PlaceDetailsActivity.this, "Bãi xe đã hết chỗ!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PlaceDetailsActivity.this, "Parking full slot! Please choose other parking lots!", Toast.LENGTH_SHORT).show();
                             flagbook = true;
 
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    btnimgshow.setVisibility(View.VISIBLE);
-                                    btnimgcancel.setVisibility(View.INVISIBLE);
-                                    btnimgdirection.setVisibility(View.INVISIBLE);
-                                    btnimgchat.setVisibility(View.INVISIBLE);
-                                }
-                            });
+//                            runOnUiThread(new Runnable() {
+//
+//                                @Override
+//                                public void run() {
+//                                    btnimgshow.setVisibility(View.VISIBLE);
+//                                    btnimgcancel.setVisibility(View.INVISIBLE);
+//                                    btnimgdirection.setVisibility(View.INVISIBLE);
+//                                    btnimgchat.setVisibility(View.INVISIBLE);
+//                                }
+//                            });
                             break;
                         case IMAGE:
 
@@ -691,8 +698,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
-                    .setBookingId(saigonParkingDatabase.getBookingEntity().getBookingid())
-                    .setReason("Khong thich dat nua")
+                    .setBookingId(saigonParkingDatabase.getBookingEntity().getBookingId())
+                    .setReason("DON'T WANT TO BOOK")
                     .build();
             SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
                     .setReceiverId(id)
@@ -741,7 +748,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .setAmountOfParkingHour(3)
                     .setParkingLotId(id)
                     .build();
-
 
 
             SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
@@ -802,13 +808,13 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
 
+    @Override
     public void onBackPressed() {
-        if (flagbook == true)
-        {
+        if (flagbook == true) {
             super.onBackPressed();
         }
         //Write your code here
-        else{
+        else {
             Toast.makeText(getApplicationContext(), "Back press disabled!", Toast.LENGTH_SHORT).show();
         }
 
@@ -849,7 +855,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 //                    .into(imageView);
 //        }
 //
-//        textViewName.setText(results.getName());
+//        tc.setText(results.getName());
 //        textViewAddress.setText(results.getVicinity());
 //        // check if ratings is available for the place
 //        if (results.getRating() != null) {

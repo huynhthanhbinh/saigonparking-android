@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -156,11 +155,10 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private SlideUp slideUp;
     private View dim;
     private View slideView;
-    private FloatingActionButton fab;
+    private ImageButton fab;
     private ImageView imgbtnrestaurant;
     private ImageView imgbtnhospital;
     private ImageView imgbtnGasStation;
-
 
 
     private RippleBackground rippleBg;
@@ -690,12 +688,12 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         slideUp = new SlideUp(slideView);
         slideUp.hideImmediately();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (ImageButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 slideUp.animateIn();
-                fab.hide();
+//                fab.hide();
             }
         });
         imgbtnrestaurant = findViewById(R.id.imgrestaurant);
@@ -704,7 +702,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void onClick(View view) {
                 nearbyPlaces("restaurant");
                 slideUp.animateOut();
-                if (recommendedParkingLotResultList != null ) {
+                if (recommendedParkingLotResultList != null) {
                     recommendedParkingLotResultList.clear();
 
                 }
@@ -725,7 +723,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void onClick(View view) {
                 nearbyPlaces("hospital");
                 slideUp.animateOut();
-                if (recommendedParkingLotResultList != null ) {
+                if (recommendedParkingLotResultList != null) {
                     recommendedParkingLotResultList.clear();
                 }
                 parkingLotResultSet.clear();
@@ -745,7 +743,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void onClick(View view) {
                 nearbyPlaces("gas_station");
                 slideUp.animateOut();
-                if (recommendedParkingLotResultList != null ) {
+                if (recommendedParkingLotResultList != null) {
                     recommendedParkingLotResultList.clear();
                 }
                 parkingLotResultSet.clear();
@@ -759,8 +757,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         });
 
 
-
-
         slideUp.setSlideListener(new SlideUp.SlideListener() {
             @Override
             public void onSlideDown(float v) {
@@ -770,7 +766,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             @Override
             public void onVisibilityChanged(int i) {
                 if (i == View.GONE) {
-                    fab.show();
+//                    fab.show();
                 }
 
             }
@@ -806,7 +802,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         }
         if (type.equals(ParkingLotType.STREET)) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.makerstreet));
-    }
+        }
 
         markerOptions.snippet(String.valueOf(parkingLotResult.getId()));
         marker = mMap.addMarker(markerOptions);

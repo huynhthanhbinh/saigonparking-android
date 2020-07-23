@@ -94,6 +94,7 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
         intent.putExtra("UserName", username);
         intent.putExtra("PassWord", password);
         startActivity(intent);
+        finish();
         // TODO: Implement your own authentication logic here.
 
 //        new android.os.Handler().postDelayed(

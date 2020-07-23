@@ -55,7 +55,8 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
     private RecyclerView recyclerView;
     private int IMAGE_REQUEST_ID = 1;
     private MessageAdapter messageAdapter;
-    private long id ;
+    private long id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

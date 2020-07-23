@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nav_account"
-        android:title="Tài khoản"/>
-    <item android:id="@+id/nav_history"
-        android:title="Lịch sử đặt chỗ"/>
-    <item android:id="@+id/nav_setting"
-        android:title="Cài đặt"/>
-    <item android:id="@+id/nav_logout"
-        android:title="Đăng xuất"/>
+    <item
+        android:id="@+id/nav_account"
+        android:title="Account" />
+    <item
+        android:id="@+id/nav_history"
+        android:title="Booking History" />
+    <item
+        android:id="@+id/nav_setting"
+        android:title="Setting" />
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Log out" />
 </menu>

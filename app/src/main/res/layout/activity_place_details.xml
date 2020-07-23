@@ -207,7 +207,7 @@
                             android:orientation="horizontal"
                             android:paddingLeft="2dp"
                             android:paddingTop="5dp"
-                            android:paddingRight="2dp"
+                            android:paddingRight="0dp"
                             android:paddingBottom="5dp">
 
                             <TextView
@@ -240,13 +240,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_marginRight="5dp"
-                                android:padding="5dp"
-                                android:text="Xem chi tiet danh gia"
+                                android:layout_marginRight="0dp"
+                                android:onClick="funcXemChiTietDanhGia"
+                                android:paddingLeft="75dp"
+                                android:text="Show Comment Detail"
                                 android:textColor="#fff"
                                 android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:onClick="funcXemChiTietDanhGia" />
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -338,18 +338,18 @@
                 />
 
                 <ImageView
+                    android:id="@+id/imgdirection"
                     android:layout_width="2dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="46dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:padding="5dp"
+                    android:src="@drawable/icon_direction2"
                     android:text="TYPE: "
                     android:textColor="#42b883"
-                    android:textSize="14sp"
-                    android:visibility="invisible"
 
-                    android:id="@+id/imgdirection"
-                    android:src="@drawable/icon_direction2" />
+                    android:textSize="14sp"
+                    android:visibility="invisible" />
 
 
                 <ImageView
@@ -424,7 +424,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="10dp"
                     android:layout_gravity="center"
                     android:text="DrawDirection"
                     android:textColor="#fff"

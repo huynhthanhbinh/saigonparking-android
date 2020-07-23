@@ -18,7 +18,7 @@
     <TextView
         android:gravity="center"
         android:textAlignment="center"
-        android:text="Tên bãi xe: "
+        android:text="Parking: "
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/textView2"
@@ -27,7 +27,7 @@
     <TextView
         android:gravity="center"
         android:textAlignment="center"
-        android:text="Biển số: "
+        android:text="Car's ID: "
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/textView3"
