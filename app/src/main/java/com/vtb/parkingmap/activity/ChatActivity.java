@@ -21,7 +21,6 @@ import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
 import com.vtb.parkingmap.BuildConfig;
-import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
@@ -38,8 +37,6 @@ import java.sql.Timestamp;
 
 import io.paperdb.Paper;
 import lombok.SneakyThrows;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -48,37 +45,23 @@ import okio.ByteString;
 public class ChatActivity extends BaseSaigonParkingActivity implements TextWatcher {
 
     private String name;
-    private WebSocket webSocket;
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
     private EditText messageEdit;
     private View sendBtn, pickImgBtn;
     private RecyclerView recyclerView;
     private int IMAGE_REQUEST_ID = 1;
-    private MessageAdapter messageAdapter;
     private long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        initializeView();
 
 //        name = getIntent().getStringExtra("name");
         name = "VU TUONG BACH";
         Intent intent = getIntent();
         id = (long) intent.getSerializableExtra("idparkinglot");
-        initiateSocketConnection();
-
-    }
-
-    private void initiateSocketConnection() {
-        String token = saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(SERVER_PATH)
-                .addHeader("Authorization", token)
-                .build();
-        webSocket = client.newWebSocket(request, new SocketListener());
-
     }
 
     @Override
@@ -216,8 +199,6 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
         pickImgBtn = findViewById(R.id.pickImgBtn);
 
         recyclerView = findViewById(R.id.recyclerView);
-
-        messageAdapter = new MessageAdapter(getLayoutInflater());
         recyclerView.setAdapter(messageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

@@ -17,7 +17,7 @@ public final class SaigonParkingDatabaseEntity {
     private double longitude;
     private double mylat;
     private double mylong;
-    private int tmptype;
+    private int tmpType;
     private long id;
     private double position3lat;
     private double position3long;

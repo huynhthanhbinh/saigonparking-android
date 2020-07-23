@@ -22,7 +22,7 @@ import java.util.List;
 
 import io.paperdb.Paper;
 
-public class MessageAdapter extends RecyclerView.Adapter {
+public final class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_MESSAGE_SENT = 0;
     private static final int TYPE_MESSAGE_RECEIVED = 1;

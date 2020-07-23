@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,13 +19,12 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.BuildConfig;
-import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -34,10 +32,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.paperdb.Paper;
-import okhttp3.OkHttpClient;
-import okhttp3.WebSocket;
+import lombok.Getter;
 import okio.ByteString;
 
+@Getter
 public final class BookingActivity extends BaseSaigonParkingActivity {
 
     private ParkingLot parkingLot;
@@ -45,7 +43,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     double mylong;
     double position3lat;
     double position3long;
-    int tmptype;
+    int tmpType;
     private double latitude;
     private double longitude;
     private String closingHour;
@@ -63,19 +61,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private long id;
     private ParkingLotType type;
 
-    //websocket
-    private static final URI WEB_SOCKET_LOCAL_URI = URI.create("ws://192.168.0.103:8000/contact");
-    private WebSocket webSocket;
-    private OkHttpClient client;
-    private WebSocket ws;
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
-    private RecyclerView recyclerView;
-
-    private MessageAdapter messageAdapter;
-    private String bookingId;
-    private String bookingreject = null;
-    private boolean flagbook = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +73,13 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         Log.d("BachMap", "\n\ncreated at: " + bookingProcessingContent.getCreatedAt());
         Log.d("BachMap", "\n\nQR code: " + bookingProcessingContent.getQrCode());
 
-        flagbook = false;
+
         parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
         mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
         position3lat = intent.getDoubleExtra("postion3lat", 1234);
         position3long = intent.getDoubleExtra("postion3long", 1234);
-        tmptype = (int) intent.getSerializableExtra("placedetailtype");
+        tmpType = (int) intent.getSerializableExtra("placedetailtype");
 
         Log.d("khongbiloi", "Nhan du lieu 2");
 
@@ -106,25 +92,16 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
 
         //ping ping client
         btnimgcancel.setOnClickListener(view -> {
-            cancelbooking();
+            cancelBooking();
             onBackPressed();
         });
-        btnimgdirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onClickDrawDirection(view);
-            }
-        });
+        btnimgdirection.setOnClickListener(this::onClickDrawDirection);
 
 
-        btnimgchat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(BookingActivity.this, ChatActivity.class);
-                intent1.putExtra("idparkinglot", (Serializable) id);
-                startActivity(intent1);
-            }
+        btnimgchat.setOnClickListener(view -> {
+            Intent intent1 = new Intent(BookingActivity.this, ChatActivity.class);
+            intent1.putExtra("idparkinglot", (Serializable) id);
+            startActivity(intent1);
         });
     }
 
@@ -148,6 +125,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     }
 
 
+    @SuppressWarnings("unused")
     private void onClickDrawDirection(View view) {
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
@@ -168,7 +146,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         intent.putExtra("placedetaillong", (Serializable) longitude);
         intent.putExtra("mylatfromplacedetail", (Serializable) mylat);
         intent.putExtra("mylongfromplacedetail", (Serializable) mylong);
-        intent.putExtra("placedetailtype", (Serializable) tmptype);
+        intent.putExtra("placedetailtype", (Serializable) tmpType);
         intent.putExtra("idplacedetail", (Serializable) id);
         double tmp = 1234;
         if (position3lat != tmp) {
@@ -223,7 +201,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         btnimgchat = findViewById(R.id.imgchat);
     }
 
-    private void cancelbooking() {
+    private void cancelBooking() {
         if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
@@ -237,11 +215,13 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
                     .setTimestamp(timestamp.toString())
                     .setContent(bookingCancellationContent.toByteString())
                     .build();
-            Log.d("BachMap", String.format("gia tri cua web socket: %b", webSocket == null));
+
             webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable();
-            flagbook = true;
+            ((SaigonParkingApplication) getApplicationContext()).setIsBooked(false);
+
             //xóa history message
             Paper.book().delete("historymessage");
         }
@@ -250,14 +230,14 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
 
     @Override
     public void onBackPressed() {
-        if (flagbook == true) {
-            super.onBackPressed();
+        if (!((SaigonParkingApplication) getApplicationContext()).getIsBooked()) {
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
         }
         //Write your code here
         else {
             Toast.makeText(getApplicationContext(), "Back press disabled!", Toast.LENGTH_SHORT).show();
         }
-
     }
-
 }

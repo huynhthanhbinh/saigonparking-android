@@ -200,13 +200,13 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
             entity.position3long(cursor.getDouble(4));
             entity.mylat(cursor.getDouble(5));
             entity.mylong(cursor.getDouble(6));
-            entity.tmptype(cursor.getInt(7));
+            entity.tmpType(cursor.getInt(7));
             entity.bookingId(cursor.getString(8));
         }
         return entity.build();
     }
 
-    public void InsertBookingTable(SaigonParkingDatabaseEntity saigonParkingDatabaseEntity) {
+    public void insertBookingTable(SaigonParkingDatabaseEntity saigonParkingDatabaseEntity) {
         queryData(String.format(Locale.US,
                 "INSERT OR REPLACE INTO SAIGON_PARKING_BOOKING VALUES(%d,%f,%f,%f,%f,%f,%f,%d,'%s')",
                 saigonParkingDatabaseEntity.getId(),
@@ -216,12 +216,12 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 saigonParkingDatabaseEntity.getPosition3long(),
                 saigonParkingDatabaseEntity.getMylat(),
                 saigonParkingDatabaseEntity.getMylong(),
-                saigonParkingDatabaseEntity.getTmptype(),
+                saigonParkingDatabaseEntity.getTmpType(),
                 saigonParkingDatabaseEntity.getBookingId()
         ));
 
         SaigonParkingDatabaseEntity entity = getFirstRowOfBookingTable();
-        Log.d("BachMap", "InsertBookingTable: " + entity);
+        Log.d("BachMap", "insertBookingTable: " + entity);
         bookingEntity = entity;
     }
 

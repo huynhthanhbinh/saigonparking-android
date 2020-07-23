@@ -15,6 +15,7 @@ import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import butterknife.BindView;
@@ -168,6 +169,7 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
                 .setPassword(password)
                 .setRole(UserRole.CUSTOMER)
                 .build();
+
         try {
             ValidateResponse loginResponse = authServiceBlockingStub
                     .validateUser(validateRequest);
@@ -176,6 +178,7 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
             Log.d("BachMap", "Sign-in successfully");
 
             saigonParkingDatabase.saveNewLoginInformation(username, loginResponse.getAccessToken(), loginResponse.getRefreshToken());
+            ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
 
         } catch (StatusRuntimeException exception) {
             valid = false;

@@ -3,24 +3,26 @@ package com.vtb.parkingmap;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 
+import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
+import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 import com.vtb.parkingmap.remotes.RetrofitBuilder;
+import com.vtb.parkingmap.websocket.SaigonParkingWebSocketListener;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft_6455;
-import org.java_websocket.handshake.ServerHandshake;
-
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Objects;
 
 import io.paperdb.Paper;
 import lombok.Getter;
+import lombok.Setter;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
 
 /**
  * Entry point of android application
@@ -31,60 +33,56 @@ import lombok.Getter;
 @Getter
 public final class SaigonParkingApplication extends Application {
 
-    private static Context applicationContext;
+    private static final String SERVER_PATH =
+            BuildConfig.WEBSOCKET_PREFIX +
+                    BuildConfig.GATEWAY_HOST + ":" +
+                    BuildConfig.GATEWAY_HTTP_PORT +
+                    "/contact";
 
+    @Setter
+    private BaseSaigonParkingActivity currentActivity = null;
+    @Setter
+    private Boolean isBooked = false;
+
+    private static Context applicationContext;
+    private WebSocket webSocket;
+    private MessageAdapter messageAdapter;
     private SaigonParkingDatabase saigonParkingDatabase = new SaigonParkingDatabase(this, "saigonparking.sqlite", null, 1);
     private SaigonParkingServiceStubs serviceStubs = new SaigonParkingServiceStubs(this);
     private GoogleApiService googleApiService = RetrofitBuilder.builder("https://maps.googleapis.com/").create(GoogleApiService.class);
     private SaigonParkingExceptionHandler saigonParkingExceptionHandler = new SaigonParkingExceptionHandler(this);
-    private WebSocketClient webSocketClient;
 
     @Override
     public void onCreate() {
-        super.onCreate();
-        applicationContext = getApplicationContext();
         Log.d("BachMap", "onCreate: SaigonParkingApplication");
+        super.onCreate();
 
         /* Init all configurations for android mobile apps */
         Locale.setDefault(Locale.US);
+        applicationContext = getApplicationContext();
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        messageAdapter = new MessageAdapter(inflater);
         saigonParkingDatabase.createDatabaseIfNotExist();
-//        initWebSocketConnection();
+
         //khởi tạo nơi lưu trữ dữ liệu historymessage
         Paper.init(applicationContext);
     }
 
-    private void initWebSocketConnection() {
-        Log.d("BachMap", "onInitWebSocketConnection");
+    public void initWebsocketConnection() {
+        if (webSocket == null) {
+            String token = Objects.requireNonNull(saigonParkingDatabase
+                    .getAuthKeyValueMap()
+                    .get(SaigonParkingDatabase.ACCESS_TOKEN_KEY));
 
-        URI webSocketUri = URI.create(BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ':' + BuildConfig.GATEWAY_HTTP_PORT + "/contact");
-        Log.d("BachMap", String.format("WebSocket URI: %s", webSocketUri));
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(SERVER_PATH)
+                    .addHeader("Authorization", token)
+                    .build();
 
-        String token = saigonParkingDatabase.getAuthKeyValueMap().get(SaigonParkingDatabase.ACCESS_TOKEN_KEY);
-        Map<String, String> httpHeaders = new HashMap<>();
-        httpHeaders.put("Authorization", "Bearer " + token);
-
-        webSocketClient = new WebSocketClient(webSocketUri, new Draft_6455(), httpHeaders, 86400000) {
-            @Override
-            public void onOpen(ServerHandshake handshakeData) {
-                Log.d("BachMap", "Successfully established new socket connection");
-            }
-
-            @Override
-            public void onMessage(String message) {
-                Log.d("BachMap", String.format("Receive message: %s", message));
-            }
-
-            @Override
-            public void onClose(int code, String reason, boolean remote) {
-                Log.d("BachMap", "Closed socket connection");
-            }
-
-            @Override
-            public void onError(Exception ex) {
-                Log.d("BachMap", String.format("Connection error with exception: %s", ex.getClass().getSimpleName()));
-            }
-        };
-        webSocketClient.connect();
-
+            SaigonParkingWebSocketListener listener = new SaigonParkingWebSocketListener(this);
+            webSocket = client.newWebSocket(request, listener);
+        }
     }
 }
