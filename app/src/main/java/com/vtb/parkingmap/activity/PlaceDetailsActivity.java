@@ -142,31 +142,15 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Log.d("khongbiloi", "Nhan du lieu 2");
 
         processParkingLot();
-        //ping ping client
-//        btnimgcancel.setOnClickListener(view -> {
-//            cancelbooking();
-//            onBackPressed();
-//
-//        });
+
         btnimgdirection.setOnClickListener(this::onClickDrawDirection);
         btnimgshow.setOnClickListener(view -> {
 
             /* kiem tra bai xe co online hay khong */
             if (onCheckParkingLotOnline()) {
-
                 showAlertDialog(view);
             }
-
         });
-
-//        btnimgchat.setOnClickListener(view -> {
-//
-//            Intent intent1 = new Intent(PlaceDetailsActivity.this, ChatActivity.class);
-//
-//            intent1.putExtra("idparkinglot", (Serializable) id);
-//
-//            startActivity(intent1);
-//        });
     }
 
     @Override
@@ -257,19 +241,16 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void assignParkingLotFields() {
+        id = parkingLot.getId();
+        type = parkingLot.getType();
+        latitude = parkingLot.getLatitude();
+        longitude = parkingLot.getLongitude();
+        openingHour = parkingLot.getOpeningHour();
+        closingHour = parkingLot.getClosingHour();
+        availableSlot = parkingLot.getAvailableSlot();
+        totalSlot = parkingLot.getTotalSlot();
 
-        ParkingLot tmpparkinglot = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotById(Int64Value.of(parkingLot.getId()));
-
-        id = tmpparkinglot.getId();
-        type = tmpparkinglot.getType();
-        latitude = tmpparkinglot.getLatitude();
-        longitude = tmpparkinglot.getLongitude();
-        openingHour = tmpparkinglot.getOpeningHour();
-        closingHour = tmpparkinglot.getClosingHour();
-        availableSlot = tmpparkinglot.getAvailableSlot();
-        totalSlot = tmpparkinglot.getTotalSlot();
-
-        ParkingLotInformation information = tmpparkinglot.getInformation();
+        ParkingLotInformation information = parkingLot.getInformation();
 
         name = information.getName();
         phone = information.getPhone();
@@ -471,7 +452,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .setTimestamp(timestamp.toString())
                     .setContent(bookingRequestContent.toByteString())
                     .build();
-
+            Log.d("BachMap", String.format("websocket is null: %b", webSocket == null));
             webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
             ((SaigonParkingApplication) getApplicationContext()).setIsBooked(true);
             Log.d("BachMap", "Gửi request Booking");

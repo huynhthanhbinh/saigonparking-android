@@ -69,7 +69,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="1.25"
                                 android:padding="5dp"
                                 android:text="Booking ID: "
                                 android:textColor="#fff"
@@ -80,9 +80,42 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="2.5"
+                                android:layout_weight="2.75"
                                 android:padding="5dp"
                                 android:text="txtBookingID"
+                                android:textColor="#fff"
+                                android:textSize="15sp" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1.25"
+                                android:padding="5dp"
+                                android:text="Status: "
+                                android:textColor="#fff"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/txtStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="2.75"
+                                android:padding="5dp"
+                                android:text="txtStatus"
                                 android:textColor="#fff"
                                 android:textSize="15sp" />
 
@@ -104,7 +137,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="1.25"
                                 android:padding="5dp"
                                 android:text="Created At: "
                                 android:textColor="#fff"
@@ -115,7 +148,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="2.5"
+                                android:layout_weight="2.75"
                                 android:padding="5dp"
                                 android:text="txtCreatedAt"
                                 android:textColor="#fff"
@@ -134,22 +167,21 @@
                             android:paddingTop="5dp">
 
                             <TextView
-                                android:id="@+id/Status"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="1.25"
                                 android:padding="5dp"
                                 android:text="Parking-lot: "
                                 android:textColor="#fff"
                                 android:textSize="15sp" />
 
                             <TextView
-                                android:id="@+id/txtStatus"
+                                android:id="@+id/txtParking"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="2.5"
+                                android:layout_weight="2.75"
                                 android:padding="5dp"
                                 android:text="txtParking"
                                 android:textColor="#fff"
@@ -167,22 +199,53 @@
                             android:paddingTop="5dp">
 
                             <TextView
-                                android:id="@+id/lastupdate"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="1.25"
+                                android:padding="5dp"
+                                android:text="Address: "
+                                android:textColor="#fff"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/txtAddress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="2.75"
+                                android:padding="5dp"
+                                android:text="txtAddress"
+                                android:textColor="#fff"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1.25"
                                 android:padding="5dp"
                                 android:text="License Plate: "
                                 android:textColor="#fff"
                                 android:textSize="15sp" />
 
                             <TextView
-                                android:id="@+id/txtlastupdate"
+                                android:id="@+id/txtLicensePlate"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="2.5"
+                                android:layout_weight="2.75"
                                 android:padding="5dp"
                                 android:text="txtLicensePlate"
                                 android:textColor="#fff"

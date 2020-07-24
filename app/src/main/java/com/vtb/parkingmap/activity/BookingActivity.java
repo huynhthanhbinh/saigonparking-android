@@ -17,7 +17,6 @@ import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
-import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.BuildConfig;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
@@ -55,6 +54,11 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private ImageView imgQRCode;
     private TextView txtBookingID;
     private TextView txtCreatedAt;
+    private TextView txtStatus;
+    private TextView txtParking;
+    private TextView txtAddress;
+    private TextView txtLicensePlate;
+
     private String reducedBookingId;
 
     //parking-lot
@@ -113,15 +117,11 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     }
 
     private void assignParkingLotFields() {
-
-        ParkingLot tmpparkinglot = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotById(Int64Value.of(parkingLot.getId()));
-
-        id = tmpparkinglot.getId();
-        type = tmpparkinglot.getType();
-        latitude = tmpparkinglot.getLatitude();
-        longitude = tmpparkinglot.getLongitude();
-        closingHour = tmpparkinglot.getClosingHour();
-
+        id = parkingLot.getId();
+        type = parkingLot.getType();
+        latitude = parkingLot.getLatitude();
+        longitude = parkingLot.getLongitude();
+        closingHour = parkingLot.getClosingHour();
     }
 
 
@@ -174,7 +174,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
 
     private void initReducedBookingId() {
         String originBookingId = bookingProcessingContent.getBookingId();
-        reducedBookingId = "*****" + originBookingId.substring(originBookingId.length() - 12);
+        reducedBookingId = "****** " + originBookingId.substring(originBookingId.length() - 12);
     }
 
     private void initQRCode() {
@@ -190,8 +190,16 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private void initBookingDetail() {
         txtBookingID = findViewById(R.id.txtBookingID);
         txtCreatedAt = findViewById(R.id.txtCreatedAt);
+        txtStatus = findViewById(R.id.txtStatus);
+        txtParking = findViewById(R.id.txtParking);
+        txtAddress = findViewById(R.id.txtAddress);
+        txtLicensePlate = findViewById(R.id.txtLicensePlate);
+
 
         txtBookingID.setText(reducedBookingId);
+        txtStatus.setText("Processing");
+        txtParking.setText(parkingLot.getInformation().getName());
+        txtAddress.setText(parkingLot.getInformation().getAddress());
         txtCreatedAt.setText(bookingProcessingContent.getCreatedAt());
     }
 
@@ -234,6 +242,8 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             Intent intent = new Intent(this, MapActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
+
+//            super.onBackPressed();
         }
         //Write your code here
         else {
