@@ -228,7 +228,7 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
                         .setContent(textMessageContent.toByteString())
                         .build();
 
-                webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+                sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
 
 
                 jsonObject.put("isSent", true);
@@ -290,7 +290,7 @@ public class ChatActivity extends BaseSaigonParkingActivity implements TextWatch
             jsonObject.put("name", name);
             jsonObject.put("image", base64String);
 
-            webSocket.send(jsonObject.toString());
+            sendWebSocketTextMessage(jsonObject.toString());
 
             jsonObject.put("isSent", true);
 

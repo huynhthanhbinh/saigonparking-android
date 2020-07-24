@@ -12,7 +12,9 @@ import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 
+import lombok.NonNull;
 import okhttp3.WebSocket;
+import okio.ByteString;
 
 /**
  * customize Activity Class for Saigon Parking App only
@@ -26,7 +28,16 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     protected SaigonParkingServiceStubs serviceStubs;
     protected GoogleApiService googleApiService;
     protected MessageAdapter messageAdapter;
-    protected WebSocket webSocket;
+
+    /**
+     * websocket will be private
+     * so as to any child of this base class
+     * cannot call websocket directly !!!!
+     * if any child class want to use websocket to send message
+     * they must call method inherit from their parent
+     * for example sendMessage: sendWebSocketBinaryMessage/TextMessage(msg)
+     */
+    private WebSocket webSocket;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,5 +61,21 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
 
     public void changeActivity(Class<? extends BaseSaigonParkingActivity> nextActivityClass) {
         startActivity(new Intent(this, nextActivityClass));
+    }
+
+    protected void sendWebSocketBinaryMessage(@NonNull ByteString message) {
+        if (webSocket == null) {
+            ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
+            webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
+        }
+        webSocket.send(message);
+    }
+
+    protected void sendWebSocketTextMessage(@NonNull String message) {
+        if (webSocket == null) {
+            ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
+            webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
+        }
+        webSocket.send(message);
     }
 }

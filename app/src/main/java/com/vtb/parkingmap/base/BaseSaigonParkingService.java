@@ -9,7 +9,9 @@ import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 
+import lombok.NonNull;
 import okhttp3.WebSocket;
+import okio.ByteString;
 
 /**
  * customize Service Class for Saigon Parking App only
@@ -23,7 +25,17 @@ public abstract class BaseSaigonParkingService extends Service {
     protected SaigonParkingServiceStubs serviceStubs;
     protected GoogleApiService googleApiService;
     protected MessageAdapter messageAdapter;
-    protected WebSocket webSocket;
+
+    /**
+     * websocket will be private
+     * so as to any child of this base class
+     * cannot call websocket directly !!!!
+     * <p>
+     * if any child class want to use websocket to send message
+     * they must call method inherit from their parent
+     * for example sendMessage: sendWebSocketBinaryMessage/TextMessage(msg)
+     */
+    private WebSocket webSocket;
 
     @Override
     public void onCreate() {
@@ -34,5 +46,21 @@ public abstract class BaseSaigonParkingService extends Service {
         googleApiService = ((SaigonParkingApplication) getApplicationContext()).getGoogleApiService();
         webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
         messageAdapter = ((SaigonParkingApplication) getApplicationContext()).getMessageAdapter();
+    }
+
+    protected void sendWebSocketBinaryMessage(@NonNull ByteString message) {
+        if (webSocket == null) {
+            ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
+            webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
+        }
+        webSocket.send(message);
+    }
+
+    protected void sendWebSocketTextMessage(@NonNull String message) {
+        if (webSocket == null) {
+            ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
+            webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
+        }
+        webSocket.send(message);
     }
 }

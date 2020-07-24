@@ -224,7 +224,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
                     .setContent(bookingCancellationContent.toByteString())
                     .build();
 
-            webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+            sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
 
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable();

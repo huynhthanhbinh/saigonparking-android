@@ -176,7 +176,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Booking Confirm");
-        alert.setMessage("Do you want to book this parking lot?");
+        alert.setMessage("Do you want to book this parking lots?");
         alert.setPositiveButton("Yes", (dialogInterface, i) -> {
             sendBooking();
             Toast.makeText(PlaceDetailsActivity.this, "Booking successfully!", Toast.LENGTH_SHORT).show();
@@ -404,7 +404,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .setTimestamp(timestamp.toString())
                     .setContent(bookingCancellationContent.toByteString())
                     .build();
-            webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+
+            sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
 
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable();
@@ -452,8 +453,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .setTimestamp(timestamp.toString())
                     .setContent(bookingRequestContent.toByteString())
                     .build();
-            Log.d("BachMap", String.format("websocket is null: %b", webSocket == null));
-            webSocket.send(new ByteString(saigonParkingMessage.toByteArray()));
+
+            sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
             ((SaigonParkingApplication) getApplicationContext()).setIsBooked(true);
             Log.d("BachMap", "Gửi request Booking");
 
