@@ -132,9 +132,11 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                     break;
 
                 case BOOKING_REJECT:
+                    Log.d("BachMap", "ĐTAI");
                     BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
                     Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
                     String rejectNotification = "Parking full slot! Please choose other parking lots!";
+
                     Toast.makeText(applicationContext.getCurrentActivity(), rejectNotification, Toast.LENGTH_SHORT).show();
                     applicationContext.setIsBooked(false);
                     break;

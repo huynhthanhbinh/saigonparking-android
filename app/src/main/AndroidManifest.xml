@@ -27,7 +27,6 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.BookingActivity"></activity>
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.MainChatActivity" />
@@ -67,10 +66,15 @@
         <activity
             android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activity.MapActivity"
             android:label="@string/title_activity_map"
             android:theme="@style/AppTheme.TransparentTheme" />
+
+        <activity
+            android:name=".activity.BookingActivity"
+            android:label="@string/title_activity_booking" />
 
         <service android:name=".service.HiddenService" />
     </application>

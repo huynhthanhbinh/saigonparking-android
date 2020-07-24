@@ -49,6 +49,7 @@ public abstract class BaseSaigonParkingService extends Service {
         messageAdapter = ((SaigonParkingApplication) getApplicationContext()).getMessageAdapter();
     }
 
+
     protected void sendWebSocketBinaryMessage(@NonNull SaigonParkingMessage message) {
         if (webSocket == null) {
             ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
