@@ -32,7 +32,6 @@ import java.util.Locale;
 
 import io.paperdb.Paper;
 import lombok.Getter;
-import okio.ByteString;
 
 @Getter
 public final class BookingActivity extends BaseSaigonParkingActivity {
@@ -224,7 +223,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
                     .setContent(bookingCancellationContent.toByteString())
                     .build();
 
-            sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
+            sendWebSocketBinaryMessage(saigonParkingMessage);
 
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable();

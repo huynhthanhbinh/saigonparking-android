@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
@@ -63,12 +64,12 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
         startActivity(new Intent(this, nextActivityClass));
     }
 
-    protected void sendWebSocketBinaryMessage(@NonNull ByteString message) {
+    protected void sendWebSocketBinaryMessage(@NonNull SaigonParkingMessage message) {
         if (webSocket == null) {
             ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
             webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
         }
-        webSocket.send(message);
+        webSocket.send(new ByteString(message.toByteArray()));
     }
 
     protected void sendWebSocketTextMessage(@NonNull String message) {

@@ -2,6 +2,7 @@ package com.vtb.parkingmap.base;
 
 import android.app.Service;
 
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
@@ -48,12 +49,12 @@ public abstract class BaseSaigonParkingService extends Service {
         messageAdapter = ((SaigonParkingApplication) getApplicationContext()).getMessageAdapter();
     }
 
-    protected void sendWebSocketBinaryMessage(@NonNull ByteString message) {
+    protected void sendWebSocketBinaryMessage(@NonNull SaigonParkingMessage message) {
         if (webSocket == null) {
             ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
             webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
         }
-        webSocket.send(message);
+        webSocket.send(new ByteString(message.toByteArray()));
     }
 
     protected void sendWebSocketTextMessage(@NonNull String message) {

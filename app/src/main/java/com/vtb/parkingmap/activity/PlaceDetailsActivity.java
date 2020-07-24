@@ -49,7 +49,6 @@ import java.util.Objects;
 import io.paperdb.Paper;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
-import okio.ByteString;
 
 @Getter
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
@@ -405,7 +404,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .setContent(bookingCancellationContent.toByteString())
                     .build();
 
-            sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
+            sendWebSocketBinaryMessage(saigonParkingMessage);
 
             //xử lý gọi database
             saigonParkingDatabase.DeleteBookTable();
@@ -454,7 +453,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                     .setContent(bookingRequestContent.toByteString())
                     .build();
 
-            sendWebSocketBinaryMessage(new ByteString(saigonParkingMessage.toByteArray()));
+            sendWebSocketBinaryMessage(saigonParkingMessage);
             ((SaigonParkingApplication) getApplicationContext()).setIsBooked(true);
             Log.d("BachMap", "Gửi request Booking");
 
