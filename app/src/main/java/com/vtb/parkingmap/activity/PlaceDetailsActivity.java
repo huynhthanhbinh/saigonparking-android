@@ -15,7 +15,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -56,7 +59,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private ImageView imageView;
     private ImageView btnimgdirection;
-    private ImageView btnimgshow;
     private ImageView btnimgchat;
     private ImageView btnimgcancel;
     private Photos photos;
@@ -66,9 +68,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private TextView textViewAvailability;
     private RatingBar ratingBar;
     private LinearLayout linearLayoutRating;
-    private LinearLayout linearLayoutShowOnMap;
     private LinearLayout linearLayoutShowDistanceOnMap;
-    private LinearLayout linearLayoutDrawDirection;
+    private LinearLayout btnimgshow;
     private TextView txtOpen;
     private TextView txtClose;
     private TextView txtStatus;
@@ -90,6 +91,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     //parking-lot
     private long id;
+    private EditText txtlicensePlate;
+    private EditText txtAmountOfParkingHour;
+    private ExampleDialogListener listener;
     private ParkingLotType type;
     private double latitude;
     private double longitude;
@@ -142,7 +146,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         processParkingLot();
 
-        btnimgdirection.setOnClickListener(this::onClickDrawDirection);
+
         btnimgshow.setOnClickListener(view -> {
 
             /* kiem tra bai xe co online hay khong */
@@ -171,20 +175,83 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         return true;
     }
 
-    public void showAlertDialog(View v) {
+
+    public void showAlertDialog(View view) {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Booking Confirm");
-        alert.setMessage("Do you want to book this parking lots?");
-        alert.setPositiveButton("Yes", (dialogInterface, i) -> {
-            sendBooking();
-            Toast.makeText(PlaceDetailsActivity.this, "Booking successfully!", Toast.LENGTH_SHORT).show();
-        });
-        alert.setNegativeButton("No", (dialogInterface, i) ->
-                Toast.makeText(PlaceDetailsActivity.this, "Cancel booking successfully!", Toast.LENGTH_SHORT).show());
-        alert.create().show();
 
+        LayoutInflater inflater = getLayoutInflater();
+        view = inflater.inflate(R.layout.booking_dialog, null);
+
+        alert.setView(view)
+                .setTitle("Booking Confirm")
+                .setMessage("Please input your License Plate and Parking Hour!")
+                .setPositiveButton("Yes", null)
+                .setNegativeButton("No", (dialogInterface, i) ->
+                        Toast.makeText(PlaceDetailsActivity.this, "Cancel booking successfully!", Toast.LENGTH_SHORT).show());
+
+        txtlicensePlate = view.findViewById(R.id.txtlicensePlate);
+        txtAmountOfParkingHour = view.findViewById(R.id.txtAmountOfParkingHour);
+        AlertDialog dialog = alert.create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view1 -> {
+                String licensePlate = txtlicensePlate.getText().toString();
+                String amountOfParkingHourString = txtAmountOfParkingHour.getText().toString();
+
+                Log.d("BachMap", " " + licensePlate);
+                Log.d("BachMap", " " + amountOfParkingHourString);
+
+                boolean isAmountOfParkingLotHourCorrect = false;
+                boolean isNumberLicensePlateCorrect = isNumberLicensePlateCorrect(licensePlate);
+                double amountOfParkingHour = 0.0;
+
+                if (!isNumberLicensePlateCorrect) {
+                    Toast.makeText(PlaceDetailsActivity.this, "License Plate Invalid!", Toast.LENGTH_SHORT).show();
+                }
+
+                try {
+                    amountOfParkingHour = Double.valueOf(amountOfParkingHourString);
+                    isAmountOfParkingLotHourCorrect = true;
+                } catch (Exception e) {
+                    Toast.makeText(PlaceDetailsActivity.this, "Parking Hour Invalid!", Toast.LENGTH_SHORT).show();
+                }
+
+                //Dismiss once everything is OK.
+                if (isNumberLicensePlateCorrect && isAmountOfParkingLotHourCorrect) {
+                    sendBooking(licensePlate, amountOfParkingHour);
+                    dialog.dismiss();
+                    Toast.makeText(PlaceDetailsActivity.this, "Booking successfully!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
     }
+
+    /* 59B-66059 */
+    private boolean isNumberLicensePlateCorrect(String numberLicenseString) {
+        String alternativeString = numberLicenseString.replace(".", "");
+        return alternativeString.matches("^[0-9]{1,2}[A-Za-z]-[0-9]{1,5}$");
+    }
+
+    public void onAttach(Context context) {
+        //super.onAttach(context);
+        try {
+            listener = (ExampleDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() +
+                    "must implement ExampleDialogListener");
+        }
+    }
+
+    public interface ExampleDialogListener {
+        void applyTexts(String LicensePlate, String AmountOfParkingHour);
+    }
+
 
     private void processParkingLot() {
         if (parkingLot != null) {
@@ -195,11 +262,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     }
 
     private void initEventListeners() {
-        linearLayoutShowDistanceOnMap.setOnClickListener(this::onClickShowDistanceOnMap);
-        linearLayoutDrawDirection.setOnClickListener(this::onClickDrawDirection);
-        linearLayoutShowOnMap.setOnClickListener(view -> {
-//                cancelbooking();
-        });
+        linearLayoutShowDistanceOnMap.setOnClickListener(this::onClickShowDistanceOnGoogleMap);
     }
 
     @SuppressLint("SetTextI18n")
@@ -263,40 +326,12 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     /**
      * on click drawn direction
      */
-    private void onClickDrawDirection(View view) {
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-        String currentDateTimeString = sdf.format(d);
 
-        Time currentTime = Time.valueOf(currentDateTimeString);
-        Time closingTime = Time.valueOf(closingHour);
-
-        boolean check = (currentTime.getTime() + deltaHour * 60 * 60) - closingTime.getTime() > 0;
-
-        if (check) {
-            Toast.makeText(PlaceDetailsActivity.this, " Quá giờ rồi Không còn nhận xe nhé", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(PlaceDetailsActivity.this, BookingActivity.class);
-        intent.putExtra("placedetaillat", (Serializable) latitude);
-        intent.putExtra("placedetaillong", (Serializable) longitude);
-        intent.putExtra("mylatfromplacedetail", (Serializable) mylat);
-        intent.putExtra("mylongfromplacedetail", (Serializable) mylong);
-        intent.putExtra("placedetailtype", (Serializable) tmpType);
-        intent.putExtra("idplacedetail", (Serializable) id);
-        double tmp = 1234;
-        if (position3lat != tmp) {
-            intent.putExtra("position3lat", (Serializable) position3lat);
-            intent.putExtra("position3long", (Serializable) position3long);
-        }
-        startActivity(intent);
-    }
 
     /**
      * on click show distion on map
      */
-    private void onClickShowDistanceOnMap(View view) {
+    private void onClickShowDistanceOnGoogleMap(View view) {
 
 
         Date d = new Date();
@@ -347,21 +382,19 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
-        linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);
         linearLayoutShowDistanceOnMap = findViewById(R.id.linearLayoutShowDistanceOnMap);
         textViewName = findViewById(R.id.textViewName);
         textViewRating = findViewById(R.id.textViewRating);
         textViewAddress = findViewById(R.id.textViewAddress);
         textViewAvailability = findViewById(R.id.textViewAvailability);
         ratingBar = findViewById(R.id.ratingBar);
-        linearLayoutDrawDirection = findViewById(R.id.linearLayoutDrawDirection);
+
 
         txtOpen = findViewById(R.id.txtOpen);
         txtClose = findViewById(R.id.txtClose);
         txtStatus = findViewById(R.id.txtStatus);
         txtphone = findViewById(R.id.txtphone);
         iconType = findViewById(R.id.iconType);
-        output = findViewById(R.id.txtlastupdate);
         txtXemChiTiet = findViewById(R.id.txtXemChiTiet);
     }
 
@@ -418,29 +451,36 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 btnimgdirection.setVisibility(View.INVISIBLE);
                 btnimgchat.setVisibility(View.INVISIBLE);
             });
+
+
 //            btnimgshow.setEnabled(true);
 //            btnimgcancel.setEnabled(false);
 //            btnimgdirection.setEnabled(false);
 //            btnimgphone.setEnabled(false);
 //            Log.d("BachMap", "Gửi request CAMCELATION");
         }
-
-
     }
 
-    public void sendBooking() {
+
+//    public void applyTexts(String LicensePlate, String AmountOfParkingHour) {
+//        licensePlate.set(LicensePlate);
+//        AmountOfParkingHour.setText(AmountOfParkingHour);
+//    }
+
+    public void sendBooking(String numberLicensePlate, double amountOfParkingHour) {
 
         //flagbook = true nghĩa là CHƯA có dữ liệu bôking
         //b1 hiện dialog xác nhận hoặc hủy
         // xác nhận thì => vào if flagbook == true
         // huy thì k có gì hết
+
         if (!((SaigonParkingApplication) getApplicationContext()).getIsBooked()) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
                     .setCustomerName(Objects.requireNonNull(saigonParkingDatabase
                             .getAuthKeyValueMap().get(SaigonParkingDatabase.USERNAME_KEY)))
-                    .setCustomerLicense("9954")
-                    .setAmountOfParkingHour(3)
+                    .setCustomerLicense(numberLicensePlate)
+                    .setAmountOfParkingHour(amountOfParkingHour)
                     .setParkingLotId(id)
                     .build();
 

@@ -66,6 +66,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
 
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,6 +234,10 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             Paper.book().delete("historymessage");
         }
 
+    }
+
+    public void setLabelTxtStatus(String newStatus) {
+        txtStatus.setText(newStatus);
     }
 
     @Override

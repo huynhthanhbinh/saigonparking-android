@@ -64,7 +64,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
         startActivity(new Intent(this, nextActivityClass));
     }
 
-    protected void sendWebSocketBinaryMessage(@NonNull SaigonParkingMessage message) {
+    protected final void sendWebSocketBinaryMessage(@NonNull SaigonParkingMessage message) {
         if (webSocket == null) {
             ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
             webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
@@ -72,7 +72,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
         webSocket.send(new ByteString(message.toByteArray()));
     }
 
-    protected void sendWebSocketTextMessage(@NonNull String message) {
+    protected final void sendWebSocketTextMessage(@NonNull String message) {
         if (webSocket == null) {
             ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
             webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();

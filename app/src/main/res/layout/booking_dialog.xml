@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_weight=".4"
+            android:layout_height="wrap_content"
+            android:text="License Plate:" />
+
+        <EditText
+            android:id="@+id/txtlicensePlate"
+            android:layout_width="0dip"
+            android:layout_weight=".6"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="59D-12345"
+            android:imeOptions="actionDone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_weight=".4"
+            android:layout_height="wrap_content"
+            android:text="Parking Hour:" />
+
+        <EditText
+            android:id="@+id/txtAmountOfParkingHour"
+            android:layout_width="0dip"
+            android:layout_weight=".6"
+            android:layout_height="wrap_content"
+            android:hint="1 -> 5 hour"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
+    </LinearLayout>
+
+</LinearLayout>
+
+

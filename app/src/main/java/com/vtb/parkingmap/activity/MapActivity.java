@@ -11,7 +11,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -153,8 +152,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private final int RECOGNIZER_REQ_CODE = 100; //code activity result speech
 
 
-    //other locations and progress dialog
-    ProgressDialog progressDoalog;
+    //other locations
     private SlideUp slideUp;
     private View dim;
     private View slideView;
@@ -913,47 +911,40 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     try {
 //                        Long loicuatoi = Long.parseLong(marker.getSnippet());
 //                        Log.d("Loicuatoi ",""+loicuatoi);
-                        parkingLot = parkingLotServiceBlockingStub
-                                .getParkingLotById(Int64Value.newBuilder()
-                                        .setValue(Long.parseLong(marker.getSnippet()))
-                                        .build());
-                        Log.d("khongbiloi", "" + Long.parseLong(marker.getSnippet()));
 
-//                        progressDoalog = new ProgressDialog(MapActivity.this);
-//                        progressDoalog.setMax(100);
-//                        progressDoalog.setMessage("It's loading....");
-//                        progressDoalog.setTitle("ProgressDialog bar example");
-//                        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                        progressDoalog.show();
-//                        new Thread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                try {
-//                                    while (progressDoalog.getProgress() <= progressDoalog
-//                                            .getMax()) {
-//                                        Thread.sleep(200);
-//                                        handle.sendMessage(handle.obtainMessage());
-//                                        if (progressDoalog.getProgress() == progressDoalog
-//                                                .getMax()) {
-//                                            progressDoalog.dismiss();
-//                                        }
-//                                    }
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        }).start();
-                        Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
-                        intent.putExtra("parkingLot", (Serializable) parkingLot);
-                        intent.putExtra("myLat", (Serializable) mLastKnownLocation.getLatitude());
-                        intent.putExtra("myLong", (Serializable) mLastKnownLocation.getLongitude());
+                        ProgressDialog progressDialog = new ProgressDialog(MapActivity.this,
+                                R.style.AppTheme_Dark_Dialog);
+                        progressDialog.setIndeterminate(true);
+                        progressDialog.setMessage("Loading...");
+                        progressDialog.show();
 
-                        if (position3 != null) {
-                            intent.putExtra("postion3lat", position3.latitude);
-                            intent.putExtra("postion3long", position3.longitude);
-                        }
 
-                        startActivity(intent);
+                        // TODO: Implement your own signup logic here.
+
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // depending on success
+                                        parkingLot = parkingLotServiceBlockingStub
+                                                .getParkingLotById(Int64Value.newBuilder()
+                                                        .setValue(Long.parseLong(marker.getSnippet()))
+                                                        .build());
+                                        Log.d("khongbiloi", "" + Long.parseLong(marker.getSnippet()));
+
+                                        Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
+                                        intent.putExtra("parkingLot", (Serializable) parkingLot);
+                                        intent.putExtra("myLat", (Serializable) mLastKnownLocation.getLatitude());
+                                        intent.putExtra("myLong", (Serializable) mLastKnownLocation.getLongitude());
+
+                                        if (position3 != null) {
+                                            intent.putExtra("postion3lat", position3.latitude);
+                                            intent.putExtra("postion3long", position3.longitude);
+                                        }
+                                        progressDialog.dismiss();
+                                        startActivity(intent);
+                                    }
+                                }, 3000);
 
 
                     } catch (StatusRuntimeException exception) {
@@ -966,14 +957,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 return true;
 
             }
-
-            Handler handle = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    progressDoalog.incrementProgressBy(1);
-                }
-            };
         });
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 

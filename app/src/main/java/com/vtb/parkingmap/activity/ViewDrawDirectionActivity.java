@@ -209,7 +209,7 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
         getDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ViewDrawDirectionActivity.this, "Test Service", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ViewDrawDirectionActivity.this, "Test Service", Toast.LENGTH_SHORT).show();
             }
         });
 

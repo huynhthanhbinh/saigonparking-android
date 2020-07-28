@@ -44,7 +44,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
+                        android:background="@color/primary"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -250,15 +250,6 @@
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/txtphone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="5dp"
-                            android:text="Phone"
-                            android:textColor="#fff"
-                            android:textSize="16sp"></TextView>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -270,31 +261,26 @@
                             android:paddingTop="5dp">
 
                             <TextView
-                                android:id="@+id/lastupdate"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="1"
                                 android:padding="5dp"
-                                android:text="Last Update"
+                                android:text="Phone"
+                                android:layout_weight="1"
                                 android:textColor="#fff"
-                                android:textSize="15sp" />
+                                android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/txtlastupdate"
+                                android:id="@+id/txtphone"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="3"
                                 android:padding="5dp"
-                                android:text="txtLastUpdate"
+                                android:text="Phone number"
                                 android:textColor="#fff"
                                 android:textSize="15sp" />
-
-
                         </LinearLayout>
-
-
                     </LinearLayout>
 
                 </LinearLayout>
@@ -302,81 +288,13 @@
 
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="5dp">
-
-                <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:text="TYPE: "
-                    android:textColor="#42b883"
-                    android:textSize="14sp"
-                    android:id="@+id/imgshow"
-                    android:src="@drawable/icon_position2" />
-
-                <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:text="TYPE: "
-                    android:textColor="#42b883"
-                    android:textSize="14sp"
-                    android:visibility="invisible"
-                    android:id="@+id/imgcancel"
-                    android:src="@drawable/icon_cancel" />
-                />
-
-                <ImageView
-                    android:id="@+id/imgdirection"
-                    android:layout_width="2dp"
-                    android:layout_height="46dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:src="@drawable/icon_direction2"
-                    android:text="TYPE: "
-                    android:textColor="#42b883"
-
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
-
-
-                <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:text="TYPE: "
-                    android:textColor="#42b883"
-                    android:textSize="14sp"
-                    android:visibility="invisible"
-
-                    android:id="@+id/imgchat"
-                    android:src="@drawable/icon_chat" />
-                />
-
-
-            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutShowOnMap"
+                android:id="@+id/imgshow"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:background="#359ab9"
+                android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -384,7 +302,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Show on Map"
+                    android:text="Booking Parking Lot"
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -395,7 +313,6 @@
                 android:id="@+id/linearLayoutShowDistanceOnMap"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="#359ab9"
                 android:gravity="center"
@@ -405,33 +322,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Show direction on Map"
+                    android:text="Show direction on Google Map"
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayoutDrawDirection"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="#359ab9"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="10dp"
-                    android:layout_gravity="center"
-                    android:text="DrawDirection"
-                    android:textColor="#fff"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

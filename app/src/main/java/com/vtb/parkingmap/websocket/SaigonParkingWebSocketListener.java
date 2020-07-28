@@ -8,19 +8,24 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
+import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
 import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
 import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.activity.BookingActivity;
 import com.vtb.parkingmap.activity.ChatActivity;
+import com.vtb.parkingmap.activity.MapActivity;
 import com.vtb.parkingmap.activity.PlaceDetailsActivity;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
@@ -30,6 +35,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
+import io.paperdb.Paper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import okhttp3.Response;
@@ -96,10 +102,11 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 .tmpType(activity.getTmpType())
                                 .bookingId(bookingAcceptanceContent.getBookingId())
                                 .build();
-
+                        activity.setLabelTxtStatus("Accepted");
 
                         Log.d("BachMap", bookingEntity.toString());
                         applicationContext.getSaigonParkingDatabase().insertBookingTable(bookingEntity);
+
                     }
                     break;
 
@@ -132,13 +139,62 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                     break;
 
                 case BOOKING_REJECT:
-                    Log.d("BachMap", "ĐTAI");
-                    BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
-                    Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
-                    String rejectNotification = "Parking full slot! Please choose other parking lots!";
+                    applicationContext.getCurrentActivity().runOnUiThread(() -> {
+                        try {
+                            Log.d("BachMap", "ĐTAI");
+                            BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
+                            AlertDialog.Builder alert2 = new AlertDialog.Builder(applicationContext.getCurrentActivity());
+                            applicationContext.setIsBooked(false);
+                            alert2.setTitle("Booking Confirm");
+                            alert2.setMessage("Parking full slot! Please choose other parking lots!");
+                            alert2.setPositiveButton("OK", (dialogInterface, i) -> {
 
-                    Toast.makeText(applicationContext.getCurrentActivity(), rejectNotification, Toast.LENGTH_SHORT).show();
-                    applicationContext.setIsBooked(false);
+                                Intent intent2 = new Intent(applicationContext.getCurrentActivity(), MapActivity.class);
+                                intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                applicationContext.getCurrentActivity().startActivity(intent2);
+                                applicationContext.getCurrentActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                            });
+                            AlertDialog dialog = alert2.create();
+                            dialog.show();
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                                    .setTextColor(applicationContext.getCurrentActivity().getResources().getColor(R.color.colorPrimary));
+                        } catch (InvalidProtocolBufferException e) {
+                            Toast.makeText(applicationContext.getCurrentActivity(), "ERROR!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    break;
+
+                case BOOKING_FINISH:
+                    applicationContext.getCurrentActivity().runOnUiThread(() -> {
+                        try {
+                            Log.d("BachMap", "ĐTAI");
+                            BookingFinishContent bookingFinishContentContent = BookingFinishContent.parseFrom(message.getContent());
+                            Log.d("BachMap", "1 : BOOKING Finish" + bookingFinishContentContent);
+                            AlertDialog.Builder alert = new AlertDialog.Builder(applicationContext.getCurrentActivity());
+
+                            alert.setTitle("Booking Finish!");
+                            alert.setMessage("Booking finished! Thanks for choose our service!");
+                            alert.setPositiveButton("Back", (dialogInterface, i) -> {
+                                //xử lý gọi database
+                                applicationContext.getSaigonParkingDatabase().DeleteBookTable();
+                                applicationContext.setIsBooked(false);
+                                //xóa history message
+                                Paper.book().delete("historymessage");
+
+                                Intent intent2 = new Intent(applicationContext.getCurrentActivity(), MapActivity.class);
+                                intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                applicationContext.getCurrentActivity().startActivity(intent2);
+                                applicationContext.getCurrentActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                            });
+                            AlertDialog dialog = alert.create();
+                            dialog.show();
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                                    .setTextColor(applicationContext.getCurrentActivity().getResources().getColor(R.color.colorPrimary));
+                        } catch (InvalidProtocolBufferException e) {
+                            Toast.makeText(applicationContext.getCurrentActivity(), "ERROR!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     break;
 
                 case IMAGE:
@@ -158,6 +214,11 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
     @Override
     public void onFailure(@NotNull WebSocket webSocket, Throwable t, Response response) {
         Log.d("BachMap", t.getMessage());
+    }
+
+    public void showAlertDialog(View v) {
+
+
     }
 
     private void addNotification(String name, String message) {
