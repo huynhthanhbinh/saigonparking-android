@@ -59,6 +59,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private TextView txtLicensePlate;
 
     private String reducedBookingId;
+    private String licensePlate;
+    private String amountOfParkingHourString;
+
 
     //parking-lot
     private long id;
@@ -84,6 +87,8 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         position3lat = intent.getDoubleExtra("postion3lat", 1234);
         position3long = intent.getDoubleExtra("postion3long", 1234);
         tmpType = (int) intent.getSerializableExtra("placedetailtype");
+        licensePlate = intent.getStringExtra("licenseplate");
+        amountOfParkingHourString = intent.getStringExtra("parkinghour");
 
         Log.d("khongbiloi", "Nhan du lieu 2");
 
@@ -195,11 +200,11 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         txtAddress = findViewById(R.id.txtAddress);
         txtLicensePlate = findViewById(R.id.txtLicensePlate);
 
-
         txtBookingID.setText(reducedBookingId);
         txtStatus.setText("Processing");
         txtParking.setText(parkingLot.getInformation().getName());
         txtAddress.setText(parkingLot.getInformation().getAddress());
+        txtLicensePlate.setText(licensePlate.toUpperCase());
         txtCreatedAt.setText(bookingProcessingContent.getCreatedAt());
     }
 

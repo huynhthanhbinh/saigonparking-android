@@ -42,7 +42,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class ChatActivity extends BaseSaigonParkingActivity implements TextWatcher {
+public final class ChatActivity extends BaseSaigonParkingActivity implements TextWatcher {
 
     private String name;
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";

@@ -13,6 +13,7 @@ import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 
+import io.grpc.StatusRuntimeException;
 import lombok.NonNull;
 import okhttp3.WebSocket;
 import okio.ByteString;
@@ -32,8 +33,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
 
     /**
      * websocket will be private
-     * so as to any child of this base class
-     * cannot call websocket directly !!!!
+     * so as to any child of this base class cannot call websocket directly !!!!
      * if any child class want to use websocket to send message
      * they must call method inherit from their parent
      * for example sendMessage: sendWebSocketBinaryMessage/TextMessage(msg)
@@ -78,5 +78,13 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
             webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
         }
         webSocket.send(message);
+    }
+
+    protected final void callApiWithExceptionHandling(Runnable action) {
+        try {
+            action.run();
+        } catch (StatusRuntimeException exception) {
+            saigonParkingExceptionHandler.handleCommunicationException(exception, this);
+        }
     }
 }

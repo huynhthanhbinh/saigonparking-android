@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.vtb.parkingmap.R;
 
-public class MainChatActivity extends AppCompatActivity {
+public final class MainChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +20,5 @@ public class MainChatActivity extends AppCompatActivity {
             intent.putExtra("name", editText.getText().toString());
             startActivity(intent);
         });
-
     }
 }

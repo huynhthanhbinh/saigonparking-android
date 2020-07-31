@@ -126,6 +126,9 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                         intent.putExtra("mylongfromplacedetail", (Serializable) activity.getMylong());
                         intent.putExtra("placedetailtype", (Serializable) activity.getTmpType());
                         intent.putExtra("idplacedetail", (Serializable) activity.getId());
+                        intent.putExtra("licenseplate", (Serializable) activity.getLicensePlate());
+                        intent.putExtra("parkinghour", (Serializable) activity.getAmountOfParkingHourString());
+                        intent.putExtra("bookingProcessingContent", bookingProcessingContent);
 
                         if (activity.getPosition3lat() != 1234) {
                             intent.putExtra("position3lat", (Serializable) activity.getPosition3lat());
@@ -133,7 +136,6 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                         }
                     }
 
-                    intent.putExtra("bookingProcessingContent", bookingProcessingContent);
                     applicationContext.getCurrentActivity().startActivity(intent);
                     applicationContext.getCurrentActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     break;

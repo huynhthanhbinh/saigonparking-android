@@ -31,6 +31,7 @@ import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
@@ -93,6 +94,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private long id;
     private EditText txtlicensePlate;
     private EditText txtAmountOfParkingHour;
+    private String licensePlate;
+    private String amountOfParkingHourString;
     private ExampleDialogListener listener;
     private ParkingLotType type;
     private double latitude;
@@ -164,11 +167,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private boolean onCheckParkingLotOnline() {
         Log.d("BachMap", "parking lot id: " + id);
+        BoolValue.Builder isParkingLotOnline = BoolValue.newBuilder().setValue(false);
+        callApiWithExceptionHandling(() -> {
+            isParkingLotOnline.setValue(serviceStubs.getContactServiceBlockingStub()
+                    .checkParkingLotOnlineByParkingLotId(Int64Value.of(id)).getValue());
+        });
 
-        boolean isParkingLotOnline = serviceStubs.getContactServiceBlockingStub()
-                .checkParkingLotOnlineByParkingLotId(Int64Value.of(id)).getValue();
 
-        if (!isParkingLotOnline) {
+        if (!isParkingLotOnline.getValue()) {
             Toast.makeText(PlaceDetailsActivity.this, "Parking are not available!", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -197,8 +203,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener(view1 -> {
-                String licensePlate = txtlicensePlate.getText().toString();
-                String amountOfParkingHourString = txtAmountOfParkingHour.getText().toString();
+                licensePlate = txtlicensePlate.getText().toString();
+                amountOfParkingHourString = txtAmountOfParkingHour.getText().toString();
 
                 Log.d("BachMap", " " + licensePlate);
                 Log.d("BachMap", " " + amountOfParkingHourString);
@@ -403,7 +409,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
         intent.putExtra("idplacedetail", (Serializable) id);
         startActivity(intent);
-        Toast.makeText(PlaceDetailsActivity.this, "hết giờ nha  ", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(PlaceDetailsActivity.this, "hết giờ nha  ", Toast.LENGTH_SHORT).show();
     }
 
     public class Broadcast extends BroadcastReceiver {
@@ -496,7 +502,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             sendWebSocketBinaryMessage(saigonParkingMessage);
             ((SaigonParkingApplication) getApplicationContext()).setIsBooked(true);
             Log.d("BachMap", "Gửi request Booking");
-
         }
     }
 

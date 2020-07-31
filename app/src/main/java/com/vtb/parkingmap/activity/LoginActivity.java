@@ -182,7 +182,7 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
         } catch (StatusRuntimeException exception) {
             valid = false;
-            Log.d("BachMap", exception.getMessage());
+            saigonParkingExceptionHandler.handleCommunicationException(exception, LoginActivity.this);
         }
 
         return valid;

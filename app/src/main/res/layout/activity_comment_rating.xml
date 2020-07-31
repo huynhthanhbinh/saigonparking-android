@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
 
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_margin="50dp"
-        android:text="GIỚI THIỆU"
+        android:text="COMMENT"
         android:textSize="10pt" />
 
     <LinearLayout
@@ -22,9 +23,10 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/primary"
             android:gravity="right"
             android:id="@+id/btnthembinhluan"
-            android:text="BINH LUẬN" />
+            android:text="COMMENT" />
 
         <TextView
             android:id="@+id/countallcomment"

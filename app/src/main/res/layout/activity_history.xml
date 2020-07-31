@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="120">
+    android:orientation="vertical">
 
 
     <TextView
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="Booking ID: "
+        android:id="@+id/txtgioithieu"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/textView1"
-        android:layout_weight="40" />
-
-    <TextView
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAlignment="center"
-        android:text="Parking: "
+        android:layout_margin="50dp"
+        android:text="MY BOOKING HISTORY"
+        android:textSize="10pt" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/textView2"
-        android:layout_weight="40" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="Car's ID: "
+
+        <TextView
+            android:id="@+id/countallcomment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Amount of Booking" />
+
+    </LinearLayout>
+
+
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/textView3"
-        android:layout_weight="40" />
-
-
+        android:layout_height="match_parent"
+        android:id="@+id/listview_history"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:dividerHeight="1dp"
+        android:divider="#54CA59"></ListView>
 </LinearLayout>
+

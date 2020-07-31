@@ -274,10 +274,14 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 ParkingLotResult selectedFromList = (ParkingLotResult) listView.getItemAtPosition(i);
-                parkingLot = parkingLotServiceBlockingStub
-                        .getParkingLotById(Int64Value.newBuilder()
-                                .setValue(selectedFromList.getId())
-                                .build());
+
+                callApiWithExceptionHandling(() -> {
+                    parkingLot = parkingLotServiceBlockingStub
+                            .getParkingLotById(Int64Value.newBuilder()
+                                    .setValue(selectedFromList.getId())
+                                    .build());
+                });
+
 
                 Log.d("khongbiloi", "" + Long.parseLong(marker.getSnippet()));
                 Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);

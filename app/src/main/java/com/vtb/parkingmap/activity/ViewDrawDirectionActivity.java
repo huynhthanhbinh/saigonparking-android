@@ -417,15 +417,17 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
 
             recommendedParkingLotResultList = new LinkedList<>();
 
-            Objects.requireNonNull(recommendedParkingLotResultList)
-                    .addAll(parkingLotServiceBlockingStub
-                            .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
-                                    .setLatitude(placedetaillat)
-                                    .setLongitude(placedetaillong)
-                                    .setRadiusToScan(3)
-                                    .setNResult(10)
-                                    .build())
-                            .getParkingLotResultList());
+            callApiWithExceptionHandling(() -> {
+                Objects.requireNonNull(recommendedParkingLotResultList)
+                        .addAll(parkingLotServiceBlockingStub
+                                .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
+                                        .setLatitude(placedetaillat)
+                                        .setLongitude(placedetaillong)
+                                        .setRadiusToScan(3)
+                                        .setNResult(10)
+                                        .build())
+                                .getParkingLotResultList());
+            });
 
 
             List<ParkingLotResult> a = new ArrayList<>(recommendedParkingLotResultList);
@@ -459,16 +461,19 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
             builderSingle.setAdapter(adapter, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ParkingLot parkingLot;
+                    final ParkingLot.Builder parkingLot = ParkingLot.newBuilder();
                     ParkingLotResult selectedFromList = (ParkingLotResult) adapter.getItem(which);
-                    parkingLot = parkingLotServiceBlockingStub
-                            .getParkingLotById(Int64Value.newBuilder()
-                                    .setValue(selectedFromList.getId())
-                                    .build());
+                    callApiWithExceptionHandling(() -> {
+                        parkingLot.mergeFrom(parkingLotServiceBlockingStub
+                                .getParkingLotById(Int64Value.newBuilder()
+                                        .setValue(selectedFromList.getId())
+                                        .build()));
+                    });
+
                     Intent intent = new Intent(ViewDrawDirectionActivity.this, PlaceDetailsActivity.class);
                     Intent intent_placedetail = new Intent();
                     intent_placedetail.setAction("parkinglot_broadcast");
-                    intent_placedetail.putExtra("parkinglot_broadcast", (Serializable) parkingLot);
+                    intent_placedetail.putExtra("parkinglot_broadcast", (Serializable) parkingLot.build());
                     intent_placedetail.putExtra("myLat_broadcast", (Serializable) mylatfromplacedetail);
                     intent_placedetail.putExtra("myLong_broadcast", (Serializable) mylongfromplacedetail);
                     if (place3 != null) {

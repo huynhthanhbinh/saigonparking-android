@@ -27,7 +27,7 @@ import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
 import java.io.Serializable;
 
-public class PermissionsActivity extends BaseSaigonParkingActivity {
+public final class PermissionsActivity extends BaseSaigonParkingActivity {
     //    SaigonParkingDatabase database ;
     private Button btnGrant;
 

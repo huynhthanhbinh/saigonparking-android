@@ -24,17 +24,20 @@ import com.vtb.parkingmap.CommentRating.ProductListAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class CommentRatingActivity extends BaseSaigonParkingActivity {
     private ListView lvProduct;
     private ProductListAdapter adapter;
     private List<Product> mProductList;
+    private List<ParkingLotRating> getallratingmore;
     public Handler mHandler;
     public View ftView;
     public boolean isLoading = false;
-    public int currentId = 11;
+
 
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
@@ -63,6 +66,7 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CommentRatingActivity.this, RatingActivity.class);
+                intent.putExtra("idplacedetail", (Serializable) idplacedetail);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -83,7 +87,10 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
                 .setParkingLotId(idplacedetail)
                 .build();
 
-        countallrating = parkingLotServiceBlockingStub.countAllRatingsOfParkingLot(countAllRatingsOfParkingLotRequest).getValue();
+        callApiWithExceptionHandling(() -> {
+            countallrating = parkingLotServiceBlockingStub.countAllRatingsOfParkingLot(countAllRatingsOfParkingLotRequest).getValue();
+        });
+
 
         GetAllRatingsOfParkingLotRequest getAllRatingsOfParkingLotRequest = GetAllRatingsOfParkingLotRequest
                 .newBuilder()
@@ -91,7 +98,10 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
                 .setNRow(10)
                 .setPageNumber(pagenumber)
                 .build();
-        getallrating = parkingLotServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
+
+        callApiWithExceptionHandling(() -> {
+            getallrating = parkingLotServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
+        });
 
         //
         for (ParkingLotRating parkinglotrating : getallrating) {
@@ -160,7 +170,6 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
     }
 
     private ArrayList<Product> getMoreData() {
-        List<ParkingLotRating> getallratingmore;
 
         ArrayList<Product> lst = new ArrayList<>();
         pagenumber = pagenumber + 1;
@@ -170,14 +179,18 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
                 .setNRow(10)
                 .setPageNumber(pagenumber)
                 .build();
-        getallratingmore = parkingLotServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
 
-        //
-        for (ParkingLotRating parkinglotrating : getallratingmore) {
+        callApiWithExceptionHandling(() -> {
+            getallratingmore = parkingLotServiceBlockingStub
+                    .getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest)
+                    .getRatingList();
+        });
+
+        for (ParkingLotRating parkinglotrating : Objects.requireNonNull(getallratingmore)) {
             lst.add(new Product(parkinglotrating.getRatingId(), parkinglotrating.getUsername(), parkinglotrating.getRating(), parkinglotrating.getComment(), parkinglotrating.getLastUpdated()));
         }
-        //Sample code get new data :P
 
+        //Sample code get new data :P
         return lst;
     }
 
