@@ -17,6 +17,7 @@ import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
 import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
 import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
+import com.bht.saigonparking.api.grpc.contact.ErrorContent;
 import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
@@ -57,19 +58,42 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
     @SneakyThrows
     @Override
-    public void onMessage(@NotNull WebSocket webSocket, ByteString bytes) {
-        SaigonParkingMessage message = SaigonParkingMessage.parseFrom(bytes.toByteArray());
-        try {
-            BaseSaigonParkingActivity currentActivity = applicationContext.getCurrentActivity();
+    public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
+        BaseSaigonParkingActivity currentActivity = applicationContext.getCurrentActivity();
+        currentActivity.runOnUiThread(() -> {
+            try {
+                SaigonParkingMessage message = SaigonParkingMessage.parseFrom(bytes.toByteArray());
 
-            switch (message.getType()) {
-                case NOTIFICATION:
-                    NotificationContent notificationContent = NotificationContent.parseFrom(message.getContent());
-                    Log.d("BachMap", "Ket qua:" + notificationContent);
+                switch (message.getType()) {
+                    case ERROR:
+                        Log.d("BachMap", "Error booking again");
+                        ErrorContent errorContent = ErrorContent.parseFrom(message.getContent());
+                        String internalErrorCode = errorContent.getInternalErrorCode();
+                        Log.d("BachMap", "Error booking again: " + internalErrorCode);
+                        if ("SPE#00020".equals(internalErrorCode)) { /* CustomerHasOnGoingBooking */
 
-                    break;
-                case TEXT_MESSAGE: {
-                    applicationContext.getCurrentActivity().runOnUiThread(() -> {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(currentActivity);
+                            alert
+                                    .setTitle("Booking Confirm")
+                                    .setMessage("You have on going booking !")
+                                    .setNegativeButton("OK", (dialogInterface, i) ->
+                                            Toast.makeText(currentActivity,
+                                                    "Cancel booking successfully!", Toast.LENGTH_SHORT).show());
+
+                            AlertDialog dialog = alert.create();
+                            dialog.show();
+
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                                    .setTextColor(currentActivity
+                                            .getResources()
+                                            .getColor(R.color.colorPrimary));
+                        }
+                        break;
+                    case NOTIFICATION:
+                        NotificationContent notificationContent = NotificationContent.parseFrom(message.getContent());
+                        Log.d("BachMap", "Ket qua:" + notificationContent);
+                        break;
+                    case TEXT_MESSAGE: {
                         try {
                             TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
                             Log.d("BachMap", "1" + textMessageContent);
@@ -83,97 +107,96 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                         } catch (Exception exception) {
                             Log.d("BachMap", exception.getMessage());
                         }
-                    });
-                }
-                break;
-                case BOOKING_ACCEPTANCE:
-                    BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
-
-                    if (currentActivity instanceof BookingActivity) {
-                        BookingActivity activity = (BookingActivity) currentActivity;
-                        SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity.builder()
-                                .id(activity.getId())
-                                .latitude(activity.getLatitude())
-                                .longitude(activity.getLongitude())
-                                .mylat(activity.getMylat())
-                                .mylong(activity.getMylong())
-                                .position3lat(activity.getPosition3lat())
-                                .position3long(activity.getPosition3long())
-                                .tmpType(activity.getTmpType())
-                                .bookingId(bookingAcceptanceContent.getBookingId())
-                                .build();
-                        activity.setLabelTxtStatus("Accepted");
-
-                        Log.d("BachMap", bookingEntity.toString());
-                        applicationContext.getSaigonParkingDatabase().insertBookingTable(bookingEntity);
-
                     }
                     break;
+                    case BOOKING_ACCEPTANCE:
+                        BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
 
-                case BOOKING_PROCESSING:
-                    BookingProcessingContent bookingProcessingContent = BookingProcessingContent.parseFrom(message.getContent());
-                    Log.d("BachMap", "Tai ID: " + bookingProcessingContent.getBookingId());
+                        if (currentActivity instanceof BookingActivity) {
+                            BookingActivity activity = (BookingActivity) currentActivity;
+                            SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity.builder()
+                                    .id(activity.getId())
+                                    .latitude(activity.getLatitude())
+                                    .longitude(activity.getLongitude())
+                                    .mylat(activity.getMylat())
+                                    .mylong(activity.getMylong())
+                                    .position3lat(activity.getPosition3lat())
+                                    .position3long(activity.getPosition3long())
+                                    .tmpType(activity.getTmpType())
+                                    .bookingId(bookingAcceptanceContent.getBookingId())
+                                    .build();
+                            activity.setLabelTxtStatus("Accepted");
 
-                    /* open Booking Activity + send bookingProcessingContent to Booking Activity */
-                    Intent intent = new Intent(applicationContext.getCurrentActivity(), BookingActivity.class);
+                            Log.d("BachMap", bookingEntity.toString());
+                            applicationContext.getSaigonParkingDatabase().insertBookingTable(bookingEntity);
 
-                    if (currentActivity instanceof PlaceDetailsActivity) {
-                        PlaceDetailsActivity activity = (PlaceDetailsActivity) currentActivity;
-                        intent.putExtra("parkingLot", activity.getParkingLot());
-                        intent.putExtra("placedetaillat", (Serializable) activity.getLatitude());
-                        intent.putExtra("placedetaillong", (Serializable) activity.getLongitude());
-                        intent.putExtra("mylatfromplacedetail", (Serializable) activity.getMylat());
-                        intent.putExtra("mylongfromplacedetail", (Serializable) activity.getMylong());
-                        intent.putExtra("placedetailtype", (Serializable) activity.getTmpType());
-                        intent.putExtra("idplacedetail", (Serializable) activity.getId());
-                        intent.putExtra("licenseplate", (Serializable) activity.getLicensePlate());
-                        intent.putExtra("parkinghour", (Serializable) activity.getAmountOfParkingHourString());
-                        intent.putExtra("bookingProcessingContent", bookingProcessingContent);
-
-                        if (activity.getPosition3lat() != 1234) {
-                            intent.putExtra("position3lat", (Serializable) activity.getPosition3lat());
-                            intent.putExtra("position3long", (Serializable) activity.getPosition3long());
                         }
-                    }
+                        break;
 
-                    applicationContext.getCurrentActivity().startActivity(intent);
-                    applicationContext.getCurrentActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                    break;
+                    case BOOKING_PROCESSING:
+                        BookingProcessingContent bookingProcessingContent = BookingProcessingContent.parseFrom(message.getContent());
+                        Log.d("BachMap", "Tai ID: " + bookingProcessingContent.getBookingId());
 
-                case BOOKING_REJECT:
-                    applicationContext.getCurrentActivity().runOnUiThread(() -> {
+                        /* open Booking Activity + send bookingProcessingContent to Booking Activity */
+                        Intent intent = new Intent(currentActivity, BookingActivity.class);
+
+                        if (currentActivity instanceof PlaceDetailsActivity) {
+                            PlaceDetailsActivity activity = (PlaceDetailsActivity) currentActivity;
+                            intent.putExtra("parkingLot", activity.getParkingLot());
+                            intent.putExtra("placedetaillat", (Serializable) activity.getLatitude());
+                            intent.putExtra("placedetaillong", (Serializable) activity.getLongitude());
+                            intent.putExtra("mylatfromplacedetail", (Serializable) activity.getMylat());
+                            intent.putExtra("mylongfromplacedetail", (Serializable) activity.getMylong());
+                            intent.putExtra("postion3lat", (Serializable) activity.getPosition3lat());
+                            intent.putExtra("postion3long", (Serializable) activity.getPosition3long());
+                            intent.putExtra("placedetailtype", (Serializable) activity.getTmpType());
+                            intent.putExtra("idplacedetail", (Serializable) activity.getId());
+                            intent.putExtra("licenseplate", (Serializable) activity.getLicensePlate());
+                            intent.putExtra("parkinghour", (Serializable) activity.getAmountOfParkingHourString());
+                            intent.putExtra("bookingProcessingContent", bookingProcessingContent);
+
+                            if (activity.getPosition3lat() != 1234) {
+                                intent.putExtra("position3lat", (Serializable) activity.getPosition3lat());
+                                intent.putExtra("position3long", (Serializable) activity.getPosition3long());
+                            }
+                        }
+
+                        currentActivity.startActivity(intent);
+                        currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        break;
+
+                    case BOOKING_REJECT:
                         try {
                             Log.d("BachMap", "ĐTAI");
                             BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
                             Log.d("BachMap", "1 : BOOKING REJ" + bookingRejectContent);
-                            AlertDialog.Builder alert2 = new AlertDialog.Builder(applicationContext.getCurrentActivity());
+                            AlertDialog.Builder alert2 = new AlertDialog.Builder(currentActivity);
                             applicationContext.setIsBooked(false);
                             alert2.setTitle("Booking Confirm");
                             alert2.setMessage("Parking full slot! Please choose other parking lots!");
                             alert2.setPositiveButton("OK", (dialogInterface, i) -> {
 
-                                Intent intent2 = new Intent(applicationContext.getCurrentActivity(), MapActivity.class);
+                                Intent intent2 = new Intent(currentActivity, MapActivity.class);
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                                applicationContext.getCurrentActivity().startActivity(intent2);
-                                applicationContext.getCurrentActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                currentActivity.startActivity(intent2);
+                                currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                             });
                             AlertDialog dialog = alert2.create();
                             dialog.show();
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                                    .setTextColor(applicationContext.getCurrentActivity().getResources().getColor(R.color.colorPrimary));
+                                    .setTextColor(currentActivity.getResources().getColor(R.color.colorPrimary));
                         } catch (InvalidProtocolBufferException e) {
-                            Toast.makeText(applicationContext.getCurrentActivity(), "ERROR!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(currentActivity, "ERROR!", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                    break;
+                        break;
 
-                case BOOKING_FINISH:
-                    applicationContext.getCurrentActivity().runOnUiThread(() -> {
+                    case BOOKING_FINISH:
+
                         try {
                             Log.d("BachMap", "ĐTAI");
                             BookingFinishContent bookingFinishContentContent = BookingFinishContent.parseFrom(message.getContent());
                             Log.d("BachMap", "1 : BOOKING Finish" + bookingFinishContentContent);
-                            AlertDialog.Builder alert = new AlertDialog.Builder(applicationContext.getCurrentActivity());
+                            AlertDialog.Builder alert = new AlertDialog.Builder(currentActivity);
 
                             alert.setTitle("Booking Finish!");
                             alert.setMessage("Booking finished! Thanks for choose our service!");
@@ -184,27 +207,29 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 //xóa history message
                                 Paper.book().delete("historymessage");
 
-                                Intent intent2 = new Intent(applicationContext.getCurrentActivity(), MapActivity.class);
+                                Intent intent2 = new Intent(currentActivity, MapActivity.class);
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                                applicationContext.getCurrentActivity().startActivity(intent2);
-                                applicationContext.getCurrentActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                currentActivity.startActivity(intent2);
+                                currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                             });
                             AlertDialog dialog = alert.create();
                             dialog.show();
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                                    .setTextColor(applicationContext.getCurrentActivity().getResources().getColor(R.color.colorPrimary));
+                                    .setTextColor(currentActivity.getResources().getColor(R.color.colorPrimary));
                         } catch (InvalidProtocolBufferException e) {
-                            Toast.makeText(applicationContext.getCurrentActivity(), "ERROR!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(currentActivity, "ERROR!", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                    break;
+                        break;
 
-                case IMAGE:
-                    break;
+                    case IMAGE:
+                        break;
+                }
+
+            } catch (
+                    Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
 
@@ -228,6 +253,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
         // Builds your notification
         ComponentName componentName;
         ActivityManager activityManager = (ActivityManager) applicationContext.getSystemService(Context.ACTIVITY_SERVICE);
+        BaseSaigonParkingActivity currentActivity = applicationContext.getCurrentActivity();
 
         //noinspection deprecation
         componentName = activityManager.getRunningTasks(1).get(0).topActivity;
@@ -235,11 +261,11 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
         if (!tmp.equals(componentName.getShortClassName())) {
 
-            Intent notificationIntent = new Intent(applicationContext.getCurrentActivity(), ChatActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(applicationContext.getCurrentActivity(),
+            Intent notificationIntent = new Intent(currentActivity, ChatActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(currentActivity,
                     0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(applicationContext.getCurrentActivity(),
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(currentActivity,
                     "ID_Notification")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setWhen(System.currentTimeMillis())

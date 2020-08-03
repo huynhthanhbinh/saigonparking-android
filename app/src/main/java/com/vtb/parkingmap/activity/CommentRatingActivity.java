@@ -1,7 +1,10 @@
 package com.vtb.parkingmap.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,12 +14,14 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.vtb.parkingmap.CommentRating.Product;
@@ -30,6 +35,9 @@ import java.util.List;
 import java.util.Objects;
 
 public final class CommentRatingActivity extends BaseSaigonParkingActivity {
+    private ParkingLot parkingLot;
+    private ImageView imageView;
+    private byte[] imageData;
     private ListView lvProduct;
     private ProductListAdapter adapter;
     private List<Product> mProductList;
@@ -55,10 +63,12 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
+        parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
 
         setContentView(R.layout.activity_comment_rating);
 
+        imageView = findViewById(R.id.imageView);
         lvProduct = (ListView) findViewById(R.id.listview_product);
         txtcount = (TextView) findViewById(R.id.countallcomment);
         Button btncomment = (Button) findViewById(R.id.btnthembinhluan);
@@ -118,12 +128,15 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
             txtcount.setText(String.valueOf((0) + "/" + String.valueOf(countallrating)));
         }
 
+        //Load Image Parkinglot
+        processParkingLot();
+
         lvProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Do something
                 //Ex: display msg with product id get from view.getTag
-                Toast.makeText(getApplicationContext(), "Clicked product id =" + view.getTag(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Clicked product id =" + view.getTag(), Toast.LENGTH_SHORT).show();
             }
         });
         lvProduct.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -146,6 +159,30 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
 
             }
         });
+    }
+
+    private void processParkingLot() {
+        if (parkingLot != null) {
+            assignParkingLotFields();
+            loadFormData();
+        }
+    }
+
+
+    private void assignParkingLotFields() {
+
+        ParkingLotInformation information = parkingLot.getInformation();
+        imageData = information.getImageData().toByteArray();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void loadFormData() {
+
+        if (imageData.length != 0) { // co hinh trong db --> load hinh moi
+            Bitmap imageParkingLot = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            imageView.setImageBitmap(imageParkingLot);
+        }
+
     }
 
     public class MyHandler extends Handler {

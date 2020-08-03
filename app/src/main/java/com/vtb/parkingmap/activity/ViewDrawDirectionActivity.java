@@ -105,7 +105,8 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
 //            Toast.makeText(ViewDrawDirection.this, "" + distance, Toast.LENGTH_SHORT).show();
             place1 = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("My Location");
             if (distance < 500 && flag_distance500 == 1) {
-                Toast.makeText(ViewDrawDirectionActivity.this, "Đã đến nơi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewDrawDirectionActivity.this, "You have arrived parking", Toast.LENGTH_SHORT).show();
+                Log.d("BachMap", "position3lat: " + myposition3lat);
                 if (myposition3lat != tmp) {
                     double distancewalk = SphericalUtil.computeDistanceBetween(new LatLng(myposition3lat, myposition3long), new LatLng(place2.getPosition().latitude, place2.getPosition().longitude));
                     if (distancewalk < 500) {

@@ -45,16 +45,16 @@ public final class HiddenService extends BaseSaigonParkingService {
 
 
             if (isAvailable) {
-                Toast.makeText(HiddenService.this, "Còn chỗ nha " + idplacedetail, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HiddenService.this, "Parkinglot available ", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(HiddenService.this, "Hết chỗ rồi " + idplacedetail, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HiddenService.this, "Parkinglot is full! Please choose other parkinglot ", Toast.LENGTH_LONG).show();
                 addNotification();
                 Intent intent = new Intent();
                 intent.setAction("dialogFlag.Broadcast");
                 sendBroadcast(intent);
                 onDestroy();
             }
-            mHandler.postDelayed(this, 5000);
+            mHandler.postDelayed(this, 60000);
         }
     };
 
@@ -67,7 +67,7 @@ public final class HiddenService extends BaseSaigonParkingService {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(HiddenService.this, "Stop Service", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(HiddenService.this, "Stop Service", Toast.LENGTH_SHORT).show();
         mHandler.removeCallbacks(mToastRunnable);
         Intent myIntent = new Intent(HiddenService.this, HiddenService.class);
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
@@ -85,8 +85,8 @@ public final class HiddenService extends BaseSaigonParkingService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ID_Notification")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle("Thông Báo")
-                .setContentText("Bãi xe bạn đang chọn đã hết chỗ")
+                .setContentTitle("Notice")
+                .setContentText("Parkinglot is full!")
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setVibrate(new long[5])

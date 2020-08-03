@@ -2,18 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="180dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="400dp"
+        android:maxHeight="190dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_plot" />
 
-    <TextView
-        android:id="@+id/txtgioithieu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="50dp"
-        android:text="COMMENT"
-        android:textSize="10pt" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,16 +27,21 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:gravity="right"
+            android:background="#359ab9"
+            android:gravity="center"
+            android:layout_weight="1"
             android:id="@+id/btnthembinhluan"
+            android:textColor="#fff"
             android:text="COMMENT" />
 
         <TextView
             android:id="@+id/countallcomment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_weight="3"
             android:gravity="center"
+            android:textColor="#fff"
             android:text="so binh luan" />
 
     </LinearLayout>

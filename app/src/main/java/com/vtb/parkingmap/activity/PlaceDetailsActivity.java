@@ -408,6 +408,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     public void funcXemChiTietDanhGia(View view) {
         Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
         intent.putExtra("idplacedetail", (Serializable) id);
+        intent.putExtra("parkinglot", (Serializable) parkingLot);
         startActivity(intent);
         //Toast.makeText(PlaceDetailsActivity.this, "hết giờ nha  ", Toast.LENGTH_SHORT).show();
     }

@@ -6,6 +6,7 @@
     <string name="title_activity_view_directions">Direction</string>
     <string name="title_activity_about">About</string>
     <string name="title_activity_booking">Booking Detail</string>
+    <string name="title_activity_comment">Comment</string>
 
     <string name="speech_prompt">Say something…</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
