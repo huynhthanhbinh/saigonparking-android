@@ -14,7 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.booking.Booking;
+import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
+import com.google.protobuf.Empty;
+import com.google.protobuf.Int64Value;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -23,7 +27,6 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
-import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
 import java.io.Serializable;
 
@@ -41,44 +44,64 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
         setContentView(R.layout.activity_permissions);
 
         if (ContextCompat.checkSelfPermission(PermissionsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) { /* booking chua xoa trong db */
-                Log.d("BachMap", "con 1 hang trong booking table");
+            callApiWithExceptionHandling(() -> {
+                boolean isCustomerHasOnGoingBooking = serviceStubs
+                        .getBookingServiceBlockingStub()
+                        .checkCustomerHasOnGoingBooking(Empty.getDefaultInstance())
+                        .getValue();
 
-                ParkingLot parkingLot = ParkingLot.newBuilder()
-                        .setLatitude(saigonParkingDatabase.getBookingEntity().getLatitude())
-                        .setLongitude(saigonParkingDatabase.getBookingEntity().getLongitude())
-                        .setId(saigonParkingDatabase.getBookingEntity().getId())
-                        .build();
+                if (isCustomerHasOnGoingBooking) {
+                    Booking currentBooking = serviceStubs
+                            .getBookingServiceBlockingStub()
+                            .getCustomerOnGoingBooking(Empty.getDefaultInstance());
+
+                    byte[] qrCode = serviceStubs
+                            .getBookingServiceBlockingStub()
+                            .generateBookingQrCode(GenerateBookingQrCodeRequest.newBuilder()
+                                    .setBookingId(currentBooking.getId())
+                                    .build())
+                            .getQrCode()
+                            .toByteArray();
+
+                    Log.d("BachMap", "current booking: " + currentBooking);
+
+                    ParkingLot currentParkingLot = serviceStubs
+                            .getParkingLotServiceBlockingStub()
+                            .getParkingLotById(Int64Value.of(currentBooking.getParkingLotId()));
 
 
-                Log.d("BachMap", "doclen: " + saigonParkingDatabase.getBookingEntity().toString());
-                Log.d("BachMap", "" + saigonParkingDatabase.getBookingEntity().getMylat());
-                Log.d("BachMap", "" + saigonParkingDatabase.getBookingEntity().getLongitude());
+                    Log.d("BachMap", "doclen: " + saigonParkingDatabase.getBookingEntity().toString());
+                    Log.d("BachMap", "" + saigonParkingDatabase.getBookingEntity().getMylat());
+                    Log.d("BachMap", "" + saigonParkingDatabase.getBookingEntity().getLongitude());
 
-                Intent intent = new Intent(PermissionsActivity.this, PlaceDetailsActivity.class);
-                intent.putExtra("parkingLot", (Serializable) parkingLot);
-                intent.putExtra("myLat", (Serializable) saigonParkingDatabase.getBookingEntity().getMylat());
-                intent.putExtra("myLong", (Serializable) saigonParkingDatabase.getBookingEntity().getLongitude());
+                    Intent intent = new Intent(PermissionsActivity.this, BookingActivity.class);
+                    intent.putExtra("parkingLot", currentParkingLot);
+                    intent.putExtra("mylatfromplacedetail", (Serializable) saigonParkingDatabase.getBookingEntity().getMylat());
+                    intent.putExtra("mylongfromplacedetail", (Serializable) saigonParkingDatabase.getBookingEntity().getLongitude());
 
-                intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
-                intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
+                    intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
+                    intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
+                    intent.putExtra("placedetailtype", saigonParkingDatabase.getCurrentBookingEntity().getTmpType());
+                    intent.putExtra("Booking", (Serializable) currentBooking);
 
-                startActivity(intent);
-                finish();
-                return;
+                    intent.putExtra("QRcode", (Serializable) qrCode);
 
-            } else {
-                if (saigonParkingDatabase.getAuthKeyValueMap().size() == 3) { /* BachMap moi vao */
-                    startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+                    startActivity(intent);
                     finish();
                     return;
-                } else { /* BachMapKoChoVao */
-                    startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
-                    finish();
-                    return;
+
+                } else {
+                    if (saigonParkingDatabase.getAuthKeyValueMap().size() == 3) { /* BachMap moi vao */
+                        startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+                        finish();
+                        return;
+                    } else { /* BachMapKoChoVao */
+                        startActivity(new Intent(PermissionsActivity.this, LoginActivity.class));
+                        finish();
+                        return;
+                    }
                 }
-            }
-
+            });
 
         }
 

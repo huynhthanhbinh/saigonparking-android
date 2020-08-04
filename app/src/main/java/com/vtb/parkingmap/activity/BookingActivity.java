@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
 import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
@@ -66,6 +67,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     //parking-lot
     private long id;
     private ParkingLotType type;
+    //Booking
+    private Booking currentBooking;
+    byte[] imageData;
 
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
 
@@ -76,19 +80,35 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         Intent intent = getIntent();
         bookingProcessingContent = (BookingProcessingContent) intent.getSerializableExtra("bookingProcessingContent");
         setContentView(R.layout.activity_booking);
-        Log.d("BachMap", "\n\nbooking id: " + bookingProcessingContent.getBookingId());
-        Log.d("BachMap", "\n\ncreated at: " + bookingProcessingContent.getCreatedAt());
-        Log.d("BachMap", "\n\nQR code: " + bookingProcessingContent.getQrCode());
+        if (bookingProcessingContent != null) {
+            Log.d("BachMap", "\n\nbooking id: " + bookingProcessingContent.getBookingId());
+            Log.d("BachMap", "\n\ncreated at: " + bookingProcessingContent.getCreatedAt());
+            Log.d("BachMap", "\n\nQR code: " + bookingProcessingContent.getQrCode());
 
+            parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
+            mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
+            mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
+            position3lat = intent.getDoubleExtra("postion3lat", 1234);
+            position3long = intent.getDoubleExtra("postion3long", 1234);
+            tmpType = (int) intent.getSerializableExtra("placedetailtype");
+            licensePlate = intent.getStringExtra("licenseplate");
+            amountOfParkingHourString = intent.getStringExtra("parkinghour");
+            currentBooking = (Booking) intent.getSerializableExtra("Booking");
+            imageData = (byte[]) intent.getSerializableExtra("QRcode");
+        } else {
+            parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
+            mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
+            mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
+            position3lat = intent.getDoubleExtra("postion3lat", 1234);
+            position3long = intent.getDoubleExtra("postion3long", 1234);
+            currentBooking = (Booking) intent.getSerializableExtra("Booking");
+            tmpType = (int) intent.getSerializableExtra("placedetailtype");
+            licensePlate = currentBooking.getLicensePlate();
+            imageData = (byte[]) intent.getSerializableExtra("QRcode");
 
-        parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
-        mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
-        mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
-        position3lat = intent.getDoubleExtra("postion3lat", 1234);
-        position3long = intent.getDoubleExtra("postion3long", 1234);
-        tmpType = (int) intent.getSerializableExtra("placedetailtype");
-        licensePlate = intent.getStringExtra("licenseplate");
-        amountOfParkingHourString = intent.getStringExtra("parkinghour");
+            Log.d("BachMap", "sau khi tat app: " + parkingLot);
+        }
+
 
         Log.d("khongbiloi", "Nhan du lieu 2");
 
@@ -178,19 +198,36 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
 
 
     private void initReducedBookingId() {
-        String originBookingId = bookingProcessingContent.getBookingId();
-        reducedBookingId = "****** " + originBookingId.substring(originBookingId.length() - 12);
+        if (bookingProcessingContent != null) {
+            String originBookingId = bookingProcessingContent.getBookingId();
+            reducedBookingId = "****** " + originBookingId.substring(originBookingId.length() - 12);
+        } else {
+
+            String originBookingId = currentBooking.getId();
+            reducedBookingId = "****** " + originBookingId.substring(originBookingId.length() - 12);
+        }
+
     }
 
     private void initQRCode() {
-        imgQRCode = findViewById(R.id.imgQRCode);
-        byte[] imageData = bookingProcessingContent.getQrCode().toByteArray();
+        if (bookingProcessingContent != null) {
+            imgQRCode = findViewById(R.id.imgQRCode);
+            imageData = bookingProcessingContent.getQrCode().toByteArray();
 
-        if (imageData.length != 0) {
-            Bitmap imageParkingLot = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-            imgQRCode.setImageBitmap(imageParkingLot);
+            if (imageData.length != 0) {
+                Bitmap imageParkingLot = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                imgQRCode.setImageBitmap(imageParkingLot);
+            }
+        } else {
+            imgQRCode = findViewById(R.id.imgQRCode);
+
+            if (imageData.length != 0) {
+                Bitmap imageParkingLot = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                imgQRCode.setImageBitmap(imageParkingLot);
+            }
         }
     }
+
 
     private void initBookingDetail() {
         txtBookingID = findViewById(R.id.txtBookingID);
@@ -199,13 +236,22 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         txtParking = findViewById(R.id.txtParking);
         txtAddress = findViewById(R.id.txtAddress);
         txtLicensePlate = findViewById(R.id.txtLicensePlate);
-
-        txtBookingID.setText(reducedBookingId);
-        txtStatus.setText("Processing");
-        txtParking.setText(parkingLot.getInformation().getName());
-        txtAddress.setText(parkingLot.getInformation().getAddress());
         txtLicensePlate.setText(licensePlate.toUpperCase());
-        txtCreatedAt.setText(bookingProcessingContent.getCreatedAt());
+
+
+        if (bookingProcessingContent != null) {
+            txtBookingID.setText(reducedBookingId);
+            txtCreatedAt.setText(bookingProcessingContent.getCreatedAt());
+            txtParking.setText(parkingLot.getInformation().getName());
+            txtAddress.setText(parkingLot.getInformation().getAddress());
+            txtStatus.setText("Processing");
+        } else {
+            txtBookingID.setText(reducedBookingId);
+            txtParking.setText(parkingLot.getInformation().getName());
+            txtAddress.setText(parkingLot.getInformation().getAddress());
+            txtCreatedAt.setText(currentBooking.getCreatedAt());
+            txtStatus.setText("Accepted");
+        }
     }
 
     private void initAllButtons() {
@@ -251,8 +297,6 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             Intent intent = new Intent(this, MapActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
-
-//            super.onBackPressed();
         }
         //Write your code here
         else {
