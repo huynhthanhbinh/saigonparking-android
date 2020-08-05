@@ -194,12 +194,12 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
         SaigonParkingDatabaseEntityBuilder entity = SaigonParkingDatabaseEntity.builder();
         if (cursor.moveToNext()) {
             entity.id(cursor.getLong(0));
-            entity.latitude(cursor.getDouble(1));
-            entity.longitude(cursor.getDouble(2));
-            entity.position3lat(cursor.getDouble(3));
-            entity.position3long(cursor.getDouble(4));
-            entity.mylat(cursor.getDouble(5));
-            entity.mylong(cursor.getDouble(6));
+            entity.latitude(Double.valueOf(cursor.getString(1)));
+            entity.longitude(Double.valueOf(cursor.getString(2)));
+            entity.position3lat(Double.valueOf(cursor.getString(3)));
+            entity.position3long(Double.valueOf(cursor.getString(4)));
+            entity.mylat(Double.valueOf(cursor.getString(5)));
+            entity.mylong(Double.valueOf(cursor.getString(6)));
             entity.tmpType(cursor.getInt(7));
             entity.bookingId(cursor.getString(8));
         }
@@ -210,12 +210,12 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
         queryData(String.format(Locale.US,
                 "INSERT OR REPLACE INTO SAIGON_PARKING_BOOKING VALUES(%d,%s,%s,%s,%s,%s,%s,%d,'%s')",
                 saigonParkingDatabaseEntity.getId(),
-                saigonParkingDatabaseEntity.getLatitude(),
-                saigonParkingDatabaseEntity.getLongitude(),
-                saigonParkingDatabaseEntity.getPosition3lat(),
-                saigonParkingDatabaseEntity.getPosition3long(),
-                saigonParkingDatabaseEntity.getMylat(),
-                saigonParkingDatabaseEntity.getMylong(),
+                saigonParkingDatabaseEntity.getLatitude().toString(),
+                saigonParkingDatabaseEntity.getLongitude().toString(),
+                saigonParkingDatabaseEntity.getPosition3lat().toString(),
+                saigonParkingDatabaseEntity.getPosition3long().toString(),
+                saigonParkingDatabaseEntity.getMylat().toString(),
+                saigonParkingDatabaseEntity.getMylong().toString(),
                 saigonParkingDatabaseEntity.getTmpType(),
                 saigonParkingDatabaseEntity.getBookingId()
         ));

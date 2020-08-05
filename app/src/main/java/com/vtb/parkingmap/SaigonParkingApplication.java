@@ -70,19 +70,36 @@ public final class SaigonParkingApplication extends Application {
     }
 
     public void initWebsocketConnection() {
-        if (webSocket == null) {
-            String token = Objects.requireNonNull(saigonParkingDatabase
-                    .getAuthKeyValueMap()
-                    .get(SaigonParkingDatabase.ACCESS_TOKEN_KEY));
+        closeSocketConnection();
 
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(SERVER_PATH)
-                    .addHeader("Authorization", token)
-                    .build();
+        String token = Objects.requireNonNull(saigonParkingDatabase
+                .getAuthKeyValueMap()
+                .get(SaigonParkingDatabase.ACCESS_TOKEN_KEY));
 
-            SaigonParkingWebSocketListener listener = new SaigonParkingWebSocketListener(this);
-            webSocket = client.newWebSocket(request, listener);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(SERVER_PATH)
+                .addHeader("Authorization", token)
+                .build();
+
+        SaigonParkingWebSocketListener listener = new SaigonParkingWebSocketListener(this);
+        webSocket = client.newWebSocket(request, listener);
+    }
+
+    public void closeSocketConnection() {
+        if (webSocket != null) {
+            try {
+                webSocket.cancel();
+            } catch (Exception exception) {
+                Log.d("BachMap", "initWebsocketConnectionError: " + exception.getMessage());
+            }
+            webSocket = null;
         }
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        closeSocketConnection();
     }
 }

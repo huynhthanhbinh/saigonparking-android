@@ -33,6 +33,17 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == "com.android.support") {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion "26.+"
+                }
+            }
+        }
+    }
 }
 
 repositories {
@@ -53,6 +64,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-plus:16.0.0'
     implementation 'org.projectlombok:lombok:1.18.12'
     implementation 'com.iarcuschin:simpleratingbar:0.1.5'
+    implementation 'org.conscrypt:conscrypt-android:2.2.1'
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'
     implementation 'org.java-websocket:Java-WebSocket:1.5.1'
     implementation 'javax.websocket:javax.websocket-all:1.1'

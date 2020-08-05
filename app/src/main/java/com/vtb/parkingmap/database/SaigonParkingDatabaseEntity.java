@@ -13,14 +13,14 @@ import lombok.ToString;
 @EqualsAndHashCode
 public final class SaigonParkingDatabaseEntity {
 
-    private double latitude;
-    private double longitude;
-    private double mylat;
-    private double mylong;
-    private int tmpType;
-    private long id;
-    private double position3lat;
-    private double position3long;
+    private Double latitude;
+    private Double longitude;
+    private Double mylat;
+    private Double mylong;
+    private Integer tmpType;
+    private Long id;
+    private Double position3lat;
+    private Double position3long;
     private String bookingId;
     public static final SaigonParkingDatabaseEntity DEFAULT_INSTANCE = SaigonParkingDatabaseEntity.builder().build();
 }

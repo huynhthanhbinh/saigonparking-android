@@ -26,6 +26,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import java.io.Serializable;
@@ -50,7 +51,11 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
                         .checkCustomerHasOnGoingBooking(Empty.getDefaultInstance())
                         .getValue();
 
+                ((SaigonParkingApplication) getApplicationContext()).setIsBooked(isCustomerHasOnGoingBooking);
+                ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
+
                 if (isCustomerHasOnGoingBooking) {
+
                     Booking currentBooking = serviceStubs
                             .getBookingServiceBlockingStub()
                             .getCustomerOnGoingBooking(Empty.getDefaultInstance());
@@ -78,12 +83,10 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
                     intent.putExtra("parkingLot", currentParkingLot);
                     intent.putExtra("mylatfromplacedetail", (Serializable) saigonParkingDatabase.getBookingEntity().getMylat());
                     intent.putExtra("mylongfromplacedetail", (Serializable) saigonParkingDatabase.getBookingEntity().getLongitude());
-
                     intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
                     intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
                     intent.putExtra("placedetailtype", saigonParkingDatabase.getCurrentBookingEntity().getTmpType());
                     intent.putExtra("Booking", (Serializable) currentBooking);
-
                     intent.putExtra("QRcode", (Serializable) qrCode);
 
                     startActivity(intent);

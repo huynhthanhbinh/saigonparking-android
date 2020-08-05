@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.booking.Booking;
+import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
 import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
@@ -65,6 +66,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
 
 
     //parking-lot
+    private boolean bookingsecond = false;
     private long id;
     private ParkingLotType type;
     //Booking
@@ -245,12 +247,16 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             txtParking.setText(parkingLot.getInformation().getName());
             txtAddress.setText(parkingLot.getInformation().getAddress());
             txtStatus.setText("Processing");
+
         } else {
             txtBookingID.setText(reducedBookingId);
             txtParking.setText(parkingLot.getInformation().getName());
             txtAddress.setText(parkingLot.getInformation().getAddress());
             txtCreatedAt.setText(currentBooking.getCreatedAt());
-            txtStatus.setText("Accepted");
+            Log.d("BachMap", "current booking" + currentBooking.getLatestStatus());
+            txtStatus.setText(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
+                    ? "Processing"
+                    : "Accepted");
         }
     }
 
@@ -285,10 +291,6 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             Paper.book().delete("historymessage");
         }
 
-    }
-
-    public void setLabelTxtStatus(String newStatus) {
-        txtStatus.setText(newStatus);
     }
 
     @Override

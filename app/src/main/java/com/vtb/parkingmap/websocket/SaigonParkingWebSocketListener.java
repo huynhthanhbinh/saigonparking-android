@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
@@ -114,22 +115,26 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
                         if (currentActivity instanceof BookingActivity) {
                             BookingActivity activity = (BookingActivity) currentActivity;
-                            SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity.builder()
-                                    .id(activity.getId())
-                                    .latitude(activity.getLatitude())
-                                    .longitude(activity.getLongitude())
-                                    .mylat(activity.getMylat())
-                                    .mylong(activity.getMylong())
-                                    .position3lat(activity.getPosition3lat())
-                                    .position3long(activity.getPosition3long())
-                                    .tmpType(activity.getTmpType())
-                                    .bookingId(bookingAcceptanceContent.getBookingId())
-                                    .build();
-                            activity.setLabelTxtStatus("Accepted");
+                            ((TextView) activity.findViewById(R.id.txtStatus)).setText("Accepted");
 
-                            Log.d("BachMap", bookingEntity.toString());
-                            applicationContext.getSaigonParkingDatabase().insertBookingTable(bookingEntity);
+                            if (applicationContext.getSaigonParkingDatabase().getBookingEntity()
+                                    .equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
 
+                                SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity.builder()
+                                        .id(activity.getId())
+                                        .latitude(activity.getLatitude())
+                                        .longitude(activity.getLongitude())
+                                        .mylat(activity.getMylat())
+                                        .mylong(activity.getMylong())
+                                        .position3lat(activity.getPosition3lat())
+                                        .position3long(activity.getPosition3long())
+                                        .tmpType(activity.getTmpType())
+                                        .bookingId(bookingAcceptanceContent.getBookingId())
+                                        .build();
+
+                                Log.d("BachMap", bookingEntity.toString());
+                                applicationContext.getSaigonParkingDatabase().insertBookingTable(bookingEntity);
+                            }
                         }
                         break;
 
@@ -159,6 +164,23 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 intent.putExtra("position3lat", (Serializable) activity.getPosition3lat());
                                 intent.putExtra("position3long", (Serializable) activity.getPosition3long());
                             }
+
+                            SaigonParkingDatabaseEntity bookingEntity = SaigonParkingDatabaseEntity.builder()
+                                    .id(activity.getId())
+                                    .latitude(activity.getLatitude())
+                                    .longitude(activity.getLongitude())
+                                    .mylat(activity.getMylat())
+                                    .mylong(activity.getMylong())
+                                    .position3lat(activity.getPosition3lat())
+                                    .position3long(activity.getPosition3long())
+                                    .tmpType(activity.getTmpType())
+                                    .bookingId(bookingProcessingContent.getBookingId())
+                                    .build();
+
+                            ((TextView) activity.findViewById(R.id.txtStatus)).setText("Accepted");
+
+                            Log.d("BachMap", bookingEntity.toString());
+                            applicationContext.getSaigonParkingDatabase().insertBookingTable(bookingEntity);
                         }
 
                         currentActivity.startActivity(intent);
