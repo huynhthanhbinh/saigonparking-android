@@ -83,12 +83,12 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
         queryData("CREATE TABLE IF NOT EXISTS SAIGON_PARKING_BOOKING ( " +
                 "PARKING_LOT_ID INTEGER PRIMARY KEY, " +
-                "PARKING_LOT_LAT REAL, " +
-                "PARKING_LOT_LNG REAL, " +
-                "TARGET_LAT REAL, " +
-                "TARGET_LNG REAL, " +
-                "CURRENT_LAT REAL, " +
-                "CURRENT_LNG REAL, " +
+                "PARKING_LOT_LAT NVARCHAR(50), " +
+                "PARKING_LOT_LNG NVARCHAR(50), " +
+                "TARGET_LAT NVARCHAR(50), " +
+                "TARGET_LNG NVARCHAR(50), " +
+                "CURRENT_LAT NVARCHAR(50), " +
+                "CURRENT_LNG NVARCHAR(50), " +
                 "MODE INTEGER, " +
                 "BOOKING_ID VARCHAR(36) " +
                 " )");
@@ -208,7 +208,7 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
 
     public void insertBookingTable(SaigonParkingDatabaseEntity saigonParkingDatabaseEntity) {
         queryData(String.format(Locale.US,
-                "INSERT OR REPLACE INTO SAIGON_PARKING_BOOKING VALUES(%d,%f,%f,%f,%f,%f,%f,%d,'%s')",
+                "INSERT OR REPLACE INTO SAIGON_PARKING_BOOKING VALUES(%d,%s,%s,%s,%s,%s,%s,%d,'%s')",
                 saigonParkingDatabaseEntity.getId(),
                 saigonParkingDatabaseEntity.getLatitude(),
                 saigonParkingDatabaseEntity.getLongitude(),

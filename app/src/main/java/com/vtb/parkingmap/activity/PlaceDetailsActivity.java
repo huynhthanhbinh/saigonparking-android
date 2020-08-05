@@ -32,6 +32,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.google.protobuf.BoolValue;
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
@@ -151,10 +152,35 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
         btnimgshow.setOnClickListener(view -> {
+            BoolValue.Builder isCustomerHasOnGoingBooking = BoolValue.newBuilder();
+            callApiWithExceptionHandling(() -> {
+                isCustomerHasOnGoingBooking.setValue(serviceStubs
+                        .getBookingServiceBlockingStub()
+                        .checkCustomerHasOnGoingBooking(Empty.getDefaultInstance())
+                        .getValue());
+            });
 
-            /* kiem tra bai xe co online hay khong */
-            if (onCheckParkingLotOnline()) {
-                showAlertDialog(view);
+            if (!isCustomerHasOnGoingBooking.getValue()) {
+                /* kiem tra bai xe co online hay khong */
+                if (onCheckParkingLotOnline()) {
+                    showAlertDialog(view);
+                }
+            } else {
+                /* notify user has ongoing booking ! */
+                AlertDialog.Builder alert = new AlertDialog.Builder(PlaceDetailsActivity.this);
+                alert
+                        .setTitle("Booking Ongoing Warning")
+                        .setMessage("You have on going booking !")
+                        .setNegativeButton("OK", (dialogInterface, i) ->
+                                Toast.makeText(PlaceDetailsActivity.this,
+                                        "Please complete booking before!", Toast.LENGTH_SHORT).show());
+
+                AlertDialog dialog = alert.create();
+                dialog.show();
+
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                        .setTextColor(getResources()
+                                .getColor(R.color.colorPrimary));
             }
         });
     }
