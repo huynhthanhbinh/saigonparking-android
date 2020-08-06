@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private double longitude;
     private String closingHour;
     final int deltaHour = 1;
-    private ImageView btnimgdirection;
+    private Button btnimgdirection;
     private ImageView btnimgchat;
     private ImageView btnimgcancel;
     private BookingProcessingContent bookingProcessingContent;
@@ -126,6 +127,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             cancelBooking();
             onBackPressed();
         });
+
         btnimgdirection.setOnClickListener(this::onClickDrawDirection);
 
 

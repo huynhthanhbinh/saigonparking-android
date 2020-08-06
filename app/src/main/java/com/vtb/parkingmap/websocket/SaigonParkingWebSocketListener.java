@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -116,6 +117,8 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                         if (currentActivity instanceof BookingActivity) {
                             BookingActivity activity = (BookingActivity) currentActivity;
                             ((TextView) activity.findViewById(R.id.txtStatus)).setText("Accepted");
+                            ((Button) activity.findViewById(R.id.imgdirection)).setClickable(true);
+                            ((Button) activity.findViewById(R.id.imgdirection)).setEnabled(true);
 
                             if (applicationContext.getSaigonParkingDatabase().getBookingEntity()
                                     .equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
@@ -144,6 +147,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
                         /* open Booking Activity + send bookingProcessingContent to Booking Activity */
                         Intent intent = new Intent(currentActivity, BookingActivity.class);
+
 
                         if (currentActivity instanceof PlaceDetailsActivity) {
                             PlaceDetailsActivity activity = (PlaceDetailsActivity) currentActivity;

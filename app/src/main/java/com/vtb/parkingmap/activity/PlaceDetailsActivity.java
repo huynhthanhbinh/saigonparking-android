@@ -60,7 +60,6 @@ import okhttp3.OkHttpClient;
 public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private ImageView imageView;
-    private ImageView btnimgdirection;
     private ImageView btnimgchat;
     private ImageView btnimgcancel;
     private Photos photos;
@@ -97,7 +96,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private EditText txtAmountOfParkingHour;
     private String licensePlate;
     private String amountOfParkingHourString;
-    private ExampleDialogListener listener;
     private ParkingLotType type;
     private double latitude;
     private double longitude;
@@ -246,9 +244,15 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 try {
                     amountOfParkingHour = Double.valueOf(amountOfParkingHourString);
                     isAmountOfParkingLotHourCorrect = true;
+                    /*1-5 hour*/
+                    if (amountOfParkingHour > 5 || amountOfParkingHour < 1) {
+                        isAmountOfParkingLotHourCorrect = false;
+                        Toast.makeText(PlaceDetailsActivity.this, "Your Parking Hour must be 1->5 hour", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     Toast.makeText(PlaceDetailsActivity.this, "Parking Hour Invalid!", Toast.LENGTH_SHORT).show();
                 }
+
 
                 //Dismiss once everything is OK.
                 if (isNumberLicensePlateCorrect && isAmountOfParkingLotHourCorrect) {
@@ -268,20 +272,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private boolean isNumberLicensePlateCorrect(String numberLicenseString) {
         String alternativeString = numberLicenseString.replace(".", "");
         return alternativeString.matches("^[0-9]{1,2}[A-Za-z]-[0-9]{1,5}$");
-    }
-
-    public void onAttach(Context context) {
-        //super.onAttach(context);
-        try {
-            listener = (ExampleDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() +
-                    "must implement ExampleDialogListener");
-        }
-    }
-
-    public interface ExampleDialogListener {
-        void applyTexts(String LicensePlate, String AmountOfParkingHour);
     }
 
 
@@ -390,7 +380,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private void init() {
         imageView = findViewById(R.id.imageView);
-        btnimgdirection = findViewById(R.id.imgdirection);
         btnimgcancel = findViewById(R.id.imgcancel);
         btnimgshow = findViewById(R.id.imgshow);
         btnimgchat = findViewById(R.id.imgchat);
@@ -481,7 +470,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             runOnUiThread(() -> {
                 btnimgshow.setVisibility(View.VISIBLE);
                 btnimgcancel.setVisibility(View.INVISIBLE);
-                btnimgdirection.setVisibility(View.INVISIBLE);
                 btnimgchat.setVisibility(View.INVISIBLE);
             });
 
@@ -494,11 +482,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         }
     }
 
-
-//    public void applyTexts(String LicensePlate, String AmountOfParkingHour) {
-//        licensePlate.set(LicensePlate);
-//        AmountOfParkingHour.setText(AmountOfParkingHour);
-//    }
 
     public void sendBooking(String numberLicensePlate, double amountOfParkingHour) {
 
