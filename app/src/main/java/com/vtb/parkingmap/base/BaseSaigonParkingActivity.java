@@ -43,13 +43,18 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((SaigonParkingApplication) getApplicationContext()).setCurrentActivity(this);
         saigonParkingExceptionHandler = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingExceptionHandler();
         saigonParkingDatabase = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingDatabase();
         serviceStubs = ((SaigonParkingApplication) getApplicationContext()).getServiceStubs();
         googleApiService = ((SaigonParkingApplication) getApplicationContext()).getGoogleApiService();
         webSocket = ((SaigonParkingApplication) getApplicationContext()).getWebSocket();
         messageAdapter = ((SaigonParkingApplication) getApplicationContext()).getMessageAdapter();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ((SaigonParkingApplication) getApplicationContext()).setCurrentActivity(this);
     }
 
     public void reload() {

@@ -523,4 +523,5 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
         myIntent.putExtra("idplacedetail", (Serializable) idplacedetail);
         startService(myIntent);
     }
+
 }

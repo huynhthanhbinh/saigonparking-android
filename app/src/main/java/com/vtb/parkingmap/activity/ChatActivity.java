@@ -165,8 +165,6 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
                 }
 
             });
-
-
         }
 
         @Override

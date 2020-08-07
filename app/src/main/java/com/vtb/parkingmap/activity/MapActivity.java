@@ -246,7 +246,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             @Override
             public void onSelectedChange(@NonNull StickySwitch.Direction direction, @NonNull String text) {
                 if (stickySwitchDragLocation.getDirection() == StickySwitch.Direction.LEFT) {
-                    Toast.makeText(MapActivity.this, "Bật chế độ BINH THUONG", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapActivity.this, "Standard MODE ON", Toast.LENGTH_SHORT).show();
                     if (mMap != null) {
                         mMap.clear();
                     }
@@ -255,7 +255,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     }
                     flatfunction = 1;
                 } else {
-                    Toast.makeText(MapActivity.this, "Bật chế độ kHONG KEO MAN HINH", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapActivity.this, "Optimal MODE ON", Toast.LENGTH_SHORT).show();
                     if (mMap != null) {
                         mMap.clear();
                     }
@@ -979,7 +979,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
                     float currentZoom = mMap.getCameraPosition().zoom;
 //                    Toast.makeText(MapActivity.this, "You Zoom that: " +topLeft + " " + rightBottom, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(MapActivity.this, "You Zoom that: " + currentZoom, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MapActivity.this, "You Zoom that: " + currentZoom, Toast.LENGTH_SHORT).show();
                     Log.d("XemZoom", "" + currentZoom);
                 }
             }
