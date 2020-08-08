@@ -63,7 +63,12 @@ public final class SaigonParkingApplication extends Application {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         messageAdapter = new MessageAdapter(inflater);
+
+        /* create db if not exist and create socket connection if db exist */
         saigonParkingDatabase.createDatabaseIfNotExist();
+        if (!saigonParkingDatabase.isAuthTableEmpty()) {
+            initWebsocketConnection();
+        }
 
         //khởi tạo nơi lưu trữ dữ liệu historymessage
         Paper.init(applicationContext);
@@ -95,11 +100,5 @@ public final class SaigonParkingApplication extends Application {
             }
             webSocket = null;
         }
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        closeSocketConnection();
     }
 }

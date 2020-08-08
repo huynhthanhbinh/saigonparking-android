@@ -41,7 +41,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
+                        android:background="@color/primary"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -292,8 +292,6 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.5"
                     android:padding="5dp"
-                    android:enabled="true"
-                    android:clickable="true"
                     android:id="@+id/imgdirection"
                     android:background="@drawable/icon_direction2" />
 

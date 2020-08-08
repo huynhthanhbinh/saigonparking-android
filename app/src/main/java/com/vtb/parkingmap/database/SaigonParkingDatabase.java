@@ -163,6 +163,16 @@ public final class SaigonParkingDatabase extends SQLiteOpenHelper {
                 Log.d("BachMap", String.format("Key: %s, Value: %s", key, value)));
     }
 
+    public boolean isAuthTableEmpty() {
+        Cursor cursor = getWritableDatabase()
+                .rawQuery("SELECT COUNT(SP_KEY) FROM SAIGON_PARKING_TABLE", null);
+
+        if (cursor.moveToNext()) {
+            return cursor.getInt(0) == 0;
+        }
+        return true;
+    }
+
     private Map<String, String> getAllRowsOfAuthTable() {
         Cursor cursor = getWritableDatabase()
                 .rawQuery("SELECT * FROM SAIGON_PARKING_TABLE", null);

@@ -3,6 +3,7 @@ package com.vtb.parkingmap.activity;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -271,7 +272,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     /* 59B-66059 */
     private boolean isNumberLicensePlateCorrect(String numberLicenseString) {
         String alternativeString = numberLicenseString.replace(".", "");
-        return alternativeString.matches("^[0-9]{1,2}[A-Za-z]-[0-9]{1,5}$");
+        return alternativeString.matches("^[0-9]{1,2}[A-Za-z]-[0-9]{4,5}$");
     }
 
 
@@ -421,12 +422,24 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
     public void funcXemChiTietDanhGia(View view) {
-        Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
-        intent.putExtra("idplacedetail", (Serializable) id);
-        intent.putExtra("parkinglot", (Serializable) parkingLot);
-        startActivity(intent);
-        //Toast.makeText(PlaceDetailsActivity.this, "hết giờ nha  ", Toast.LENGTH_SHORT).show();
+        ProgressDialog progressDialog = new ProgressDialog(PlaceDetailsActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
+                        intent.putExtra("idplacedetail", (Serializable) id);
+                        intent.putExtra("parkinglot", (Serializable) parkingLot);
+                        progressDialog.dismiss();
+                        startActivity(intent);
+                    }
+                }, 3000);
     }
+
 
     public class Broadcast extends BroadcastReceiver {
         @Override
@@ -524,19 +537,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (!((SaigonParkingApplication) getApplicationContext()).getIsBooked()) {
-            super.onBackPressed();
-        }
-        //Write your code here
-        else {
-            Toast.makeText(getApplicationContext(), "Back press disabled!", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
 

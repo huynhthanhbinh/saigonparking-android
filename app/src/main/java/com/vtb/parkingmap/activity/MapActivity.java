@@ -184,7 +184,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);

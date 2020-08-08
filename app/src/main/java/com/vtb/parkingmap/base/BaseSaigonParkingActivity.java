@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
@@ -35,7 +36,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
      * websocket will be private
      * so as to any child of this base class cannot call websocket directly !!!!
      * if any child class want to use websocket to send message
-     * they must call method inherit from their parent
+     * they must call method inherit from their parentc
      * for example sendMessage: sendWebSocketBinaryMessage/TextMessage(msg)
      */
     private WebSocket webSocket;
@@ -43,6 +44,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((SaigonParkingApplication) getApplicationContext()).setCurrentActivity(this);
         saigonParkingExceptionHandler = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingExceptionHandler();
         saigonParkingDatabase = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingDatabase();
         serviceStubs = ((SaigonParkingApplication) getApplicationContext()).getServiceStubs();
@@ -55,6 +57,8 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         ((SaigonParkingApplication) getApplicationContext()).setCurrentActivity(this);
+        Log.d("BachMap", String.format("onResume: WebSocket is null: %b",
+                ((SaigonParkingApplication) getApplicationContext()).getWebSocket() == null));
     }
 
     public void reload() {

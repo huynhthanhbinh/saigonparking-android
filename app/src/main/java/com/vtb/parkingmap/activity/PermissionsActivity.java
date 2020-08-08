@@ -44,6 +44,7 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
 
         setContentView(R.layout.activity_permissions);
 
+
         if (ContextCompat.checkSelfPermission(PermissionsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             callApiWithExceptionHandling(() -> {
                 boolean isCustomerHasOnGoingBooking = serviceStubs
@@ -51,8 +52,9 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
                         .checkCustomerHasOnGoingBooking(Empty.getDefaultInstance())
                         .getValue();
 
+
                 ((SaigonParkingApplication) getApplicationContext()).setIsBooked(isCustomerHasOnGoingBooking);
-                ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
+
 
                 if (isCustomerHasOnGoingBooking) {
 
