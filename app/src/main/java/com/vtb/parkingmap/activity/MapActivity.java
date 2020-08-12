@@ -811,6 +811,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
         markerOptions.snippet(String.valueOf(parkingLotResult.getId()));
         marker = mMap.addMarker(markerOptions);
+        marker.setTag("saigon-parking-parking-lot");
     }
 
     void setAllMarkerParkingLot(Collection<ParkingLotResult> parkingLotResultSet) {
@@ -909,7 +910,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 //                    startActivity(intent);
 //                }
 
-                if (marker.getSnippet() != null) {
+                if (marker.getSnippet() != null && "saigon-parking-parking-lot".equals(marker.getTag())) {
                     parkingLot = null;
                     try {
 //                        Long loicuatoi = Long.parseLong(marker.getSnippet());
