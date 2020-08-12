@@ -160,6 +160,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private ImageView imgbtnrestaurant;
     private ImageView imgbtnhospital;
     private ImageView imgbtnGasStation;
+    private boolean modeParkingLot = true;
 
 
     private RippleBackground rippleBg;
@@ -626,6 +627,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
         //Event click button find parkinglot
         btnFind.setOnClickListener(v -> {
+            modeParkingLot = true;
             LatLng currentMarkerLocation = mMap.getCameraPosition().target;
             //Xoa cu
             if (recommendedParkingLotResultList != null) {
@@ -705,19 +707,11 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         imgbtnrestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                modeParkingLot = false;
                 nearbyPlaces("restaurant");
                 slideUp.animateOut();
-                if (recommendedParkingLotResultList != null) {
-                    recommendedParkingLotResultList.clear();
-
-                }
-                parkingLotResultSet.clear();
-                if (mMap != null) {
-                    mMap.clear();
-                }
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                Toast.makeText(MapActivity.this, "Da Bam", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -726,18 +720,11 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         imgbtnhospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                modeParkingLot = false;
                 nearbyPlaces("hospital");
                 slideUp.animateOut();
-                if (recommendedParkingLotResultList != null) {
-                    recommendedParkingLotResultList.clear();
-                }
-                parkingLotResultSet.clear();
-                if (mMap != null) {
-                    mMap.clear();
-                }
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                Toast.makeText(MapActivity.this, "Da Bam", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -746,18 +733,11 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         imgbtnGasStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                modeParkingLot = false;
                 nearbyPlaces("gas_station");
                 slideUp.animateOut();
-                if (recommendedParkingLotResultList != null) {
-                    recommendedParkingLotResultList.clear();
-                }
-                parkingLotResultSet.clear();
-                if (mMap != null) {
-                    mMap.clear();
-                }
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                Toast.makeText(MapActivity.this, "Da Bam", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -815,6 +795,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     }
 
     void setAllMarkerParkingLot(Collection<ParkingLotResult> parkingLotResultSet) {
+
         parkingLotResultSet.forEach(this::setMarkerParkingLot);
     }
 
@@ -1154,21 +1135,22 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     preSouthWest = southWest;
 
                     try {
-                        Set<ParkingLotResult> differentSet = parkingLotServiceBlockingStub
-                                .getTopParkingLotInRegionOrderByDistanceWithoutName(ScanningByRadiusRequest.newBuilder()
-                                        .setLatitude(center.latitude)
-                                        .setLongitude(center.longitude)
-                                        .setRadiusToScan(zoomRadiusMap.get((int) Math.floor(currentZoom)))
-                                        .setNResult(zoomNResultMap.get((int) Math.floor(currentZoom)))
-                                        .build())
-                                .getParkingLotResultList()
-                                .stream()
-                                .filter(parkingLot -> !parkingLotResultSet.contains(parkingLot))
-                                .collect(Collectors.toSet());
+                        if (modeParkingLot) {
+                            Set<ParkingLotResult> differentSet = parkingLotServiceBlockingStub
+                                    .getTopParkingLotInRegionOrderByDistanceWithoutName(ScanningByRadiusRequest.newBuilder()
+                                            .setLatitude(center.latitude)
+                                            .setLongitude(center.longitude)
+                                            .setRadiusToScan(zoomRadiusMap.get((int) Math.floor(currentZoom)))
+                                            .setNResult(zoomNResultMap.get((int) Math.floor(currentZoom)))
+                                            .build())
+                                    .getParkingLotResultList()
+                                    .stream()
+                                    .filter(parkingLot -> !parkingLotResultSet.contains(parkingLot))
+                                    .collect(Collectors.toSet());
 
-                        setAllMarkerParkingLot(differentSet);
-                        parkingLotResultSet.addAll(differentSet);
-
+                            setAllMarkerParkingLot(differentSet);
+                            parkingLotResultSet.addAll(differentSet);
+                        }
                     } catch (StatusRuntimeException exception) {
                         saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
                     } catch (Exception e) {
