@@ -160,6 +160,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private ImageView imgbtnrestaurant;
     private ImageView imgbtnhospital;
     private ImageView imgbtnGasStation;
+    private ImageView imgbtnParkinglot;
     private boolean modeParkingLot = true;
 
 
@@ -295,7 +296,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 startActivity(intent);
 
 
-                Toast.makeText(MapActivity.this, "" + selectedFromList, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MapActivity.this, "" + selectedFromList, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -409,10 +410,10 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                         Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                                if (option == 2) {
-                                    nearbyPlaces("restaurant");
-
-                                }
+//                                if (option == 2) {
+//                                    nearbyPlaces("restaurant");
+//
+//                                }
 //                                if (option == 3) {
 //                                    nearbyPlaces("hospital");
 //
@@ -500,7 +501,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void afterTextChanged(Editable s) {
 
                 if (s.length() == 0) {
-                    Toast.makeText(MapActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
                     position3 = null;
                 }
 
@@ -603,9 +603,9 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                     Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            if (option == 2) {
-                                nearbyPlaces("restaurant");
-                            }
+//                            if (option == 2) {
+//                                nearbyPlaces("restaurant");
+//                            }
                         }
                     }
                 }).addOnFailureListener(e -> {
@@ -738,6 +738,68 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 slideUp.animateOut();
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+            }
+        });
+
+
+        imgbtnParkinglot = findViewById(R.id.imgparkinglot);
+        imgbtnParkinglot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modeParkingLot = true;
+                LatLng currentMarkerLocation = mMap.getCameraPosition().target;
+                //Xoa cu
+                if (recommendedParkingLotResultList != null) {
+                    recommendedParkingLotResultList.clear();
+
+                }
+                if (mMap != null) {
+                    mMap.clear();
+                }
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+
+                try {
+
+                    Objects.requireNonNull(recommendedParkingLotResultList)
+                            .addAll(parkingLotServiceBlockingStub
+                                    .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
+                                            .setLatitude(mLastKnownLocation.getLatitude())
+                                            .setLongitude(mLastKnownLocation.getLongitude())
+                                            .setRadiusToScan(3)
+                                            .setNResult(10)
+                                            .build())
+                                    .getParkingLotResultList());
+
+                    setAllMarkerParkingLot(recommendedParkingLotResultList);
+
+                    List<ParkingLotResult> parkingLotResultList = new ArrayList<>(recommendedParkingLotResultList);
+                    for (int i = 0; i < parkingLotResultList.size(); i++) {
+                        Double distance = SphericalUtil.computeDistanceBetween(
+                                new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()),
+                                new LatLng(parkingLotResultList.get(i).getLatitude(), parkingLotResultList.get(i).getLongitude()));
+
+                        ParkingLotResult parkingLot = parkingLotResultList.get(i).toBuilder()
+                                .setDistance(distance / 1000)
+                                .build();
+
+                        parkingLotResultList.set(i, parkingLot);
+                    }
+
+
+                    ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
+                    listView.setAdapter(adapter);
+
+
+                } catch (StatusRuntimeException exception) {
+                    saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
+                } catch (Exception e) {
+
+                    Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                slideUp.animateOut();
+
             }
         });
 
@@ -1154,7 +1216,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     } catch (StatusRuntimeException exception) {
                         saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
                     } catch (Exception e) {
-                        Toast.makeText(MapActivity.this, "ERROR keo man hinh" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapActivity.this, "ERROR scroll screen" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             };
@@ -1192,14 +1254,12 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 finish();
                 break;
             case R.id.nav_account:
-                Toast.makeText(MapActivity.this, "ERROR keo man hinh2", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_history:
                 Intent intenthistory = new Intent(MapActivity.this, HistoryActivity.class);
                 startActivity(intenthistory);
                 break;
             case R.id.nav_setting:
-                Toast.makeText(MapActivity.this, "ERROR keo man hinh4", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;

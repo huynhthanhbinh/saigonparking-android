@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/imgparkinglot"
                         android:src="@drawable/icon_parkinglot"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="100px"
