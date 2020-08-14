@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="#359ab9"
+        android:background="@drawable/combiebutton"
         android:text="Send feedback"
         android:textColor="@android:color/white" />
 

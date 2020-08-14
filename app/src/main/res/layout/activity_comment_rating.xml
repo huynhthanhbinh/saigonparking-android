@@ -6,16 +6,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="180dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
         android:layout_gravity="center"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="15dp"
         android:adjustViewBounds="true"
         android:maxWidth="400dp"
         android:maxHeight="190dp"
-        android:scaleType="fitCenter"
         android:src="@drawable/default_plot" />
 
 
@@ -27,7 +24,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#359ab9"
+            android:background="@drawable/combiebutton"
             android:gravity="center"
             android:layout_weight="1"
             android:id="@+id/btnthembinhluan"
