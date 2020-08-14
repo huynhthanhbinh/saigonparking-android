@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_account"
-        android:title="Account" />
-    <item
-        android:id="@+id/nav_history"
-        android:title="Booking History" />
-    <item
-        android:id="@+id/nav_setting"
-        android:title="Setting" />
-    <item
-        android:id="@+id/nav_logout"
-        android:title="Log out" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group>
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Account" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="Booking History" />
+    </group>
+    <item android:title="Control">
+        <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="Setting"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_keyboard_backspace_black_24dp"
+                android:title="Log out" />
+        </menu>
+    </item>
 </menu>

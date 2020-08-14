@@ -8,8 +8,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,9 +49,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private double longitude;
     private String closingHour;
     final int deltaHour = 1;
-    private Button btnimgdirection;
-    private ImageView btnimgchat;
-    private ImageView btnimgcancel;
+    private LinearLayout btnimgdirection;
+    private LinearLayout btnimgchat;
+    private LinearLayout btnimgcancel;
     private BookingProcessingContent bookingProcessingContent;
     private ImageView imgQRCode;
     private TextView txtBookingID;

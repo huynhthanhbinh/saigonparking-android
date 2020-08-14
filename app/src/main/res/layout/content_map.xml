@@ -54,9 +54,9 @@
             android:layout_marginTop="40dp"
             app:mt_navIconEnabled="true"
             android:elevation="5dp"
-            android:outlineProvider="bounds"
             app:mt_placeholder="Search a place"
-            android:imeOptions="actionDone" />
+            android:imeOptions="actionDone"
+            app:mt_roundedSearchBarEnabled="true" />
 
         <Button
             android:id="@+id/btn_find"
@@ -108,20 +108,24 @@
 
         <ImageButton
             android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="204dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/menu_list" />
+            android:background="@drawable/ic_menu_circle" />
 
 
     </RelativeLayout>
-
+    <!--    android:layout_gravity="start"-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:menu="@menu/navigation_menu"
-        android:layout_gravity="start"></android.support.design.widget.NavigationView>
+        app:headerLayout="@layout/nav_header"
+        android:layout_gravity="start">
+
+
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

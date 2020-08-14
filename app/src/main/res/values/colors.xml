@@ -7,7 +7,7 @@
 
     <color name="primary">#42b883</color>
     <color name="primary_dark">#E12929</color>
-    <color name="primary_darker">#347474</color>
+    <color name="primary_darker">#42b883</color>
     <color name="accent">#FFFFFF</color>
 
     <color name="black">#000000</color>
