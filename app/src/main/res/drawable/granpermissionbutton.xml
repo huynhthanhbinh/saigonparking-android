@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="#88FFFFFF"> <!-- Ripple color :: WHITE -->
 
     <item>
         <shape>
-            <corners android:radius="10dp" />
-            <solid android:color="#347474" />
+            <corners android:radius="10dp"/>
+            <solid android:color="#000"/>
         </shape>
     </item>
 
     <!-- Make sure the ripple doesn't exceed the bounds -->
     <item android:id="@android:id/mask">
         <shape>
-            <corners android:radius="10dp" />
+            <corners android:radius="10dp"/>
             <solid android:color="?android:colorControlHighlight" />
         </shape>
     </item>

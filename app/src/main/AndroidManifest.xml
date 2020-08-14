@@ -52,7 +52,9 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activity.PlaceDetailsActivity" />
-        <activity android:name=".activity.PermissionsActivity">
+        <activity
+            android:name=".activity.PermissionsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

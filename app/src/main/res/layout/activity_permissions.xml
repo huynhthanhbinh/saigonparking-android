@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.PermissionsActivity"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:orientation="vertical"
+    android:weightSum="10">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="9"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo" />
+            android:src="@drawable/textsg" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,18 +28,17 @@
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-condensed"
             android:textStyle="bold" />
-
-
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_grant"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/granpermissionbutton"
         android:textColor="#FFFFFF"
         android:text="Grant Permission"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp" />
 
-</RelativeLayout>
+</LinearLayout>
