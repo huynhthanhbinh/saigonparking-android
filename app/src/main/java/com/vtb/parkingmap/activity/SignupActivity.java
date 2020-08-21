@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -135,9 +136,26 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
 
         callApiWithExceptionHandling(() -> {
             String addedEmail = serviceStubs.getAuthServiceBlockingStub().registerUser(request).getValue();
-            Toast.makeText(getBaseContext(),
-                    String.format("Activate link has been sent to %s email. " +
-                            "Please check your email to activate account !", addedEmail), Toast.LENGTH_LONG).show();
+            AlertDialog.Builder alert = new AlertDialog.Builder(SignupActivity.this);
+
+            alert.setTitle("Sign up Finish!");
+            alert.setMessage("Activate link has been sent to %s email." + addedEmail +
+                    "Please check your email to activate account !");
+            alert.setPositiveButton("OK", (dialogInterface, i) -> {
+
+
+                Intent intent2 = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent2);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                finish();
+            });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(getResources().getColor(R.color.colorPrimary));
+//            Toast.makeText(getBaseContext(),
+//                    String.format("Activate link has been sent to %s email. " +
+//                            "Please check your email to activate account !", addedEmail), Toast.LENGTH_LONG).show();
         });
     }
 
@@ -158,12 +176,12 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
             _nameText.setError(null);
         }
 
-//        if (address.isEmpty()) {
-//            _addressText.setError("Enter Valid Address");
-//            valid = false;
-//        } else {
-//            _addressText.setError(null);
-//        }
+        if (lastName.isEmpty()) {
+            _lastnameText.setError("at least 3 characters");
+            valid = false;
+        } else {
+            _lastnameText.setError(null);
+        }
 
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
