@@ -166,6 +166,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
     private RippleBackground rippleBg;
 
+    private int LAUNCH_SECOND_ACTIVITY = 1;
+
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
     CameraPosition mUpCameraPosition;
@@ -182,6 +184,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     int flatfunction = 1; // = 0 là ở dạng bình thường , = 1 là  ở dạng không cho kéo màn hình
     int flatscreen = 0;
     CountDownTimer countDownTimer;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -964,6 +967,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                         progressDialog.setIndeterminate(true);
                         progressDialog.setMessage("Loading...");
                         progressDialog.show();
+                        progressDialog.setCanceledOnTouchOutside(false);
 
 
                         // TODO: Implement your own signup logic here.
@@ -988,10 +992,10 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                             intent.putExtra("postion3lat", position3.latitude);
                                             intent.putExtra("postion3long", position3.longitude);
                                         }
-                                        progressDialog.dismiss();
                                         startActivity(intent);
+                                        progressDialog.dismiss();
                                     }
-                                }, 3000);
+                                }, 1000);
 
 
                     } catch (StatusRuntimeException exception) {
@@ -1033,7 +1037,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 51) {
             if (resultCode == RESULT_OK) {
@@ -1047,6 +1051,13 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 materialSearchBar.setText(result.get(0));
                 materialSearchBar.enableSearch();
+            }
+        }
+        if (requestCode == LAUNCH_SECOND_ACTIVITY) {
+            if (resultCode == HistoryActivity.RESULT_OK) {
+                progressDialog.dismiss();
+            }
+            if (resultCode == HistoryActivity.RESULT_CANCELED) {
             }
         }
     }
@@ -1254,18 +1265,25 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 finish();
                 break;
             case R.id.nav_account:
+                intent = new Intent(MapActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_history:
+                progressDialog = new ProgressDialog(MapActivity.this,
+                        R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Loading...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
                 Intent intenthistory = new Intent(MapActivity.this, HistoryActivity.class);
-                startActivity(intenthistory);
+                startActivityForResult(intenthistory, LAUNCH_SECOND_ACTIVITY);
                 break;
             case R.id.nav_setting:
                 break;
         }
         return true;
     }
-
-    //click vào bãi xe sẽ lấy id của bãi xe đó
 
 
 }

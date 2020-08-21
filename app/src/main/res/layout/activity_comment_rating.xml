@@ -18,18 +18,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/combiebutton"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:id="@+id/btnthembinhluan"
-            android:textColor="#fff"
-            android:text="COMMENT" />
 
         <TextView
             android:id="@+id/countallcomment"

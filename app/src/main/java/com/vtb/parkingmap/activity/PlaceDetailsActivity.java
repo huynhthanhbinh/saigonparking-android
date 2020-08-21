@@ -117,6 +117,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private MessageAdapter messageAdapter;
     private String bookingId;
     private String bookingreject = null;
+    private int LAUNCH_SECOND_ACTIVITY = 1;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -381,9 +383,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private void init() {
         imageView = findViewById(R.id.imageView);
-        btnimgcancel = findViewById(R.id.imgcancel);
         btnimgshow = findViewById(R.id.imgshow);
-        btnimgchat = findViewById(R.id.imgchat);
         //đã có dự lieu booking
 //        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
 //            // hien nut cancel + chat + huong di bai xe ( flagbook = false )
@@ -422,22 +422,29 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
     public void funcXemChiTietDanhGia(View view) {
-        ProgressDialog progressDialog = new ProgressDialog(PlaceDetailsActivity.this,
+        progressDialog = new ProgressDialog(PlaceDetailsActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
-                        intent.putExtra("idplacedetail", (Serializable) id);
-                        intent.putExtra("parkinglot", (Serializable) parkingLot);
-                        progressDialog.dismiss();
-                        startActivity(intent);
-                    }
-                }, 3000);
+        Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
+        intent.putExtra("idplacedetail", (Serializable) id);
+        intent.putExtra("parkinglot", (Serializable) parkingLot);
+        startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LAUNCH_SECOND_ACTIVITY) {
+            if (resultCode == CommentRatingActivity.RESULT_OK) {
+                progressDialog.dismiss();
+            }
+            if (resultCode == CommentRatingActivity.RESULT_CANCELED) {
+            }
+        }
     }
 
 
@@ -455,6 +462,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
         }
+
     }
 
     private void cancelbooking() {
@@ -574,7 +582,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 //                    .into(imageView);
 //        }
 //
-//        tc.setText(results.getName());
+//        tc.setText(results.getFirstName());
 //        textViewAddress.setText(results.getVicinity());
 //        // check if ratings is available for the place
 //        if (results.getRating() != null) {

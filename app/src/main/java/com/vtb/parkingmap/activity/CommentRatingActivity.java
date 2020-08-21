@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +29,6 @@ import com.vtb.parkingmap.CommentRating.ProductListAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,31 +56,21 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
     //GetAllRating
     List<ParkingLotRating> getallrating;
     TextView txtcount;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        setResult(PlaceDetailsActivity.RESULT_OK, intent);
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
         parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
-
         setContentView(R.layout.activity_comment_rating);
-
         imageView = findViewById(R.id.imageView);
         lvProduct = (ListView) findViewById(R.id.listview_product);
         txtcount = (TextView) findViewById(R.id.countallcomment);
-        Button btncomment = (Button) findViewById(R.id.btnthembinhluan);
-        btncomment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CommentRatingActivity.this, RatingActivity.class);
-                intent.putExtra("idplacedetail", (Serializable) idplacedetail);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-        });
+
 
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ftView = li.inflate(R.layout.footer_view, null);

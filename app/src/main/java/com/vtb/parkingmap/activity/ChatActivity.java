@@ -58,7 +58,7 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
         setContentView(R.layout.activity_chat);
         initializeView();
 
-//        name = getIntent().getStringExtra("name");
+//        firstName = getIntent().getStringExtra("firstName");
         name = "VU TUONG BACH";
         Intent intent = getIntent();
         id = (long) intent.getSerializableExtra("idparkinglot");
@@ -139,7 +139,7 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
                                 TextMessageContent textMessageContent = TextMessageContent.parseFrom(message.getContent());
                                 Log.d("BachMap", "1" + textMessageContent);
                                 JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("name", textMessageContent.getSender());
+                                jsonObject.put("firstName", textMessageContent.getSender());
                                 jsonObject.put("message", textMessageContent.getMessage());
                                 jsonObject.put("isSent", false);
 
@@ -209,7 +209,7 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
             try {
 //                long tmpid = serviceStubs.getParkingLotServiceBlockingStub().getParkingLotEmployeeIdOfParkingLot(Int64Value.of(id)).getValue();
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                jsonObject.put("name", name);
+                jsonObject.put("firstName", name);
                 jsonObject.put("message", messageEdit.getText().toString());
 
                 TextMessageContent textMessageContent = TextMessageContent.newBuilder()
@@ -285,7 +285,7 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("name", name);
+            jsonObject.put("firstName", name);
             jsonObject.put("image", base64String);
 
             sendWebSocketTextMessage(jsonObject.toString());

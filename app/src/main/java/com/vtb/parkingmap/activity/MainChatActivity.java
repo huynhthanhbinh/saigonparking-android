@@ -17,7 +17,7 @@ public final class MainChatActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.editText);
         findViewById(R.id.enterBtn).setOnClickListener(view -> {
             Intent intent = new Intent(this, ChatActivity.class);
-            intent.putExtra("name", editText.getText().toString());
+            intent.putExtra("firstName", editText.getText().toString());
             startActivity(intent);
         });
     }

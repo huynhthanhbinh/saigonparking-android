@@ -41,6 +41,7 @@
             android:layout_marginBottom="8dp">
 
             <EditText
+                android:id="@+id/input_lastname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
@@ -54,6 +55,7 @@
             android:layout_marginBottom="8dp">
 
             <EditText
+                android:id="@+id/input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"

@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,7 +49,8 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bookingServiceBlockingStub = serviceStubs.getBookingServiceBlockingStub();
-
+        Intent intent = getIntent();
+        setResult(MapActivity.RESULT_OK, intent);
         setContentView(R.layout.activity_history);
 
         lvProduct = findViewById(R.id.listview_history);

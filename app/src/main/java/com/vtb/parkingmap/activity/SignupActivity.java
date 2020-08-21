@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
@@ -27,6 +28,10 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
 
     @BindView(R.id.input_name)
     EditText _nameText;
+    @BindView(R.id.input_lastname)
+    EditText _lastnameText;
+    @BindView(R.id.input_username)
+    EditText _usernameText;
     @BindView(R.id.input_email)
     EditText _emailText;
     @BindView(R.id.input_mobile)
@@ -39,6 +44,15 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
     Button _signupButton;
     @BindView(R.id.link_login)
     TextView _loginLink;
+
+
+    String firstName;
+    String lastName;
+    String userName;
+    String email;
+    String mobile;
+    String password;
+    String reEnterPassword;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +81,13 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
 
     public void signup() {
         Log.d(TAG, "Signup");
+        firstName = _nameText.getText().toString();
+        lastName = _lastnameText.getText().toString();
+        userName = _usernameText.getText().toString();
+        email = _emailText.getText().toString();
+        mobile = _mobileText.getText().toString();
+        password = _passwordText.getText().toString();
+        reEnterPassword = _reEnterPasswordText.getText().toString();
 
         if (!validate()) {
             onSignupFailed();
@@ -79,13 +100,9 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String mobile = _mobileText.getText().toString();
-        String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
 
         // TODO: Implement your own signup logic here.
 
@@ -104,9 +121,24 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
 
 
     public void onSignupSuccess() {
+
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
-        finish();
+        RegisterRequest request = RegisterRequest.newBuilder()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUsername(userName)
+                .setPassword(password)
+                .setEmail(email)
+                .setPhone(mobile)
+                .build();
+
+        callApiWithExceptionHandling(() -> {
+            String addedEmail = serviceStubs.getAuthServiceBlockingStub().registerUser(request).getValue();
+            Toast.makeText(getBaseContext(),
+                    String.format("Activate link has been sent to %s email. " +
+                            "Please check your email to activate account !", addedEmail), Toast.LENGTH_LONG).show();
+        });
     }
 
     public void onSignupFailed() {
@@ -118,13 +150,8 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String mobile = _mobileText.getText().toString();
-        String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        if (name.isEmpty() || name.length() < 3) {
+        if (firstName.isEmpty() || firstName.length() < 3) {
             _nameText.setError("at least 3 characters");
             valid = false;
         } else {

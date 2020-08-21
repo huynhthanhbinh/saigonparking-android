@@ -29,6 +29,7 @@ import com.vtb.parkingmap.activity.BookingActivity;
 import com.vtb.parkingmap.activity.ChatActivity;
 import com.vtb.parkingmap.activity.MapActivity;
 import com.vtb.parkingmap.activity.PlaceDetailsActivity;
+import com.vtb.parkingmap.activity.RatingBookingActivity;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
@@ -232,10 +233,16 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 //xóa history message
                                 Paper.book().delete("historymessage");
 
-                                Intent intent2 = new Intent(currentActivity, MapActivity.class);
+                                Intent intent2 = new Intent(currentActivity, RatingBookingActivity.class);
+
+                                BookingActivity activity = (BookingActivity) currentActivity;
+                                intent2.putExtra("idplacedetail", (Serializable) activity.getId());
+
+
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                                 currentActivity.startActivity(intent2);
                                 currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                currentActivity.finish();
                             });
                             AlertDialog dialog = alert.create();
                             dialog.show();
