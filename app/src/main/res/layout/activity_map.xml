@@ -11,50 +11,56 @@
     app:umanoScrollableView="@id/listview"
     android:layout_gravity="bottom"
     android:gravity="bottom"
-    app:umanoPanelHeight="17dp"
+    app:umanoPanelHeight="0dp"
     app:umanoShadowHeight="4dp">
-
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <include layout="@layout/content_map" />
+
         <include layout="@layout/other_location" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="254dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/dragview"
+            android:clickable="true"
+            android:focusable="false"
+            android:orientation='vertical'
+            android:background="@drawable/ic_open_menu"
+            android:layout_centerHorizontal="true"></android.support.v7.widget.AppCompatButton>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dragview"
         android:clickable="true"
         android:focusable="false"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:background="@color/primary_darker"
-            android:backgroundTint="@color/primary_darker">
+            android:layout_height="68dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:paddingStart="15dp"
-                android:paddingLeft="15dp"
-                android:text="Action"
-                android:textSize="16sp" />
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_baseline_keyboard_arrow_up_24" />
         </RelativeLayout>
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/listview">
-
-
-        </ListView>
+            android:id="@+id/listview"></ListView>
     </LinearLayout>
 
 

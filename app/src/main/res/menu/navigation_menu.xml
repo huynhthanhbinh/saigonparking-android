@@ -12,15 +12,20 @@
             android:icon="@drawable/ic_history_black_24dp"
             android:title="Booking History" />
     </group>
-    <item android:title="Control">
+    <item android:title="Preferences">
         <menu>
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Setting"/>
+                android:title="Setting" />
+        </menu>
+    </item>
+
+    <item android:title="">
+        <menu>
+            <item android:title="Help" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_keyboard_backspace_black_24dp"
                 android:title="Log out" />
         </menu>
     </item>

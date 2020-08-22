@@ -27,7 +27,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.ProfileActivity"></activity>
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:theme="@style/AppTheme.TransparentTheme"></activity>
         <activity android:name=".activity.RatingBookingActivity" />
         <activity
             android:name=".activity.HistoryActivity"

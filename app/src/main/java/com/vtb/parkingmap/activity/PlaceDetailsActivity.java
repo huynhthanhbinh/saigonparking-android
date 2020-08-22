@@ -323,7 +323,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         textViewRating.setText(String.format(Locale.US, "%.2f", ratingAverage));
         ratingBar.setRating((float) ratingAverage);
         textViewAddress.setText(address);
-        textViewAvailability.setText(String.format(Locale.ENGLISH, "%d/%d", availableSlot, totalSlot));
+        textViewAvailability.setText(String.format(Locale.ENGLISH, "%d", availableSlot));
         txtStatus.setText("Active");
     }
 
