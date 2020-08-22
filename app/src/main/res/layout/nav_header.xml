@@ -16,15 +16,15 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:contentDescription="@string/nav_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/nav_icon"
             android:src="@mipmap/ic_launcher_round" />
 
         <ImageView
-            android:contentDescription="@string/nav_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/nav_text"
             android:src="@drawable/textsg" />
     </LinearLayout>
 
