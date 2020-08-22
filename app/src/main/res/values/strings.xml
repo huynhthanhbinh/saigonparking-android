@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Saigon Parking</string>
+    <string name="homepage">https://www.saigonparking.wtf</string>
+    <string name="email">saigonparkingmap@gmail.com</string>
     <string name="google_maps_api">AIzaSyAzMtM_tq9piTrRzZ5J0e4fEdsnx5ZSOJ8</string>
 
     <string name="title_activity_map">Parking Map</string>
@@ -13,4 +15,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_text">nav_text</string>
+    <string name="nav_icon">nav_icon</string>
 </resources>

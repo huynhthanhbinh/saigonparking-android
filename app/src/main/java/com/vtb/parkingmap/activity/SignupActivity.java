@@ -139,8 +139,8 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
             AlertDialog.Builder alert = new AlertDialog.Builder(SignupActivity.this);
 
             alert.setTitle("Sign up Finish!");
-            alert.setMessage("Activate link has been sent to %s email." + addedEmail +
-                    "Please check your email to activate account !");
+            alert.setMessage("Activate link has been sent to" + addedEmail +
+                    ". Please check your email to activate account !");
             alert.setPositiveButton("OK", (dialogInterface, i) -> {
 
 
