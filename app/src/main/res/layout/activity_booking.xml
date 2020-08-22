@@ -255,7 +255,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/combiebutton"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -271,7 +272,6 @@
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:padding="10dp"
                     android:gravity="center" />
 
             </LinearLayout>
@@ -282,7 +282,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/combiebutton"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -298,7 +299,6 @@
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:padding="10dp"
                     android:gravity="center" />
 
             </LinearLayout>
@@ -309,7 +309,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/combiebutton"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -325,7 +326,6 @@
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:padding="10dp"
                     android:gravity="center" />
 
             </LinearLayout>
