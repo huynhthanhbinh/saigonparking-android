@@ -59,7 +59,7 @@
 
         <activity
             android:name=".activity.PlaceDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.PlaceDetail" />
         <activity
             android:name=".activity.PermissionsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -81,7 +81,8 @@
             android:theme="@style/AppTheme.TransparentTheme" />
         <activity
             android:name=".activity.BookingActivity"
-            android:label="@string/title_activity_booking" />
+            android:label="@string/title_activity_booking"
+            android:theme="@style/AppTheme.PlaceDetail" />
         <activity
             android:name=".activity.CommentRatingActivity"
             android:label="@string/title_activity_comment" />

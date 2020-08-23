@@ -23,6 +23,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@color/primary_darker</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -47,5 +48,13 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@color/primary_darker</item>
         <item name="android:textColor">@color/primary_darker</item>
+    </style>
+
+    <style name="AppTheme.PlaceDetail" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/primary_darker</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>
