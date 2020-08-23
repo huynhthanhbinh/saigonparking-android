@@ -24,6 +24,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 
+import static com.vtb.parkingmap.websocket.SaigonParkingWebSocketListener.NORMAL_CLOSURE_STATUS;
+
 /**
  * Entry point of android application
  * Will be run first before all Activity classes
@@ -94,7 +96,7 @@ public final class SaigonParkingApplication extends Application {
     public void closeSocketConnection() {
         if (webSocket != null) {
             try {
-                webSocket.cancel();
+                webSocket.close(NORMAL_CLOSURE_STATUS, null);
             } catch (Exception exception) {
                 Log.d("BachMap", "initWebsocketConnectionError: " + exception.getMessage());
             }

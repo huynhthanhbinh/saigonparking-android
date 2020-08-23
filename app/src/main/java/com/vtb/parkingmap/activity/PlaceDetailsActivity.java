@@ -76,6 +76,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private TextView txtClose;
     private TextView txtStatus;
     private TextView txtphone;
+    private TextView lblPhone;
     private ImageView iconType;
     private TextView output;
     private TextView txtXemChiTiet;
@@ -184,6 +185,12 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                                 .getColor(R.color.colorPrimary));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        lblPhone.setVisibility((txtphone.getText().length() == 0) ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -384,6 +391,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private void init() {
         imageView = findViewById(R.id.imageView);
         btnimgshow = findViewById(R.id.imgshow);
+        lblPhone = findViewById(R.id.lblPhone);
         //đã có dự lieu booking
 //        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
 //            // hien nut cancel + chat + huong di bai xe ( flagbook = false )

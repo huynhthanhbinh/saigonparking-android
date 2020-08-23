@@ -81,6 +81,7 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mancj.slideup.SlideUp;
 import com.skyfishjy.library.RippleBackground;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.models.MyPlaces;
 import com.vtb.parkingmap.models.Results;
@@ -1259,6 +1260,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         switch (menuItem.getItemId()) {
             case R.id.nav_logout:
                 saigonParkingDatabase.emptyTable();
+                ((SaigonParkingApplication) getApplicationContext()).closeSocketConnection();
                 Intent intent = new Intent(MapActivity.this, PermissionsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

@@ -49,7 +49,7 @@ import okio.ByteString;
 @RequiredArgsConstructor
 public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
-    private static final int NORMAL_CLOSURE_STATUS = 1000;
+    public static final int NORMAL_CLOSURE_STATUS = 1000;
 
     private final SaigonParkingApplication applicationContext;
 
