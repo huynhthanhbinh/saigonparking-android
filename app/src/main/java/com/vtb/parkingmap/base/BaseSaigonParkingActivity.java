@@ -3,9 +3,10 @@ package com.vtb.parkingmap.base;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;

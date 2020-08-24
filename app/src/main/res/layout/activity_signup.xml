@@ -28,7 +28,7 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
             <!-- Name Label -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -42,9 +42,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:hint="First Name" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -58,9 +58,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:hint="Last Name" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -74,10 +74,10 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:hint="Username" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Label -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -92,10 +92,10 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:hint="Password" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Re-enter Label -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -109,10 +109,10 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:hint="Re-enter Password" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!--  Email Label -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -126,11 +126,11 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:hint="Email" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <!-- mobile number -->
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -144,11 +144,11 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:hint="Mobile Number" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <!-- Signup Button -->
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_signup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

@@ -15,7 +15,7 @@
         android:background="@drawable/edittext_design"
         android:padding="10dp" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editText"

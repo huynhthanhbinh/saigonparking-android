@@ -2,7 +2,6 @@ package com.vtb.parkingmap.support;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.vtb.parkingmap.R;
