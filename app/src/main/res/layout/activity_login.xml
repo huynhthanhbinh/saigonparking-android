@@ -24,6 +24,14 @@
         android:paddingTop="56dp"
         android:paddingRight="24dp">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_height="280dp"
+            android:layout_width="280dp"
+            android:layout_gravity="center"
+            app:lottie_rawRes="@raw/welcome"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
+
         <!--  Email Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -31,6 +39,7 @@
             android:layout_marginBottom="8dp"
             android:hint="Username"
             android:textColorHint="@color/black"
+            android:theme="@style/input_text_field"
             app:hintTextAppearance="@style/hint_text_size">
 
             <EditText
@@ -47,6 +56,7 @@
             android:layout_marginBottom="8dp"
             android:hint="Password"
             android:textColorHint="@color/black"
+            android:theme="@style/input_text_field"
             app:hintTextAppearance="@style/hint_text_size"
             app:passwordToggleEnabled="true">
 

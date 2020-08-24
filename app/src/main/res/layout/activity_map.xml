@@ -1,57 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MapActivity"
-    app:umanoDragView="@id/dragview"
-    app:umanoScrollableView="@id/listview"
-    android:layout_gravity="bottom"
-    android:gravity="bottom"
-    app:umanoPanelHeight="20dp"
-    app:umanoShadowHeight="4dp">
+    tools:context=".activity.MapActivity">
 
-
-    <RelativeLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/content_map" />
-
-        <include layout="@layout/other_location" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="false"
-        android:orientation="vertical"
-        android:id="@+id/dragview"
-        android:background="#fff">
+        android:layout_height="match_parent"
+        tools:context=".activity.MapActivity"
+        app:umanoDragView="@id/dragview"
+        app:umanoScrollableView="@id/listview"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        app:umanoPanelHeight="20dp"
+        app:umanoShadowHeight="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="68dp">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/ic_baseline_keyboard_arrow_up_24" />
+            <include layout='@layout/content_map' />
         </RelativeLayout>
 
-        <ListView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/listview"></ListView>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:orientation="vertical"
+            android:id="@+id/dragview"
+            android:background="#fff">
 
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/listview"></ListView>
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="68dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ic_baseline_keyboard_arrow_up_24" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    <include layout="@layout/other_location" />
+</RelativeLayout>
+

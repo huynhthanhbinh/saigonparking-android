@@ -158,6 +158,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private View dim;
     private View slideView;
     private ImageButton fab;
+    private ImageButton bnt_mylocation;
     private CardView imgbtnrestaurant;
     private CardView imgbtnhospital;
     private CardView imgbtnGasStation;
@@ -674,10 +675,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     parkingLotResultList.set(i, parkingLot);
                 }
 
-
                 ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
                 listView.setAdapter(adapter);
-
 
             } catch (StatusRuntimeException exception) {
                 saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
@@ -685,7 +684,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
                 Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
 
             new Handler().postDelayed(() -> rippleBg.stopRippleAnimation(), 3000);
 
@@ -705,6 +703,14 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void onClick(View view) {
                 slideUp.animateIn();
 //                fab.hide();
+            }
+        });
+
+        bnt_mylocation = (ImageButton) findViewById(R.id.bnt_mylocation);
+        bnt_mylocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
             }
         });
         imgbtnrestaurant = findViewById(R.id.imgrestaurant);
@@ -878,8 +884,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
 
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 
         if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {

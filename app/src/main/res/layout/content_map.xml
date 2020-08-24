@@ -37,7 +37,7 @@
             android:id="@+id/ripple_bg"
             app:rb_color="#75d9fa"
             app:rb_radius="32dp"
-            app:rb_rippleAmount="2"
+            app:rb_rippleAmount="3"
             app:rb_duration="3000"
             app:rb_scale="6"></com.skyfishjy.library.RippleBackground>
 
@@ -57,6 +57,16 @@
             app:mt_placeholder="Search a place"
             android:imeOptions="actionDone"
             app:mt_roundedSearchBarEnabled="true" />
+
+
+        <ImageButton
+            android:id="@+id/bnt_mylocation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="254dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/ic_compass" />
 
         <Button
             android:id="@+id/btn_find"
