@@ -65,8 +65,8 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
     }

@@ -57,4 +57,9 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
+
+    <style name="hint_text_size" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

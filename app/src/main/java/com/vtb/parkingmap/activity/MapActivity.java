@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,7 +31,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -158,10 +158,10 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private View dim;
     private View slideView;
     private ImageButton fab;
-    private ImageView imgbtnrestaurant;
-    private ImageView imgbtnhospital;
-    private ImageView imgbtnGasStation;
-    private ImageView imgbtnParkinglot;
+    private CardView imgbtnrestaurant;
+    private CardView imgbtnhospital;
+    private CardView imgbtnGasStation;
+    private CardView imgbtnParkinglot;
     private boolean modeParkingLot = true;
 
 
