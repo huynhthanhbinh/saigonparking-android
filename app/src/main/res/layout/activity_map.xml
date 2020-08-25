@@ -33,12 +33,6 @@
             android:id="@+id/dragview"
             android:background="#fff">
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:id="@+id/listview"></ListView>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="68dp">
@@ -51,6 +45,11 @@
                     android:background="@drawable/ic_baseline_keyboard_arrow_up_24" />
             </RelativeLayout>
 
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/listview" />
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

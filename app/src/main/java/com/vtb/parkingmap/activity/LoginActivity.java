@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.user.UserRole;
+import com.google.android.material.snackbar.Snackbar;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
@@ -54,7 +54,7 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
             @Override
             public void onClick(View v) {
-                login();
+                login(v);
             }
         });
 
@@ -71,14 +71,23 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
         });
     }
 
-    public void login() {
+    public void login(View v) {
         Log.d(TAG, "Login");
 
-        if (!validate()) {
-            onLoginFailed();
-            return;
-        }
+        String val = validate();
 
+        switch (val) {
+            case "Empty":
+                return;
+            case "Success":
+                break;
+            case "UNAVAILABLE":
+                onLoginFailed(v, "Can't connect to Server!");
+                return;
+            default:
+                onLoginFailed(v, "Username or Password was Wrong!");
+                return;
+        }
 //        _loginButton.setEnabled(false);
 
 //        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
@@ -108,8 +117,6 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 //                        progressDialog.dismiss();
 //                    }
 //                }, 500);
-
-
     }
 
 
@@ -136,14 +143,16 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
         finish();
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onLoginFailed(View v, String temp) {
+        Snackbar.make(v, temp, Snackbar.LENGTH_LONG)
+                .setDuration(4000)
+                .show();
 
         _loginButton.setEnabled(true);
     }
 
-    public boolean validate() {
-        boolean valid;
+    public String validate() {
+        String valid;
 
         String username = _username.getText().toString();
         String password = _passwordText.getText().toString();
@@ -151,17 +160,17 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
         if (username.isEmpty()) {
             _username.setError("Pls input UserName");
-            return false;
+            return "Empty";
 
         }
 
         if (password.isEmpty()) {
             _passwordText.setError("Pls Input password");
-            return false;
+            return "Empty";
         }
         if (password.length() < 4 || password.length() > 10) {
             _passwordText.setError(" PassWord between 4 and 10 alphanumeric characters");
-            return false;
+            return "Empty";
         }
 
         ValidateRequest validateRequest = ValidateRequest.newBuilder()
@@ -173,15 +182,20 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
         try {
             ValidateResponse loginResponse = authServiceBlockingStub
                     .validateUser(validateRequest);
-            valid = true;
-
-            Log.d("BachMap", "Sign-in successfully");
+            valid = "Success";
 
             saigonParkingDatabase.saveNewLoginInformation(username, loginResponse.getAccessToken(), loginResponse.getRefreshToken());
             ((SaigonParkingApplication) getApplicationContext()).initWebsocketConnection();
 
         } catch (StatusRuntimeException exception) {
-            valid = false;
+            switch (String.valueOf(exception.getStatus().getCode())) {
+                case "UNAVAILABLE":
+                    valid = "UNAVAILABLE";
+                    break;
+                default:
+                    valid = "False";
+                    break;
+            }
             saigonParkingExceptionHandler.handleCommunicationException(exception, LoginActivity.this);
         }
 
