@@ -168,6 +168,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private RippleBackground rippleBg;
 
     private int LAUNCH_SECOND_ACTIVITY = 1;
+    private int LAUNCH_SECOND_ACTIVITY2 = 2;
 
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
@@ -971,32 +972,23 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                         progressDialog.setCanceledOnTouchOutside(false);
 
 
-                        // TODO: Implement your own signup logic here.
+                        parkingLot = parkingLotServiceBlockingStub
+                                .getParkingLotById(Int64Value.newBuilder()
+                                        .setValue(Long.parseLong(marker.getSnippet()))
+                                        .build());
+                        Log.d("khongbiloi", "" + Long.parseLong(marker.getSnippet()));
 
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // depending on success
-                                        parkingLot = parkingLotServiceBlockingStub
-                                                .getParkingLotById(Int64Value.newBuilder()
-                                                        .setValue(Long.parseLong(marker.getSnippet()))
-                                                        .build());
-                                        Log.d("khongbiloi", "" + Long.parseLong(marker.getSnippet()));
+                        Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
+                        intent.putExtra("parkingLot", (Serializable) parkingLot);
+                        intent.putExtra("myLat", (Serializable) mLastKnownLocation.getLatitude());
+                        intent.putExtra("myLong", (Serializable) mLastKnownLocation.getLongitude());
 
-                                        Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
-                                        intent.putExtra("parkingLot", (Serializable) parkingLot);
-                                        intent.putExtra("myLat", (Serializable) mLastKnownLocation.getLatitude());
-                                        intent.putExtra("myLong", (Serializable) mLastKnownLocation.getLongitude());
-
-                                        if (position3 != null) {
-                                            intent.putExtra("postion3lat", position3.latitude);
-                                            intent.putExtra("postion3long", position3.longitude);
-                                        }
-                                        startActivity(intent);
-                                        progressDialog.dismiss();
-                                    }
-                                }, 1000);
+                        if (position3 != null) {
+                            intent.putExtra("postion3lat", position3.latitude);
+                            intent.putExtra("postion3long", position3.longitude);
+                        }
+                        startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY2);
+                        progressDialog.dismiss();
 
 
                     } catch (StatusRuntimeException exception) {
@@ -1008,6 +1000,16 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 }
                 return true;
 
+            }
+
+            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                if (requestCode == LAUNCH_SECOND_ACTIVITY2) {
+                    if (resultCode == PlaceDetailsActivity.RESULT_OK) {
+                        progressDialog.dismiss();
+                    }
+                    if (resultCode == PlaceDetailsActivity.RESULT_CANCELED) {
+                    }
+                }
             }
         });
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
@@ -1035,8 +1037,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     }
 
     //handle loading screen
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1061,7 +1061,16 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             if (resultCode == HistoryActivity.RESULT_CANCELED) {
             }
         }
+
+//        if (requestCode == LAUNCH_SECOND_ACTIVITY2) {
+//            if (resultCode == PlaceDetailsActivity.RESULT_OK) {
+//                progressDialog.dismiss();
+//            }
+//            if (resultCode == PlaceDetailsActivity.RESULT_CANCELED) {
+//            }
+//        }
     }
+
 
     @SuppressLint("MissingPermission")
     private void getDeviceLocation() {

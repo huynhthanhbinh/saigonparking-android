@@ -125,6 +125,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        setResult(MapActivity.RESULT_OK, intent);
         Log.d("khongbiloi", "Nhan du lieu");
         setContentView(R.layout.activity_place_details);
         // tạo thông báo
@@ -142,7 +144,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         registerReceiver(broadcast, filter);
         // lam phần parking map
 
-        Intent intent = getIntent();
+
         parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         mylat = (double) intent.getSerializableExtra("myLat");
         mylong = (double) intent.getSerializableExtra("myLong");
