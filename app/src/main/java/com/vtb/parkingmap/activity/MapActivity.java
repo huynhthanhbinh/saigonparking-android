@@ -1,7 +1,6 @@
 package com.vtb.parkingmap.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -169,8 +168,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
     private RippleBackground rippleBg;
 
-    private int LAUNCH_SECOND_ACTIVITY = 1;
-    private int LAUNCH_SECOND_ACTIVITY2 = 2;
 
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
@@ -188,7 +185,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     int flatfunction = 1; // = 0 là ở dạng bình thường , = 1 là  ở dạng không cho kéo màn hình
     int flatscreen = 0;
     CountDownTimer countDownTimer;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -969,15 +965,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     try {
 //                        Long loicuatoi = Long.parseLong(marker.getSnippet());
 //                        Log.d("Loicuatoi ",""+loicuatoi);
-
-                        ProgressDialog progressDialog = new ProgressDialog(MapActivity.this,
-                                R.style.AppTheme_Dark_Dialog);
-                        progressDialog.setIndeterminate(true);
-                        progressDialog.setMessage("Loading...");
-                        progressDialog.show();
-                        progressDialog.setCanceledOnTouchOutside(false);
-
-
                         parkingLot = parkingLotServiceBlockingStub
                                 .getParkingLotById(Int64Value.newBuilder()
                                         .setValue(Long.parseLong(marker.getSnippet()))
@@ -993,9 +980,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                             intent.putExtra("postion3lat", position3.latitude);
                             intent.putExtra("postion3long", position3.longitude);
                         }
-                        startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY2);
-                        progressDialog.dismiss();
-
+                        startActivityWithLoading(intent);
 
                     } catch (StatusRuntimeException exception) {
                         saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
@@ -1008,15 +993,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
             }
 
-            public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                if (requestCode == LAUNCH_SECOND_ACTIVITY2) {
-                    if (resultCode == PlaceDetailsActivity.RESULT_OK) {
-                        progressDialog.dismiss();
-                    }
-                    if (resultCode == PlaceDetailsActivity.RESULT_CANCELED) {
-                    }
-                }
-            }
         });
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
@@ -1060,21 +1036,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 materialSearchBar.enableSearch();
             }
         }
-        if (requestCode == LAUNCH_SECOND_ACTIVITY) {
-            if (resultCode == HistoryActivity.RESULT_OK) {
-                progressDialog.dismiss();
-            }
-            if (resultCode == HistoryActivity.RESULT_CANCELED) {
-            }
-        }
-
-//        if (requestCode == LAUNCH_SECOND_ACTIVITY2) {
-//            if (resultCode == PlaceDetailsActivity.RESULT_OK) {
-//                progressDialog.dismiss();
-//            }
-//            if (resultCode == PlaceDetailsActivity.RESULT_CANCELED) {
-//            }
-//        }
     }
 
 
@@ -1286,15 +1247,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 startActivity(intent);
                 break;
             case R.id.nav_history:
-                progressDialog = new ProgressDialog(MapActivity.this,
-                        R.style.AppTheme_Dark_Dialog);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Loading...");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-
                 Intent intenthistory = new Intent(MapActivity.this, HistoryActivity.class);
-                startActivityForResult(intenthistory, LAUNCH_SECOND_ACTIVITY);
+                startActivityWithLoading(intenthistory);
                 break;
             case R.id.nav_setting:
                 break;

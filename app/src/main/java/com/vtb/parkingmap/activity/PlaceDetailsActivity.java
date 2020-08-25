@@ -3,7 +3,6 @@ package com.vtb.parkingmap.activity;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -119,15 +118,13 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private MessageAdapter messageAdapter;
     private String bookingId;
     private String bookingreject = null;
-    private int LAUNCH_SECOND_ACTIVITY = 1;
-    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        setResult(MapActivity.RESULT_OK, intent);
         Log.d("khongbiloi", "Nhan du lieu");
         setContentView(R.layout.activity_place_details);
         // tạo thông báo
@@ -433,29 +430,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
     public void funcXemChiTietDanhGia(View view) {
-        progressDialog = new ProgressDialog(PlaceDetailsActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
         Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
         intent.putExtra("idplacedetail", (Serializable) id);
         intent.putExtra("parkinglot", (Serializable) parkingLot);
-        startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == LAUNCH_SECOND_ACTIVITY) {
-            if (resultCode == CommentRatingActivity.RESULT_OK) {
-                progressDialog.dismiss();
-            }
-            if (resultCode == CommentRatingActivity.RESULT_CANCELED) {
-            }
-        }
+        startActivityWithLoading(intent);
     }
 
 

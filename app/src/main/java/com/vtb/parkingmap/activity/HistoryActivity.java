@@ -50,7 +50,6 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
         super.onCreate(savedInstanceState);
         bookingServiceBlockingStub = serviceStubs.getBookingServiceBlockingStub();
         Intent intent = getIntent();
-        setResult(MapActivity.RESULT_OK, intent);
         setContentView(R.layout.activity_history);
 
         lvProduct = findViewById(R.id.listview_history);

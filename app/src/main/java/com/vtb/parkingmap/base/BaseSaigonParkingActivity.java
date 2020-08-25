@@ -1,5 +1,7 @@
 package com.vtb.parkingmap.base;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
+import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
@@ -33,6 +36,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     protected SaigonParkingServiceStubs serviceStubs;
     protected GoogleApiService googleApiService;
     protected MessageAdapter messageAdapter;
+    protected ProgressDialog progressDialog;
 
     /**
      * websocket will be private
@@ -46,6 +50,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initProgressDialog();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ((SaigonParkingApplication) getApplicationContext()).setCurrentActivity(this);
         saigonParkingExceptionHandler = ((SaigonParkingApplication) getApplicationContext()).getSaigonParkingExceptionHandler();
@@ -59,9 +64,16 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        closeCurrentProgressDialog();
         ((SaigonParkingApplication) getApplicationContext()).setCurrentActivity(this);
         Log.d("BachMap", String.format("onResume: WebSocket is null: %b",
                 ((SaigonParkingApplication) getApplicationContext()).getWebSocket() == null));
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     public void reload() {
@@ -74,6 +86,23 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
 
     public void changeActivity(Class<? extends BaseSaigonParkingActivity> nextActivityClass) {
         startActivity(new Intent(this, nextActivityClass));
+    }
+
+    public void startActivityWithLoading(Intent intent) {
+        showProgressDialog();
+        startActivity(intent);
+    }
+
+    private void showProgressDialog() {
+        ((SaigonParkingApplication) getApplicationContext()).setCurrentProgressDialog(progressDialog);
+        progressDialog.show();
+    }
+
+    private void closeCurrentProgressDialog() {
+        ProgressDialog current = ((SaigonParkingApplication) getApplicationContext()).getCurrentProgressDialog();
+        if (current != null && current.isShowing()) {
+            current.dismiss();
+        }
     }
 
     protected final void sendWebSocketBinaryMessage(@NonNull SaigonParkingMessage message) {
@@ -98,5 +127,12 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
         } catch (StatusRuntimeException exception) {
             saigonParkingExceptionHandler.handleCommunicationException(exception, this);
         }
+    }
+
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 }

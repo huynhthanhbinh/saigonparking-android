@@ -1,6 +1,7 @@
 package com.vtb.parkingmap;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,8 @@ public final class SaigonParkingApplication extends Application {
     private BaseSaigonParkingActivity currentActivity = null;
     @Setter
     private Boolean isBooked = false;
+    @Setter
+    private ProgressDialog currentProgressDialog;
 
     private static Context applicationContext;
     private WebSocket webSocket;
@@ -62,7 +65,6 @@ public final class SaigonParkingApplication extends Application {
         /* Init all configurations for android mobile apps */
         Locale.setDefault(Locale.US);
         applicationContext = getApplicationContext();
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         messageAdapter = new MessageAdapter(inflater);
 

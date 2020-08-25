@@ -88,35 +88,15 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
                 onLoginFailed(v, "Username or Password was Wrong!");
                 return;
         }
-//        _loginButton.setEnabled(false);
-
-//        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-//                R.style.AppTheme_Dark_Dialog);
-//        progressDialog.setIndeterminate(true);
-//        progressDialog.setMessage("Authenticating...");
-//        progressDialog.show();
 
         String username = _username.getText().toString();
         String password = _passwordText.getText().toString();
-
 
         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
         intent.putExtra("UserName", username);
         intent.putExtra("PassWord", password);
         startActivity(intent);
         finish();
-        // TODO: Implement your own authentication logic here.
-
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 500);
     }
 
 

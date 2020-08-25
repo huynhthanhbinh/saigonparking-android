@@ -1,7 +1,6 @@
 package com.vtb.parkingmap.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,13 +55,12 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
     //GetAllRating
     List<ParkingLotRating> getallrating;
     TextView txtcount;
-    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        setResult(PlaceDetailsActivity.RESULT_OK, intent);
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
         parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
