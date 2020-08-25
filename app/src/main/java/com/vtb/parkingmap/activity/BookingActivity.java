@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
@@ -60,6 +61,8 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     private TextView txtParking;
     private TextView txtAddress;
     private TextView txtLicensePlate;
+    private LottieAnimationView iconPendding;
+    private LottieAnimationView iconAccept;
 
     private String reducedBookingId;
     private String licensePlate;
@@ -240,6 +243,8 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         txtParking = findViewById(R.id.txtParking);
         txtAddress = findViewById(R.id.txtAddress);
         txtLicensePlate = findViewById(R.id.txtLicensePlate);
+        iconPendding = findViewById(R.id.iconPendding);
+        iconAccept = findViewById(R.id.iconAccept);
         txtLicensePlate.setText(licensePlate.toUpperCase());
 
 
@@ -249,6 +254,8 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             txtParking.setText(parkingLot.getInformation().getName());
             txtAddress.setText(parkingLot.getInformation().getAddress());
             txtStatus.setText("Processing");
+            iconPendding.setVisibility(View.VISIBLE);
+            iconAccept.setVisibility(View.GONE);
 
         } else {
             txtBookingID.setText(reducedBookingId);
@@ -259,6 +266,12 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             txtStatus.setText(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
                     ? "Processing"
                     : "Accepted");
+            iconPendding.setVisibility(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
+                    ? View.VISIBLE
+                    : View.GONE);
+            iconAccept.setVisibility(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
+                    ? View.GONE
+                    : View.VISIBLE);
         }
     }
 

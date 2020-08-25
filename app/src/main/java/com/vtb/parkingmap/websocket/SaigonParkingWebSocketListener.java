@@ -118,6 +118,8 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                         if (currentActivity instanceof BookingActivity) {
                             BookingActivity activity = (BookingActivity) currentActivity;
                             ((TextView) activity.findViewById(R.id.txtStatus)).setText("Accepted");
+                            activity.findViewById(R.id.iconPendding).setVisibility(View.GONE);
+                            activity.findViewById(R.id.iconAccept).setVisibility(View.VISIBLE);
 //                            ((Button) activity.findViewById(R.id.imgdirection)).setClickable(true);
 //                            ((Button) activity.findViewById(R.id.imgdirection)).setEnabled(true);
 

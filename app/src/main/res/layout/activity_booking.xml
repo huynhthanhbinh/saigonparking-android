@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activity.BookingActivity">
 
@@ -97,6 +98,28 @@
                             android:textStyle="bold"
                             android:textColor="#000"
                             android:textSize="15sp" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/iconPendding"
+                            android:layout_height="24dp"
+                            android:layout_width="24dp"
+                            android:layout_gravity="center"
+                            app:lottie_rawRes="@raw/pendding"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/iconAccept"
+                            android:layout_height="24dp"
+                            android:layout_width="24dp"
+                            android:layout_gravity="center"
+                            app:lottie_rawRes="@raw/accepted"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/txtStatus"
