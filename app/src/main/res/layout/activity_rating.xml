@@ -55,7 +55,7 @@
         android:orientation="horizontal"
         android:weightSum="2">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_weight="1"
             android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:text="Send feedback"
             android:textColor="@android:color/white" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_weight="1"
             android:id="@+id/btnfeedBackLater"
             android:layout_width="match_parent"

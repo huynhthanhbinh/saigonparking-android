@@ -12,11 +12,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,10 +25,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
@@ -74,6 +74,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.navigation.NavigationView;
 import com.google.maps.android.SphericalUtil;
 import com.google.protobuf.Int64Value;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -158,10 +159,11 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private View dim;
     private View slideView;
     private ImageButton fab;
-    private ImageView imgbtnrestaurant;
-    private ImageView imgbtnhospital;
-    private ImageView imgbtnGasStation;
-    private ImageView imgbtnParkinglot;
+    private ImageButton bnt_mylocation;
+    private CardView imgbtnrestaurant;
+    private CardView imgbtnhospital;
+    private CardView imgbtnGasStation;
+    private CardView imgbtnParkinglot;
     private boolean modeParkingLot = true;
 
 
@@ -675,10 +677,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     parkingLotResultList.set(i, parkingLot);
                 }
 
-
                 ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
                 listView.setAdapter(adapter);
-
 
             } catch (StatusRuntimeException exception) {
                 saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
@@ -686,7 +686,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
                 Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
 
             new Handler().postDelayed(() -> rippleBg.stopRippleAnimation(), 3000);
 
@@ -706,6 +705,14 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             public void onClick(View view) {
                 slideUp.animateIn();
 //                fab.hide();
+            }
+        });
+
+        bnt_mylocation = (ImageButton) findViewById(R.id.bnt_mylocation);
+        bnt_mylocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
             }
         });
         imgbtnrestaurant = findViewById(R.id.imgrestaurant);
@@ -879,8 +886,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
 
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 
         if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {

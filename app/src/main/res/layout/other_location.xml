@@ -5,7 +5,6 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -19,8 +18,13 @@
         android:id="@+id/slideView"
         android:orientation="vertical"
         android:layout_marginTop="85dp"
-
         android:background="@android:color/white">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_baseline_drag_handle_24" />
 
         <RelativeLayout
             android:layout_weight="2"
@@ -52,7 +56,7 @@
             <!-- Row 1 -->
 
             <!-- Column 1 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -61,7 +65,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:id="@+id/imgparkinglot"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -71,7 +78,6 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imgparkinglot"
                         android:src="@drawable/icon_parkinglot"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="100px"
@@ -87,10 +93,11 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!-- Column 2 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imgGasStation"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -99,7 +106,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -109,7 +118,6 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imgGasStation"
                         android:src="@drawable/gas_pump"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="100px"
@@ -125,13 +133,13 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
             <!-- Row 2 -->
 
             <!-- Column 1 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -140,7 +148,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -165,10 +175,10 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!-- Column 2 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -177,7 +187,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -202,11 +214,11 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
             <!-- Column 2 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -215,7 +227,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -240,9 +254,9 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -251,7 +265,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -276,9 +292,10 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imgrestaurant"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -287,7 +304,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -297,7 +316,6 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imgrestaurant"
                         android:src="@drawable/icon_restaurant"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="100px"
@@ -313,9 +331,10 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imghospital"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_columnWeight="1"
@@ -324,7 +343,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:cardElevation="8dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -334,7 +355,6 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imghospital"
                         android:src="@drawable/icon_hospital"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="100px"
@@ -350,7 +370,7 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
         </GridLayout>

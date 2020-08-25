@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -37,7 +37,7 @@
             android:id="@+id/ripple_bg"
             app:rb_color="#75d9fa"
             app:rb_radius="32dp"
-            app:rb_rippleAmount="2"
+            app:rb_rippleAmount="3"
             app:rb_duration="3000"
             app:rb_scale="6"></com.skyfishjy.library.RippleBackground>
 
@@ -58,7 +58,17 @@
             android:imeOptions="actionDone"
             app:mt_roundedSearchBarEnabled="true" />
 
-        <Button
+
+        <ImageButton
+            android:id="@+id/bnt_mylocation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="254dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/ic_compass" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_find"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,7 +128,7 @@
 
     </RelativeLayout>
     <!--    android:layout_gravity="start"-->
-    <android.support.design.widget.NavigationView
+    <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -127,5 +137,5 @@
         android:layout_gravity="start">
 
 
-    </android.support.design.widget.NavigationView>
-</android.support.v4.widget.DrawerLayout>
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>
