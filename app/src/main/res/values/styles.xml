@@ -32,9 +32,10 @@
     </style>
 
     <style name="AppTheme.Dark.Dialog" parent="Theme.MaterialComponents.Dialog">
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorPrimary">@color/iron</item>
-        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:background">@drawable/loading_background</item>
+        <item name="android:indeterminateTint">@color/black</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

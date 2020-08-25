@@ -4,10 +4,12 @@
     android:layout_height="match_parent"
     android:id="@+id/loadingPanel"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/loading_background">
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:indeterminateTint="@color/black" />
 </LinearLayout>

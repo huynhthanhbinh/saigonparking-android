@@ -22,15 +22,24 @@
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingTop="56dp"
-        android:paddingRight="24dp">
+        android:paddingRight="24dp"
+        android:weightSum="10">
+
+        <androidx.legacy.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_height="280dp"
-            android:layout_width="280dp"
+            android:layout_height="250dp"
+            android:layout_width="250dp"
             android:layout_gravity="center"
             app:lottie_rawRes="@raw/welcome"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true" />
+            app:lottie_loop="true"
+            android:paddingTop="20dp"
+            android:scaleType="centerCrop"
+            android:layout_weight="1" />
 
         <!--  Email Label -->
         <com.google.android.material.textfield.TextInputLayout
@@ -41,7 +50,8 @@
             android:textColorHint="@color/black"
             android:theme="@style/input_text_field"
             app:hintTextAppearance="@style/hint_text_size"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_weight="1">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editusername"
@@ -61,7 +71,8 @@
             android:theme="@style/input_text_field"
             app:hintTextAppearance="@style/hint_text_size"
             app:passwordToggleEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_weight="1">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_password"
@@ -87,7 +98,8 @@
             android:text="Don't have account? Create one"
             android:textColor="#000"
             android:textSize="16dip"
-            android:padding="20dp" />
+            android:padding="20dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
 </FrameLayout>

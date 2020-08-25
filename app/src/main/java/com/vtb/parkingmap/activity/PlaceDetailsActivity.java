@@ -32,6 +32,7 @@ import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
@@ -164,7 +165,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
             if (!isCustomerHasOnGoingBooking.getValue()) {
                 /* kiem tra bai xe co online hay khong */
-                if (onCheckParkingLotOnline()) {
+                if (onCheckParkingLotOnline(view)) {
                     showAlertDialog(view);
                 }
             } else {
@@ -199,7 +200,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         unregisterReceiver(broadcast);
     }
 
-    private boolean onCheckParkingLotOnline() {
+    private boolean onCheckParkingLotOnline(View v) {
         Log.d("BachMap", "parking lot id: " + id);
         BoolValue.Builder isParkingLotOnline = BoolValue.newBuilder().setValue(false);
         callApiWithExceptionHandling(() -> {
@@ -209,7 +210,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
 
         if (!isParkingLotOnline.getValue()) {
-            Toast.makeText(PlaceDetailsActivity.this, "Parking are not available!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(v, "Parking Lot is offline", Snackbar.LENGTH_LONG)
+                    .setDuration(2000)
+                    .show();
             return false;
         }
         return true;
