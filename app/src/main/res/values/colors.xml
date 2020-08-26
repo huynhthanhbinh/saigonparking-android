@@ -18,6 +18,7 @@
     <color name="aluminum">#999999</color>
     <color name="base">#AAAAAA</color>
     <color name="iron">#CCCCCC</color>
+    <color name="near_white">#f4f4f4</color>
     <color name="white">#FFFFFF</color>
     <color name="colorSliderBackground">#FF181821</color>
     <color name="colorTextColor">#FFFFFFFF</color>
