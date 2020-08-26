@@ -5,7 +5,7 @@ package com.vtb.parkingmap.CommentRating;
  * Created by BACHMAP
  */
 public class Product {
-    private long id;
+    private String id;
     private String username;
     private int rating;
     private String comment;
@@ -13,7 +13,7 @@ public class Product {
 
     //Constructor
 
-    public Product(long id, String username, int rating, String comment, String lastupdated) {
+    public Product(String id, String username, int rating, String comment, String lastupdated) {
         this.id = id;
         this.username = username;
         this.rating = rating;
@@ -23,11 +23,11 @@ public class Product {
 
     //Setter, getter
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

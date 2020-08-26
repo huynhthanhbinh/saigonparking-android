@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bht.saigonparking.api.grpc.parkinglot.CreateNewRatingRequest;
+import com.bht.saigonparking.api.grpc.booking.CreateBookingRatingRequest;
 import com.google.protobuf.Empty;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
@@ -19,7 +19,7 @@ import io.grpc.stub.StreamObserver;
 import lombok.SneakyThrows;
 
 public final class RatingBookingActivity extends BaseSaigonParkingActivity {
-    private long idplacedetail;
+    private String idbooking;
 
 
     RatingBar mRatingBar;
@@ -34,7 +34,7 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating_booking);
         Intent intent = getIntent();
-        idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
+        idbooking = (String) intent.getSerializableExtra("idbooking");
 
         mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
         mRatingScale = (TextView) findViewById(R.id.tvRatingScale);
@@ -88,15 +88,15 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
                     Toast.makeText(RatingBookingActivity.this, "Please rating for us", Toast.LENGTH_LONG).show();
                 } else {
                     Log.d("BachMap", "Rating: " + mRatingBar.getRating());
-                    CreateNewRatingRequest request = CreateNewRatingRequest.newBuilder()
+                    CreateBookingRatingRequest request = CreateBookingRatingRequest.newBuilder()
                             .setComment(mFeedback.getText().toString())
                             .setRating((int) mRatingBar.getRating())
-                            .setParkingLotId(idplacedetail)
+                            .setBookingId(idbooking)
                             .build();
 
                     callApiWithExceptionHandling(() -> {
-                        serviceStubs.getParkingLotServiceStub()
-                                .createNewRating(request, new StreamObserver<Empty>() {
+                        serviceStubs.getBookingServiceStub()
+                                .createBookingRating(request, new StreamObserver<Empty>() {
                                     @Override
                                     public void onNext(Empty value) {
                                         Log.d("BachMap", "create rating successfully");

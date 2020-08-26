@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.vtb.parkingmap.R;
@@ -86,7 +87,7 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
 
         //
         for (Booking booking : getallhistory) {
-            mProductList.add(new History(booking.getId(), booking.getParkingLotName(), booking.getLicensePlate()));
+            mProductList.add(new History(booking.getParkingLotName(), booking.getLicensePlate(), booking.getCreatedAt(), booking.getId()));
         }
         //
 
@@ -100,13 +101,26 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
         }
 
         lvProduct.setOnItemClickListener((parent, view, position, id) -> {
+
             /* send booking detail to BookingDetailActivity */
             String originBookingId = view.getTag().toString();
+
+            Snackbar.make(view, originBookingId, Snackbar.LENGTH_LONG)
+                    .setDuration(3000)
+                    .setAction("DISMISS", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        }
+                    })
+                    .show();
+
 //            Log.d("BachMap", "ID: " + originBookingId);
             callApiWithExceptionHandling(() -> {
                 Log.d("BachMap", "Booking Detail: \n" + bookingServiceBlockingStub
                         .getBookingDetailByBookingId(StringValue.of(originBookingId)));
             });
+
+
         });
 
         lvProduct.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -167,7 +181,7 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
                     .getBookingList();
 
             for (Booking booking : Objects.requireNonNull(getallhistorymore)) {
-                lst.add(new History(booking.getId(), booking.getParkingLotName(), booking.getLicensePlate()));
+                lst.add(new History(booking.getParkingLotName(), booking.getLicensePlate(), booking.getCreatedAt(), booking.getId()));
             }
         });
 

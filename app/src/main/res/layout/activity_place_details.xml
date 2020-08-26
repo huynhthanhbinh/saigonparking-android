@@ -24,6 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:weightSum="2">
 
             <LinearLayout
@@ -39,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:text="100"
                     android:textColor="#0da8f4"
-                    android:textSize="40sp" />
+                    android:textSize="50sp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -84,12 +85,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Operation time"
+                    android:text="Opening hour"
                     android:textColor="#000"
                     android:textSize="15sp"
                     android:layout_gravity="center" />
@@ -137,12 +139,11 @@
 
         </LinearLayout>
 
-        <view
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@color/near_white" />
+            android:layout_margin="10dp"
+            android:background="@color/iron" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -219,7 +220,7 @@
                         <TextView
                             android:textStyle="bold"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="5dp"
                             android:text="Address"
@@ -230,7 +231,7 @@
                         <TextView
                             android:id="@+id/textViewAddress"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_weight="3"
                             android:padding="5dp"
@@ -284,23 +285,23 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/lblPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingBottom="5dp"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:paddingTop="5dp">
+                        android:paddingTop="5dp"
+                        android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/lblPhone"
                             android:textStyle="bold"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:padding="5dp"
                             android:text="Phone"
-                            android:visibility="visible"
                             android:layout_weight="1"
                             android:textSize="16sp" />
 
@@ -318,10 +319,11 @@
 
                 </LinearLayout>
 
-                <view
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/near_white" />
+                    android:layout_margin="10dp"
+                    android:background="@color/iron" />
 
                 <TextView
                     android:layout_width="wrap_content"

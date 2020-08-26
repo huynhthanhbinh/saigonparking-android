@@ -12,8 +12,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class History {
-    private String bookingid;
     private String parkinglotName;
     private String licensePlate;
-//    private String createAt;
+    private String createAt;
+    private String idBooking;
 }

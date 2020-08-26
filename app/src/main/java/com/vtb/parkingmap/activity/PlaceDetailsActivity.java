@@ -27,13 +27,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bht.saigonparking.api.grpc.booking.BookingRating;
+import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.booking.ParkingLotBookingAndRatingStatistic;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
-import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.google.android.material.snackbar.Snackbar;
@@ -86,7 +88,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private TextView txtClose;
     private TextView txtStatus;
     private TextView txtphone;
-    private TextView lblPhone;
+    private LinearLayout lblPhone;
     private ImageView iconType;
     private TextView output;
     private TextView txtXemChiTiet;
@@ -95,6 +97,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     // variable
     private Results results;
     private ParkingLot parkingLot;
+    private ParkingLotBookingAndRatingStatistic ratingStatistic;
     double mylat;
     double mylong;
     double position3lat;
@@ -119,7 +122,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private String phone;
     private String address;
     private double ratingAverage;
-    private int numberOfRating;
+    private long numberOfRating;
     private byte[] imageData;
 
     private OkHttpClient client;
@@ -132,9 +135,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private ViewPager commentViewPaper;
     private ArrayList<Cardcomment> modelArrayList;
     private commentAdapter commentAdapter;
-    List<ParkingLotRating> getallcomment;
+    List<BookingRating> getallcomment;
 
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+    private BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,9 +170,14 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         position3long = intent.getDoubleExtra("postion3long", 1234);
         Log.d("khongbiloi", "Nhan du lieu 2");
 
-        processParkingLot();
-
         parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
+        bookingServiceBlockingStub = serviceStubs.getBookingServiceBlockingStub();
+
+        callApiWithExceptionHandling(() -> {
+            ratingStatistic = bookingServiceBlockingStub.getParkingLotBookingAndRatingStatistic(Int64Value.of(parkingLot.getId()));
+        });
+
+        processParkingLot();
 
         loadCardComment();
         btnimgshow.setOnClickListener(view -> {
@@ -208,7 +217,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        lblPhone.setVisibility((txtphone.getText().length() == 0) ? View.INVISIBLE : View.VISIBLE);
+        lblPhone.setVisibility((txtphone.getText().length() == 0) ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -366,12 +375,13 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         totalSlot = parkingLot.getTotalSlot();
 
         ParkingLotInformation information = parkingLot.getInformation();
-
         name = information.getName();
         phone = information.getPhone();
         address = information.getAddress();
-        ratingAverage = information.getRatingAverage();
-        numberOfRating = information.getNumberOfRating();
+
+
+        ratingAverage = ratingStatistic.getRatingAverage();
+        numberOfRating = ratingStatistic.getNRating();
 
         imageData = information.getImageData().toByteArray();
     }
@@ -480,15 +490,15 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .build();
 
         callApiWithExceptionHandling(() -> {
-            getallcomment = parkingLotServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
+            getallcomment = bookingServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
         });
 
-        for (ParkingLotRating parkinglotrating : getallcomment) {
+        for (BookingRating bookingrating : getallcomment) {
             modelArrayList.add(new Cardcomment(
-                    parkinglotrating.getUsername(),
-                    parkinglotrating.getComment(),
-                    parkinglotrating.getLastUpdated(),
-                    parkinglotrating.getRating()
+                    bookingrating.getUsername(),
+                    bookingrating.getComment(),
+                    bookingrating.getLastUpdated(),
+                    bookingrating.getRating()
             ));
         }
 

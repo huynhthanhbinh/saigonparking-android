@@ -17,12 +17,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
-import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.booking.BookingRating;
+import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.CountAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.vtb.parkingmap.CommentRating.Product;
 import com.vtb.parkingmap.CommentRating.ProductListAdapter;
 import com.vtb.parkingmap.R;
@@ -39,13 +39,13 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
     private ListView lvProduct;
     private ProductListAdapter adapter;
     private List<Product> mProductList;
-    private List<ParkingLotRating> getallratingmore;
+    private List<BookingRating> getallratingmore;
     public Handler mHandler;
     public View ftView;
     public boolean isLoading = false;
 
 
-    private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+    private BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
 
     // page
     //ID
@@ -53,7 +53,7 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
     int pagenumber = 1;
     long countallrating;
     //GetAllRating
-    List<ParkingLotRating> getallrating;
+    List<BookingRating> getallrating;
     TextView txtcount;
 
 
@@ -63,7 +63,7 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
         Intent intent = getIntent();
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
         parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
-        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
+        bookingServiceBlockingStub = serviceStubs.getBookingServiceBlockingStub();
         setContentView(R.layout.activity_comment_rating);
         imageView = findViewById(R.id.imageView);
         lvProduct = (ListView) findViewById(R.id.listview_product);
@@ -85,7 +85,7 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
                 .build();
 
         callApiWithExceptionHandling(() -> {
-            countallrating = parkingLotServiceBlockingStub.countAllRatingsOfParkingLot(countAllRatingsOfParkingLotRequest).getValue();
+            countallrating = bookingServiceBlockingStub.countAllRatingsOfParkingLot(countAllRatingsOfParkingLotRequest).getValue();
         });
 
 
@@ -97,12 +97,12 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
                 .build();
 
         callApiWithExceptionHandling(() -> {
-            getallrating = parkingLotServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
+            getallrating = bookingServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
         });
 
         //
-        for (ParkingLotRating parkinglotrating : getallrating) {
-            mProductList.add(new Product(parkinglotrating.getRatingId(), parkinglotrating.getUsername(), parkinglotrating.getRating(), parkinglotrating.getComment(), parkinglotrating.getLastUpdated()));
+        for (BookingRating parkinglotrating : getallrating) {
+            mProductList.add(new Product(parkinglotrating.getBookingId(), parkinglotrating.getUsername(), parkinglotrating.getRating(), parkinglotrating.getComment(), parkinglotrating.getLastUpdated()));
         }
         //
 
@@ -205,13 +205,13 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
                 .build();
 
         callApiWithExceptionHandling(() -> {
-            getallratingmore = parkingLotServiceBlockingStub
+            getallratingmore = bookingServiceBlockingStub
                     .getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest)
                     .getRatingList();
         });
 
-        for (ParkingLotRating parkinglotrating : Objects.requireNonNull(getallratingmore)) {
-            lst.add(new Product(parkinglotrating.getRatingId(), parkinglotrating.getUsername(), parkinglotrating.getRating(), parkinglotrating.getComment(), parkinglotrating.getLastUpdated()));
+        for (BookingRating parkinglotrating : Objects.requireNonNull(getallratingmore)) {
+            lst.add(new Product(parkinglotrating.getBookingId(), parkinglotrating.getUsername(), parkinglotrating.getRating(), parkinglotrating.getComment(), parkinglotrating.getLastUpdated()));
         }
 
         //Sample code get new data :P

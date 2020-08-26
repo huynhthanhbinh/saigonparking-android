@@ -39,9 +39,9 @@
         android:layout_height="match_parent"
         android:id="@+id/listview_history"
         android:background="@color/white"
-
-
-        android:dividerHeight="1dp"
-        android:divider="#54CA59"></ListView>
+        android:dividerHeight="5dp"
+        android:divider="@color/white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp" />
 </LinearLayout>
 

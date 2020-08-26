@@ -238,7 +238,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 Intent intent2 = new Intent(currentActivity, RatingBookingActivity.class);
 
                                 BookingActivity activity = (BookingActivity) currentActivity;
-                                intent2.putExtra("idplacedetail", (Serializable) activity.getId());
+                                intent2.putExtra("idbooking", (Serializable) bookingFinishContentContent.getBookingId());
 
 
                                 intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

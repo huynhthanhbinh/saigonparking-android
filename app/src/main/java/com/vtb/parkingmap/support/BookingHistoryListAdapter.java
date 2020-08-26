@@ -56,17 +56,13 @@ public class BookingHistoryListAdapter extends BaseAdapter {
         TextView tvUsername = (TextView) v.findViewById(R.id.tv_name);
         TextView tvComment = (TextView) v.findViewById(R.id.tv_description);
         TextView tvLastupdated = (TextView) v.findViewById(R.id.tv_lastupdated);
-        String originBookingId = mProductList.get(position).getBookingid();
-        reducedBookingId = "****** " + originBookingId.substring(originBookingId.length() - 12);
 
 
         //Set text for TextView
         tvUsername.setText(mProductList.get(position).getParkinglotName());
         tvComment.setText(mProductList.get(position).getLicensePlate());
-        tvLastupdated.setText(reducedBookingId);
-        //Save product id to tag
-        v.setTag(mProductList.get(position).getBookingid());
-
+        tvLastupdated.setText(mProductList.get(position).getCreateAt());
+        v.setTag(mProductList.get(position).getIdBooking());
         return v;
     }
 }
