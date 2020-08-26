@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/imageView"
@@ -24,13 +25,13 @@
 
         <TextView
             android:id="@+id/countallcomment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/combiebutton"
-            android:layout_weight="3"
             android:gravity="center"
             android:textColor="#fff"
-            android:text="so binh luan" />
+            android:text="so binh luan"
+            android:elevation="10dp" />
 
     </LinearLayout>
 
@@ -38,9 +39,11 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:id="@+id/listview_product"
-        android:dividerHeight="1dp"
-        android:divider="#54CA59"></ListView>
+        android:dividerHeight="10dp"
+        android:divider="@color/white"
+        android:background="@color/white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp" />
 </LinearLayout>
 

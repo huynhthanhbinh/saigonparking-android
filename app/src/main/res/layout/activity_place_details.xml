@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="10">
+        android:weightSum="10"
+        android:background="#fff">
 
         <ImageView
             android:id="@+id/imageView"
@@ -20,12 +21,135 @@
             android:src="@drawable/default_plot"
             android:layout_weight="3" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewAvailability"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textColor="#0da8f4"
+                    android:textSize="40sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="slots"
+                        android:textColor="#000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textColor="#000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/TotalSlot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textColor="#000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Operation time"
+                    android:textColor="#000"
+                    android:textSize="15sp"
+                    android:layout_gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/txtOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        android:text="txtOpen"
+                        android:textColor="#000"
+                        android:textStyle="bold"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        android:text=" - "
+                        android:textColor="#000"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtClose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        android:text="txtClose"
+                        android:textColor="#000"
+                        android:textStyle="bold"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <view
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/near_white" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:fillViewport="true"
             android:layout_height="0dp"
             android:layout_weight="7"
-            android:background="#eeeeee">
+            android:background="#fff">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,44 +157,21 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/cornerslinearlayout"
-                    android:weightSum="2">
-
-                    <TextView
-                        android:id="@+id/Availability"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:padding="5dp"
-                        android:text="Slots:"
-                        android:textColor="#000"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textViewAvailability"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:layout_gravity="center"
-                        android:text="txtAvaibility"
-                        android:textColor="#0da8f4"
-                        android:textSize="30sp" />
-                </LinearLayout>
+                    android:text="Information"
+                    android:paddingLeft="10dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/cornerslinearlayout"
                     android:orientation="vertical"
-                    android:padding='10dp'
-                    android:elevation="10dp">
+                    android:padding='10dp'>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,19 +203,9 @@
                             android:padding="5dp"
                             android:text="TxtViewName"
                             android:textColor="#000"
-                            android:textSize="15sp" />
+                            android:textSize="16sp" />
 
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/textViewAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="5dp"
-                        android:text="Place Address"
-                        android:textColor="#000"
-                        android:textSize="16sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -127,56 +218,32 @@
 
                         <TextView
                             android:textStyle="bold"
-                            android:id="@+id/Openhour"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="2"
                             android:padding="5dp"
-                            android:text="Open"
-                            android:textColor="#000"
-                            android:textSize="15sp" />
+                            android:text="Address"
+                            android:visibility="visible"
+                            android:layout_weight="1"
+                            android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/txtOpen"
+                            android:id="@+id/textViewAddress"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:padding="5dp"
-                            android:text="txtOpen"
+                            android:text="Place Address"
                             android:textColor="#000"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:textStyle="bold"
-                            android:id="@+id/closehour"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="2"
-                            android:padding="5dp"
-                            android:text="Close"
-                            android:textColor="#000"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/txtClose"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="2"
-                            android:padding="5dp"
-                            android:text="txtClose"
-                            android:textColor="#000"
-                            android:textSize="15sp" />
-
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:textStyle="bold"
@@ -211,7 +278,8 @@
                         android:paddingLeft="2dp"
                         android:paddingTop="5dp"
                         android:paddingRight="0dp"
-                        android:paddingBottom="5dp">
+                        android:paddingBottom="5dp"
+                        android:visibility="gone">
 
                     </LinearLayout>
 
@@ -234,7 +302,6 @@
                             android:text="Phone"
                             android:visibility="visible"
                             android:layout_weight="1"
-                            android:textColor="#000"
                             android:textSize="16sp" />
 
                         <TextView
@@ -244,12 +311,17 @@
                             android:layout_gravity="center"
                             android:layout_weight="3"
                             android:padding="5dp"
-                            android:text="Phone number"
+                            android:text="09123456789"
                             android:textColor="#000"
-                            android:textSize="15sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <view
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/near_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
