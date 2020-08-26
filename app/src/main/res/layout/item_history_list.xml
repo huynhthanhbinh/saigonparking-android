@@ -2,36 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="10"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:paddingRight="10dp">
 
-
-    android:orientation="vertical">
-
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_name"
-        android:text="Name"
-        android:textSize="20dp"
-        android:textColor="#FF5722" />
+        android:orientation="vertical"
+        android:layout_weight="5">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_name"
+            android:text="Name"
+            android:textSize="20dp"
+            android:textColor="#FF5722" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_description"
-        android:text="Description"
-        android:textSize="16dp"
-        android:textColor="#000" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_description"
+            android:text="Description"
+            android:textSize="16dp"
+            android:textColor="#000" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_lastupdated"
-        android:text="lastupdated"
-        android:textSize="16dp"
-        android:textColor="#000" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_lastupdated"
+            android:text="lastupdated"
+            android:textSize="16dp"
+            android:textColor="#000" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
+        android:layout_weight="5"
+        android:src="@drawable/bookinghistory" />
 
 
 </LinearLayout>
