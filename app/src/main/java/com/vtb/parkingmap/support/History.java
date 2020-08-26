@@ -15,4 +15,5 @@ public class History {
     private String bookingid;
     private String parkinglotName;
     private String licensePlate;
+//    private String createAt;
 }
