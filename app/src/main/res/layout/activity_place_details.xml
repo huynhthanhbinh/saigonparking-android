@@ -20,312 +20,307 @@
             android:src="@drawable/default_plot"
             android:layout_weight="3" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
+            android:fillViewport="true"
             android:layout_height="0dp"
             android:layout_weight="7"
             android:background="#eeeeee">
 
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/cornerslinearlayout"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/Availability"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:padding="5dp"
+                        android:text="Slots:"
+                        android:textColor="#000"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewAvailability"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:text="txtAvaibility"
+                        android:textColor="#0da8f4"
+                        android:textSize="30sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cornerslinearlayout"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding='10dp'
+                    android:elevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/cornerslinearlayout"
-                        android:weightSum="2">
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:paddingTop="5dp">
 
-                        <TextView
-                            android:id="@+id/Availability"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="2dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:gravity="right"
                             android:padding="5dp"
-                            android:text="Slots:"
-                            android:textColor="#000"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
+                            android:text="TYPE: "
+                            android:textColor="#008080"
+                            android:tint="#347474"
+                            android:textSize="14sp"
+                            android:id="@+id/iconType" />
 
                         <TextView
-                            android:id="@+id/textViewAvailability"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
-                            android:layout_gravity="center"
-                            android:text="txtAvaibility"
-                            android:textColor="#0da8f4"
-                            android:textSize="30sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/cornerslinearlayout"
-                        android:orientation="vertical"
-                        android:padding='10dp'
-                        android:elevation="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:paddingTop="5dp">
-
-                            <ImageView
-                                android:layout_width="2dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:padding="5dp"
-                                android:text="TYPE: "
-                                android:textColor="#008080"
-                                android:tint="#347474"
-                                android:textSize="14sp"
-                                android:id="@+id/iconType" />
-
-                            <TextView
-                                android:id="@+id/textViewName"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="8"
-                                android:padding="5dp"
-                                android:text="TxtViewName"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/textViewAddress"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textViewName"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_weight="8"
                             android:padding="5dp"
-                            android:text="Place Address"
+                            android:text="TxtViewName"
                             android:textColor="#000"
-                            android:textSize="16sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:paddingTop="5dp">
-
-                            <TextView
-                                android:textStyle="bold"
-                                android:id="@+id/Openhour"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="5dp"
-                                android:text="Open"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:id="@+id/txtOpen"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="5dp"
-                                android:text="txtOpen"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:textStyle="bold"
-                                android:id="@+id/closehour"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="5dp"
-                                android:text="Close"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:id="@+id/txtClose"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="5dp"
-                                android:text="txtClose"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:textStyle="bold"
-                                android:id="@+id/Status"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="5dp"
-                                android:text="Status"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:id="@+id/txtStatus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="5dp"
-                                android:text="txtStatus"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutRating"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingLeft="2dp"
-                            android:paddingTop="5dp"
-                            android:paddingRight="0dp"
-                            android:paddingBottom="5dp">
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:paddingTop="5dp">
-
-                            <TextView
-                                android:id="@+id/lblPhone"
-                                android:textStyle="bold"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:padding="5dp"
-                                android:text="Phone"
-                                android:visibility="visible"
-                                android:layout_weight="1"
-                                android:textColor="#000"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/txtphone"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="3"
-                                android:padding="5dp"
-                                android:text="Phone number"
-                                android:textColor="#000"
-                                android:textSize="15sp" />
-                        </LinearLayout>
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textViewAddress"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Ratings &amp; Reviews"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        android:textColor="@color/black" />
-
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        android:text="Place Address"
+                        android:textColor="#000"
+                        android:textSize="16sp" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="10dp">
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:paddingTop="5dp">
 
                         <TextView
-                            android:id="@+id/textViewRating"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5"
-                            android:textColor="#000"
-                            android:textSize="70sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="/5"
-                            android:layout_gravity="bottom"
-                            android:textSize="20sp" />
-
-                        <RatingBar
-                            android:id="@+id/ratingBar"
-                            android:layout_width="wrap_content"
+                            android:textStyle="bold"
+                            android:id="@+id/Openhour"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:progressTint="#f0750f"
-                            android:rating="5"
-                            android:stepSize="0.1" />
+                            android:layout_weight="2"
+                            android:padding="5dp"
+                            android:text="Open"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/txtOpen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:padding="5dp"
+                            android:text="txtOpen"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:id="@+id/closehour"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:padding="5dp"
+                            android:text="Close"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/txtClose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:padding="5dp"
+                            android:text="txtClose"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+
                     </LinearLayout>
 
-                    <androidx.viewpager.widget.ViewPager
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:layout_marginStart="-10dp"
-                        android:layout_marginEnd="-10dp"
-                        android:layout_marginTop="5dp"
-                        android:id="@+id/commentViewPaper"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:overScrollMode="never"
-                        android:clipToPadding="false"
-                        android:foregroundGravity="center">
+                        android:layout_height="0dp"
+                        android:orientation="horizontal">
 
-                    </androidx.viewpager.widget.ViewPager>
+                        <TextView
+                            android:textStyle="bold"
+                            android:id="@+id/Status"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:padding="5dp"
+                            android:text="Status"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/txtStatus"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:padding="5dp"
+                            android:text="txtStatus"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutRating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="2dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="0dp"
+                        android:paddingBottom="5dp">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:id="@+id/lblPhone"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="5dp"
+                            android:text="Phone"
+                            android:visibility="visible"
+                            android:layout_weight="1"
+                            android:textColor="#000"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/txtphone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="3"
+                            android:padding="5dp"
+                            android:text="Phone number"
+                            android:textColor="#000"
+                            android:textSize="15sp" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ratings &amp; Reviews"
+                    android:paddingLeft="10dp"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
+                    android:textColor="@color/black" />
 
-        </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/textViewRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textColor="#000"
+                        android:textSize="70sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/5"
+                        android:layout_gravity="bottom"
+                        android:textSize="20sp" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:progressTint="#f0750f"
+                        android:rating="5"
+                        android:stepSize="0.1" />
+                </LinearLayout>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginStart="-10dp"
+                    android:layout_marginEnd="-10dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/commentViewPaper"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:overScrollMode="never"
+                    android:clipToPadding="false"
+                    android:foregroundGravity="center">
+
+                </androidx.viewpager.widget.ViewPager>
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:id="@+id/imgshow"
