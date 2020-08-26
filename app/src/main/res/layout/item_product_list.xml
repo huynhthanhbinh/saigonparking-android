@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:orientation="vertical"
+    android:background="@drawable/comment_item_background">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_name"
+            android:text="Name"
+            android:textSize="12dp"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_lastupdated"
+            android:text="lastupdated"
+            android:textSize="12dp"
+            android:textColor="#000" />
+
+    </RelativeLayout>
 
 
-    android:orientation="vertical">
-
-    <TextView
+    <RatingBar
+        android:id="@+id/ratingBar1"
+        style="?android:attr/ratingBarStyleSmall"
+        android:progressTint="#f0750f"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_name"
-        android:text="Name"
-        android:textSize="20dp"
-        android:textColor="#FF5722" />
+        android:numStars="5"
+        android:rating="3" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,33 +46,17 @@
         android:id="@+id/tv_price"
         android:text="stars"
         android:textSize="18dp"
-        android:textColor="#f92a3f" />
+        android:textColor="#f92a3f"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_description"
         android:text="Description"
-        android:textSize="16dp"
+        android:textSize="12dp"
+        android:layout_marginTop="10dp"
         android:textColor="#000" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_lastupdated"
-        android:text="lastupdated"
-        android:textSize="16dp"
-        android:textColor="#000" />
-
-    <RatingBar
-        android:id="@+id/ratingBar1"
-        style="?android:attr/ratingBarStyleSmall"
-
-        android:progressTint="#F44336"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:rating="3" />
 
 </LinearLayout>

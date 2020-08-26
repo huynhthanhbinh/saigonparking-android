@@ -77,6 +77,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private TextView textViewRating;
     private TextView textViewAddress;
     private TextView textViewAvailability;
+    private TextView texttotalSlot;
     private RatingBar ratingBar;
     private LinearLayout linearLayoutRating;
     private LinearLayout linearLayoutShowDistanceOnMap;
@@ -350,6 +351,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         ratingBar.setRating((float) ratingAverage);
         textViewAddress.setText(address);
         textViewAvailability.setText(String.format(Locale.ENGLISH, "%d", availableSlot));
+        texttotalSlot.setText(String.format(Locale.ENGLISH, "%d", totalSlot));
         txtStatus.setText("Active");
     }
 
@@ -436,6 +438,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         textViewRating = findViewById(R.id.textViewRating);
         textViewAddress = findViewById(R.id.textViewAddress);
         textViewAvailability = findViewById(R.id.textViewAvailability);
+        texttotalSlot = findViewById(R.id.TotalSlot);
         ratingBar = findViewById(R.id.ratingBar);
 
 
