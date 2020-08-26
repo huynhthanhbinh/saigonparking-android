@@ -134,6 +134,7 @@
         android:layout_height="match_parent"
         app:menu="@menu/navigation_menu"
         app:headerLayout="@layout/nav_header"
+        android:background="@color/primary_darker"
         android:layout_gravity="start">
 
 

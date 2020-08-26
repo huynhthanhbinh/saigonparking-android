@@ -25,12 +25,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.BoolValue;
@@ -42,6 +46,7 @@ import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
+import com.vtb.parkingmap.models.Cardcomment;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
 
@@ -49,10 +54,13 @@ import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import commentAdapter.commentAdapter;
 import io.paperdb.Paper;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
@@ -120,6 +128,12 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private String bookingId;
     private String bookingreject = null;
 
+    private ViewPager commentViewPaper;
+    private ArrayList<Cardcomment> modelArrayList;
+    private commentAdapter commentAdapter;
+    List<ParkingLotRating> getallcomment;
+
+    private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +167,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         processParkingLot();
 
+        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
 
+        loadCardComment();
         btnimgshow.setOnClickListener(view -> {
             BoolValue.Builder isCustomerHasOnGoingBooking = BoolValue.newBuilder();
             callApiWithExceptionHandling(() -> {
@@ -330,7 +346,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         textViewName.setText(name);
         linearLayoutRating.setVisibility(View.VISIBLE);
-        textViewRating.setText(String.format(Locale.US, "%.2f", ratingAverage));
+        textViewRating.setText(String.format(Locale.US, "%.1f", ratingAverage));
         ratingBar.setRating((float) ratingAverage);
         textViewAddress.setText(address);
         textViewAvailability.setText(String.format(Locale.ENGLISH, "%d", availableSlot));
@@ -429,6 +445,53 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         txtphone = findViewById(R.id.txtphone);
         iconType = findViewById(R.id.iconType);
         txtXemChiTiet = findViewById(R.id.txtXemChiTiet);
+
+        commentViewPaper = findViewById(R.id.commentViewPaper);
+
+        commentViewPaper.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void loadCardComment() {
+        modelArrayList = new ArrayList<>();
+
+        GetAllRatingsOfParkingLotRequest getAllRatingsOfParkingLotRequest = GetAllRatingsOfParkingLotRequest
+                .newBuilder()
+                .setParkingLotId(parkingLot.getId())
+                .setNRow(10)
+                .setPageNumber(1)
+                .build();
+
+        callApiWithExceptionHandling(() -> {
+            getallcomment = parkingLotServiceBlockingStub.getAllRatingsOfParkingLot(getAllRatingsOfParkingLotRequest).getRatingList();
+        });
+
+        for (ParkingLotRating parkinglotrating : getallcomment) {
+            modelArrayList.add(new Cardcomment(
+                    parkinglotrating.getUsername(),
+                    parkinglotrating.getComment(),
+                    parkinglotrating.getLastUpdated(),
+                    parkinglotrating.getRating()
+            ));
+        }
+
+        commentAdapter = new commentAdapter(this, modelArrayList);
+        commentViewPaper.setOffscreenPageLimit(10);
+        commentViewPaper.setAdapter(commentAdapter);
     }
 
 
