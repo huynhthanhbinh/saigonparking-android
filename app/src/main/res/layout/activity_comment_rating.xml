@@ -26,7 +26,7 @@
             android:id="@+id/countallcomment"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
+            android:background="@drawable/combiebutton"
             android:layout_weight="3"
             android:gravity="center"
             android:textColor="#fff"
@@ -38,11 +38,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:id="@+id/listview_product"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:dividerHeight="1dp"
         android:divider="#54CA59"></ListView>
 </LinearLayout>
