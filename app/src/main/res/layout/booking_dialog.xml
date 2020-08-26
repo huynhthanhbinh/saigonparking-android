@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -19,12 +20,19 @@
             android:text="License Plate:" />
 
         <EditText
+            android:background="@drawable/custom_input"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:textColor="@color/black"
             android:id="@+id/txtlicensePlate"
             android:layout_width="0dip"
             android:layout_weight=".6"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:drawablePadding="20dp"
             android:singleLine="true"
             android:hint="59D-12345"
+            android:textAlignment="center"
             android:imeOptions="actionDone" />
     </LinearLayout>
 
@@ -41,11 +49,18 @@
             android:text="Parking Hour:" />
 
         <EditText
+            android:background="@drawable/custom_input"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:textColor="@color/black"
             android:id="@+id/txtAmountOfParkingHour"
             android:layout_width="0dip"
             android:layout_weight=".6"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:drawablePadding="20dp"
             android:hint="1 -> 5 hour"
+            android:textAlignment="center"
             android:singleLine="true"
             android:imeOptions="actionDone" />
     </LinearLayout>

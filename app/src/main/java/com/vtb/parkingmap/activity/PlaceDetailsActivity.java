@@ -487,11 +487,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             });
 
 
-//            btnimgshow.setEnabled(true);
-//            btnimgcancel.setEnabled(false);
-//            btnimgdirection.setEnabled(false);
-//            btnimgphone.setEnabled(false);
-//            Log.d("BachMap", "Gửi request CAMCELATION");
         }
     }
 

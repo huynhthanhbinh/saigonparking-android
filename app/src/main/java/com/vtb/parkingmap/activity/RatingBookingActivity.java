@@ -32,7 +32,7 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rating);
+        setContentView(R.layout.activity_rating_booking);
         Intent intent = getIntent();
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
 
@@ -84,9 +84,6 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
         mSendFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mFeedback.getText().toString().isEmpty()) {
-                    Toast.makeText(RatingBookingActivity.this, "Please fill in feedback text box", Toast.LENGTH_LONG).show();
-                }
                 if (mRatingScale.getText().toString().isEmpty()) {
                     Toast.makeText(RatingBookingActivity.this, "Please rating for us", Toast.LENGTH_LONG).show();
                 } else {

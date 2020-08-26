@@ -120,8 +120,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             ((TextView) activity.findViewById(R.id.txtStatus)).setText("Accepted");
                             activity.findViewById(R.id.iconPendding).setVisibility(View.GONE);
                             activity.findViewById(R.id.iconAccept).setVisibility(View.VISIBLE);
-//                            ((Button) activity.findViewById(R.id.imgdirection)).setClickable(true);
-//                            ((Button) activity.findViewById(R.id.imgdirection)).setEnabled(true);
+
 
                             if (applicationContext.getSaigonParkingDatabase().getBookingEntity()
                                     .equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {

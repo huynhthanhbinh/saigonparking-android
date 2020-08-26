@@ -18,7 +18,7 @@ import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import io.grpc.stub.StreamObserver;
 import lombok.SneakyThrows;
 
-public final class RatingActivity extends BaseSaigonParkingActivity {
+public final class UpdateRatingActivity extends BaseSaigonParkingActivity {
     private long idplacedetail;
 
 
@@ -30,7 +30,7 @@ public final class RatingActivity extends BaseSaigonParkingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rating);
+        setContentView(R.layout.activity_update_rating);
         Intent intent = getIntent();
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
 
@@ -70,10 +70,10 @@ public final class RatingActivity extends BaseSaigonParkingActivity {
             @Override
             public void onClick(View view) {
                 if (mFeedback.getText().toString().isEmpty()) {
-                    Toast.makeText(RatingActivity.this, "Please fill in feedback text box", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UpdateRatingActivity.this, "Please fill in feedback text box", Toast.LENGTH_LONG).show();
                 }
                 if (mRatingScale.getText().toString().isEmpty()) {
-                    Toast.makeText(RatingActivity.this, "Please rating for us", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UpdateRatingActivity.this, "Please rating for us", Toast.LENGTH_LONG).show();
                 } else {
                     Log.d("BachMap", "Rating: " + mRatingBar.getRating());
                     CreateNewRatingRequest request = CreateNewRatingRequest.newBuilder()
@@ -107,7 +107,7 @@ public final class RatingActivity extends BaseSaigonParkingActivity {
                     mFeedback.setText("");
                     mRatingBar.setRating(0);
 
-                    Toast.makeText(RatingActivity.this, "Thank you for sharing your feedback", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateRatingActivity.this, "Thank you for sharing your feedback", Toast.LENGTH_SHORT).show();
                 }
             }
         });
