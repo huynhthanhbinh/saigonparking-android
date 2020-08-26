@@ -83,9 +83,8 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
         if (string.isEmpty()) {
             resetMessageEdit();
         } else {
-
             sendBtn.setVisibility(View.VISIBLE);
-            pickImgBtn.setVisibility(View.INVISIBLE);
+            pickImgBtn.setVisibility(View.GONE);
         }
 
     }
@@ -95,9 +94,8 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
         messageEdit.removeTextChangedListener(this);
 
         messageEdit.setText("");
-        sendBtn.setVisibility(View.INVISIBLE);
+        sendBtn.setVisibility(View.GONE);
         pickImgBtn.setVisibility(View.VISIBLE);
-
         messageEdit.addTextChangedListener(this);
 
     }
