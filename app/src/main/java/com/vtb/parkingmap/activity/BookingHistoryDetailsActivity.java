@@ -3,9 +3,12 @@ package com.vtb.parkingmap.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
@@ -13,11 +16,13 @@ import com.bht.saigonparking.api.grpc.booking.BookingHistory;
 import com.bht.saigonparking.api.grpc.booking.BookingRating;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.GetBookingRatingRequest;
+import com.bht.saigonparking.api.grpc.booking.UpdateBookingRatingRequest;
 import com.google.protobuf.StringValue;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivity {
     private TextView parkingLotName;
@@ -35,6 +40,10 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
     private LinearLayout lnComment;
     private RatingBar ratingBar;
     private TextView comment;
+    private Button btnUpdate;
+    private static final int UPDATE_RATING_REQUEST_CODE = 12;
+    public static final int UPDATE_RATING_RESULT_CODE = 14;
+    public static final int DELETE_RATING_RESULT_CODE = 16;
 
 
     private String originBookingId;
@@ -42,6 +51,7 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
     private BookingDetail bookingDetail;
     private List<BookingHistory> bookingHistoryList;
     private BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
+    private BookingRating bookingRating;
 
 
     @Override
@@ -75,16 +85,18 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         comment = findViewById(R.id.txtComment);
         lnComment = findViewById(R.id.lnComment);
         lnRating = findViewById(R.id.lnRating);
+        btnUpdate = findViewById(R.id.btnUpdateRating);
 
 
         parkingLotName.setText(booking.getParkingLotName());
         licensePlate.setText(booking.getLicensePlate().toUpperCase());
         if (booking.getIsRated()) {
+
             callApiWithExceptionHandling(() -> {
                 GetBookingRatingRequest getBookingRatingRequest = GetBookingRatingRequest.newBuilder()
                         .setBookingId(originBookingId)
                         .build();
-                BookingRating bookingRating = bookingServiceBlockingStub.getBookingRating(getBookingRatingRequest);
+                bookingRating = bookingServiceBlockingStub.getBookingRating(getBookingRatingRequest);
                 String commentContent = bookingRating.getComment();
                 if (commentContent.isEmpty()) {
                     lnComment.setVisibility(View.GONE);
@@ -95,6 +107,16 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
                 ratingBar.setRating(bookingRating.getRating());
                 lnRating.setVisibility(View.VISIBLE);
             });
+            btnUpdate.setOnClickListener(view -> {
+                if (booking.getIsRated()) {
+                    Intent intent1 = new Intent(BookingHistoryDetailsActivity.this, UpdateRatingActivity.class);
+                    intent1.putExtra("bookingRating", bookingRating);
+                    startActivityForResult(intent1, UPDATE_RATING_REQUEST_CODE);
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                }
+            });
+        } else {
+
         }
 
 
@@ -125,5 +147,24 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         });
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UPDATE_RATING_REQUEST_CODE) {
+            if (resultCode == UPDATE_RATING_RESULT_CODE) {
+                UpdateBookingRatingRequest request = (UpdateBookingRatingRequest) Objects
+                        .requireNonNull(data).getSerializableExtra("updateBookingRatingRequest");
+                comment.setText(request.getComment());
+                ratingBar.setRating(request.getRating());
+                lnComment.setVisibility(request.getComment().isEmpty() ? View.GONE : View.VISIBLE);
+
+            } else { //requestCode == DELETE_RATING_RESULT_CODE
+                lnComment.setVisibility(View.GONE);
+                lnRating.setVisibility(View.GONE);
+                booking = Booking.newBuilder(booking).setIsRated(false).build();
+            }
+        }
     }
 }

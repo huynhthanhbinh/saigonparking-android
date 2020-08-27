@@ -28,7 +28,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1.5"
                 android:padding="5dp"
-                android:text="Parkinglot Name: "
+                android:text="Parking-lot: "
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -209,46 +209,6 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/lnRating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:paddingBottom="5dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingTop="5dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1.5"
-                android:padding="5dp"
-                android:text="Rating: "
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:gravity="center_vertical">
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:progressTint="#f0750f"
-                    android:rating="5"
-                    android:stepSize="1" />
-            </LinearLayout>
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/lnFinish"
@@ -314,6 +274,47 @@
                 android:minLines="3"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:paddingBottom="5dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.5"
+                android:padding="5dp"
+                android:text="Rating: "
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:gravity="center_vertical">
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:progressTint="#f0750f"
+                    android:rating="5"
+                    android:stepSize="1" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
