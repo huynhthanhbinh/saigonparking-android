@@ -2,9 +2,11 @@ package com.vtb.parkingmap.support;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vtb.parkingmap.R;
@@ -56,12 +58,30 @@ public class BookingHistoryListAdapter extends BaseAdapter {
         TextView tvUsername = (TextView) v.findViewById(R.id.tv_name);
         TextView tvComment = (TextView) v.findViewById(R.id.tv_description);
         TextView tvLastupdated = (TextView) v.findViewById(R.id.tv_lastupdated);
-
+        LinearLayout lnHistoryItem = (LinearLayout) v.findViewById(R.id.lnHistoryItem);
 
         //Set text for TextView
         tvUsername.setText(mProductList.get(position).getParkinglotName());
         tvComment.setText(mProductList.get(position).getLicensePlate());
         tvLastupdated.setText(mProductList.get(position).getCreateAt());
+
+        Drawable myIcon;
+        switch (mProductList.get(position).getStatus()) {
+            case FINISHED:
+                myIcon = mContext.getResources().getDrawable(R.drawable.finished_comment_item_background);
+                lnHistoryItem.setBackground(myIcon);
+                break;
+            case REJECTED:
+                myIcon = mContext.getResources().getDrawable(R.drawable.reject_comment_item_background);
+                lnHistoryItem.setBackground(myIcon);
+                break;
+            case CANCELLED:
+                myIcon = mContext.getResources().getDrawable(R.drawable.cancle_comment_item_background);
+                lnHistoryItem.setBackground(myIcon);
+                break;
+            default:
+                break;
+        }
         v.setTag(mProductList.get(position).getIdBooking());
         return v;
     }
