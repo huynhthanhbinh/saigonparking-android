@@ -1,6 +1,8 @@
 package com.vtb.parkingmap.support;
 
 
+import com.bht.saigonparking.api.grpc.booking.BookingStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +18,5 @@ public class History {
     private String licensePlate;
     private String createAt;
     private String idBooking;
+    private BookingStatus status;
 }

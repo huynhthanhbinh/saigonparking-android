@@ -87,7 +87,8 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
 
         //
         for (Booking booking : getallhistory) {
-            mProductList.add(new History(booking.getParkingLotName(), booking.getLicensePlate(), booking.getCreatedAt(), booking.getId()));
+            mProductList.add(new History(booking.getParkingLotName(), booking.getLicensePlate(), booking.getCreatedAt(), booking.getId(), booking.getLatestStatus()));
+
         }
         //
 
@@ -173,7 +174,7 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
                     .getBookingList();
 
             for (Booking booking : Objects.requireNonNull(getallhistorymore)) {
-                lst.add(new History(booking.getParkingLotName(), booking.getLicensePlate(), booking.getCreatedAt(), booking.getId()));
+                lst.add(new History(booking.getParkingLotName(), booking.getLicensePlate(), booking.getCreatedAt(), booking.getId(), booking.getLatestStatus()));
             }
         });
 
