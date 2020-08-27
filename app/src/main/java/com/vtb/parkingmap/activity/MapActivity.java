@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -168,6 +170,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private String snipFirstClick = "";
     private LottieAnimationView searchAnimation;
     private LottieAnimationView searchAnimationonMove;
+    private ImageView profileLottie;
 
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
@@ -222,6 +225,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         btnFind = findViewById(R.id.btn_find);
         searchAnimation = findViewById(R.id.searchAnimation);
         searchAnimationonMove = findViewById(R.id.searchAnimationOnMove);
+
+        profileLottie = navigationView.getHeaderView(0).findViewById(R.id.profileLottie);
         @Nullable Intent data;
 
 
@@ -1107,7 +1112,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         mMap.clear();
 
         String url = getUrl(latitude, longitude, placeType);
-        Log.d("cec", latitude + " " + longitude);
         mGoogleApiService.getNearByPlaces(url)
                 .enqueue(new Callback<MyPlaces>() {
                     @Override
@@ -1255,7 +1259,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 break;
             case R.id.nav_account:
                 intent = new Intent(MapActivity.this, ProfileActivity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, profileLottie, "profileLottie");
+                startActivity(intent, options.toBundle());
                 break;
             case R.id.nav_history:
                 Intent intenthistory = new Intent(MapActivity.this, HistoryActivity.class);
