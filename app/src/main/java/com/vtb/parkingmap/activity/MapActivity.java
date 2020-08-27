@@ -34,6 +34,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
@@ -50,6 +51,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -79,7 +81,6 @@ import com.google.protobuf.Int64Value;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mancj.slideup.SlideUp;
-import com.skyfishjy.library.RippleBackground;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
@@ -164,10 +165,9 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private CardView imgbtnGasStation;
     private CardView imgbtnParkinglot;
     private boolean modeParkingLot = true;
-
-
-    private RippleBackground rippleBg;
-
+    private String snipFirstClick = "";
+    private LottieAnimationView searchAnimation;
+    private LottieAnimationView searchAnimationonMove;
 
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
@@ -220,7 +220,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         navigationView.setNavigationItemSelectedListener(this);
         materialSearchBar = findViewById(R.id.searchBar);
         btnFind = findViewById(R.id.btn_find);
-        rippleBg = findViewById(R.id.ripple_bg);
+        searchAnimation = findViewById(R.id.searchAnimation);
+        searchAnimationonMove = findViewById(R.id.searchAnimationOnMove);
         @Nullable Intent data;
 
 
@@ -630,6 +631,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
         //Event click button find parkinglot
         btnFind.setOnClickListener(v -> {
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM), 500, null);
             modeParkingLot = true;
             LatLng currentMarkerLocation = mMap.getCameraPosition().target;
             //Xoa cu
@@ -640,11 +643,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             if (mMap != null) {
                 mMap.clear();
             }
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-
-            rippleBg.startRippleAnimation();
-
+            searchAnimation.loop(true);
+            searchAnimation.playAnimation();
 
             try {
 
@@ -679,12 +679,9 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
             } catch (StatusRuntimeException exception) {
                 saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
             } catch (Exception e) {
-
                 Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
-            new Handler().postDelayed(() -> rippleBg.stopRippleAnimation(), 3000);
-
+            searchAnimation.loop(false);
         });
 
 
@@ -947,7 +944,41 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
             @Override
             public boolean onMarkerClick(Marker marker) {
+                boolean temp = snipFirstClick.equals(marker.getSnippet());
 
+                if (temp) {
+                    if (marker.getSnippet() != null && "saigon-parking-parking-lot".equals(marker.getTag())) {
+                        parkingLot = null;
+                        try {
+                            parkingLot = parkingLotServiceBlockingStub
+                                    .getParkingLotById(Int64Value.newBuilder()
+                                            .setValue(Long.parseLong(marker.getSnippet()))
+                                            .build());
+                            Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
+                            intent.putExtra("parkingLot", (Serializable) parkingLot);
+                            intent.putExtra("myLat", (Serializable) mLastKnownLocation.getLatitude());
+                            intent.putExtra("myLong", (Serializable) mLastKnownLocation.getLongitude());
+
+                            if (position3 != null) {
+                                intent.putExtra("postion3lat", position3.latitude);
+                                intent.putExtra("postion3long", position3.longitude);
+                            }
+                            startActivityWithLoading(intent);
+
+                        } catch (StatusRuntimeException exception) {
+                            saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
+                        } catch (Exception e) {
+                            Toast.makeText(MapActivity.this, "co loi load thong tin" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d("loicuatoi", e.getCause() + "" + Long.parseLong(marker.getSnippet()));
+                        }
+                    }
+                } else {
+                    LatLng latLngOfPlace = marker.getPosition();
+                    CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
+                            latLngOfPlace, 18);
+                    mMap.animateCamera(location, 500, null);
+                    snipFirstClick = marker.getSnippet();
+                }
 //                Log.d("TTT",marker.getSnippet());
 //                if(marker.getSnippet()!=null)
 //                {
@@ -960,39 +991,9 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 //                    startActivity(intent);
 //                }
 
-                if (marker.getSnippet() != null && "saigon-parking-parking-lot".equals(marker.getTag())) {
-                    parkingLot = null;
-                    try {
-//                        Long loicuatoi = Long.parseLong(marker.getSnippet());
-//                        Log.d("Loicuatoi ",""+loicuatoi);
-                        parkingLot = parkingLotServiceBlockingStub
-                                .getParkingLotById(Int64Value.newBuilder()
-                                        .setValue(Long.parseLong(marker.getSnippet()))
-                                        .build());
-                        Log.d("khongbiloi", "" + Long.parseLong(marker.getSnippet()));
 
-                        Intent intent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
-                        intent.putExtra("parkingLot", (Serializable) parkingLot);
-                        intent.putExtra("myLat", (Serializable) mLastKnownLocation.getLatitude());
-                        intent.putExtra("myLong", (Serializable) mLastKnownLocation.getLongitude());
-
-                        if (position3 != null) {
-                            intent.putExtra("postion3lat", position3.latitude);
-                            intent.putExtra("postion3long", position3.longitude);
-                        }
-                        startActivityWithLoading(intent);
-
-                    } catch (StatusRuntimeException exception) {
-                        saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
-                    } catch (Exception e) {
-                        Toast.makeText(MapActivity.this, "co loi load thong tin" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d("loicuatoi", e.getCause() + "" + Long.parseLong(marker.getSnippet()));
-                    }
-                }
                 return true;
-
             }
-
         });
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
@@ -1168,6 +1169,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
                 @Override
                 public void onFinish() {
+                    searchAnimationonMove.playAnimation();
 
                     if (flatfunction == 0) {
                         return;

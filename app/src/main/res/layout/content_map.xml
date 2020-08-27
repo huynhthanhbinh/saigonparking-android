@@ -30,16 +30,20 @@
             android:layout_height="match_parent"
             class="com.vtb.parkingmap.support.TouchableSupportMapFragment" />
 
-
-        <com.skyfishjy.library.RippleBackground
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/searchAnimation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/ripple_bg"
-            app:rb_color="#75d9fa"
-            app:rb_radius="32dp"
-            app:rb_rippleAmount="3"
-            app:rb_duration="3000"
-            app:rb_scale="6"></com.skyfishjy.library.RippleBackground>
+            android:layout_centerInParent="true"
+            app:lottie_rawRes="@raw/search" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/searchAnimationOnMove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"
+            app:lottie_rawRes="@raw/circular" />
 
         <com.mancj.materialsearchbar.MaterialSearchBar
             style="@style/MaterialSearchBarLight"

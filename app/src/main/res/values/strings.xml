@@ -17,4 +17,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_text">nav_text</string>
     <string name="nav_icon">nav_icon</string>
+    <string name="center_position">crop</string>
 </resources>
