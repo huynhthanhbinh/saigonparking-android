@@ -93,7 +93,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private LinearLayout lblPhone;
     private ImageView iconType;
     private TextView output;
-    private TextView txtXemChiTiet;
     private Broadcast broadcast;
 
     // variable
@@ -459,7 +458,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         txtStatus = findViewById(R.id.txtStatus);
         txtphone = findViewById(R.id.txtphone);
         iconType = findViewById(R.id.iconType);
-        txtXemChiTiet = findViewById(R.id.txtXemChiTiet);
 
         commentViewPaper = findViewById(R.id.commentViewPaper);
 

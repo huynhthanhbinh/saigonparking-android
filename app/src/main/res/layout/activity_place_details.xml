@@ -324,18 +324,41 @@
                     android:layout_margin="10dp"
                     android:background="@color/iron" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ratings &amp; Reviews"
-                    android:paddingLeft="10dp"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ratings &amp; Reviews"
+                        android:paddingLeft="10dp"
+                        android:textStyle="bold"
+                        android:textSize="25sp"
+                        android:textColor="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:onClick="funcXemChiTietDanhGia"
+                        android:gravity="end">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_all"
+                            android:paddingStart="10dp"
+                            android:textSize="15sp"
+                            android:layout_gravity="bottom"
+                            android:textColor="#0da8f4"
+                            tools:ignore="RtlSymmetry" />
+                    </LinearLayout>
+                </LinearLayout>
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingLeft="10dp">
@@ -356,16 +379,22 @@
                         android:layout_gravity="bottom"
                         android:textSize="20sp" />
 
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:progressTint="#f0750f"
-                        android:rating="5"
-                        android:stepSize="0.1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="?android:attr/ratingBarStyleIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:progressTint="#f0750f"
+                            android:rating="5"
+                            android:stepSize="1" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <androidx.viewpager.widget.ViewPager
@@ -393,7 +422,7 @@
             android:layout_height="70dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="2"
             android:baselineAligned="false">
 
             <LinearLayout
@@ -443,34 +472,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Direction"
-                    android:textColor="#fff"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:gravity="center" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/combiebutton"
-                android:layout_weight="1"
-                android:onClick="funcXemChiTietDanhGia"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_mode_comment_black_24dp" />
-
-                <TextView
-                    android:id="@+id/txtXemChiTiet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Comment"
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold"
