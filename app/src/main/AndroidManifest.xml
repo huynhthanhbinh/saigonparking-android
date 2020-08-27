@@ -27,7 +27,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.UpdateRatingActivity"></activity>
+        <activity android:name=".activity.BookingHistoryDetailsActivity"></activity>
+        <activity android:name=".activity.UpdateRatingActivity" />
         <activity
             android:name=".activity.ProfileActivity"
             android:theme="@style/AppTheme.TransparentTheme" />
@@ -83,6 +84,7 @@
             android:name=".activity.BookingActivity"
             android:label="@string/title_activity_booking"
             android:theme="@style/AppTheme.PlaceDetail" />
+
         <activity
             android:name=".activity.CommentRatingActivity"
             android:label="@string/title_activity_comment"

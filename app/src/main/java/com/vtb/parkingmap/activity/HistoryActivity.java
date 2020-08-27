@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.vtb.parkingmap.R;
@@ -23,6 +22,7 @@ import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.support.BookingHistoryListAdapter;
 import com.vtb.parkingmap.support.History;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -104,23 +104,15 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
 
             /* send booking detail to BookingDetailActivity */
             String originBookingId = view.getTag().toString();
-
-            Snackbar.make(view, originBookingId, Snackbar.LENGTH_LONG)
-                    .setDuration(3000)
-                    .setAction("DISMISS", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                        }
-                    })
-                    .show();
-
 //            Log.d("BachMap", "ID: " + originBookingId);
             callApiWithExceptionHandling(() -> {
                 Log.d("BachMap", "Booking Detail: \n" + bookingServiceBlockingStub
                         .getBookingDetailByBookingId(StringValue.of(originBookingId)));
             });
-
-
+            Intent historydetail = new Intent(HistoryActivity.this, BookingHistoryDetailsActivity.class);
+            historydetail.putExtra("originBookingId", (Serializable) originBookingId);
+            startActivityWithLoading(historydetail);
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
 
         lvProduct.setOnScrollListener(new AbsListView.OnScrollListener() {

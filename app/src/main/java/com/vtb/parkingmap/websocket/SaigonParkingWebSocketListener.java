@@ -31,6 +31,7 @@ import com.vtb.parkingmap.activity.ChatActivity;
 import com.vtb.parkingmap.activity.MapActivity;
 import com.vtb.parkingmap.activity.PlaceDetailsActivity;
 import com.vtb.parkingmap.activity.RatingBookingActivity;
+import com.vtb.parkingmap.activity.ViewDrawDirectionActivity;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
@@ -115,12 +116,22 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                     case BOOKING_ACCEPTANCE:
                         BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
 
+                        if (currentActivity instanceof ChatActivity) {
+                            ChatActivity activity = (ChatActivity) currentActivity;
+                            activity.webSocketSetStateAccept();
+                        }
+
+                        if (currentActivity instanceof ViewDrawDirectionActivity) {
+                            ViewDrawDirectionActivity activity = (ViewDrawDirectionActivity) currentActivity;
+                            activity.webSocketSetStateAccept();
+                        }
+
                         if (currentActivity instanceof BookingActivity) {
                             BookingActivity activity = (BookingActivity) currentActivity;
                             ((TextView) activity.findViewById(R.id.txtStatus)).setText("Accepted");
                             activity.findViewById(R.id.iconPendding).setVisibility(View.GONE);
                             activity.findViewById(R.id.iconAccept).setVisibility(View.VISIBLE);
-
+                            activity.webSocketSetStateAccept();
 
                             if (applicationContext.getSaigonParkingDatabase().getBookingEntity()
                                     .equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
@@ -236,12 +247,10 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 Paper.book().delete("historymessage");
 
                                 Intent intent2 = new Intent(currentActivity, RatingBookingActivity.class);
-
-                                BookingActivity activity = (BookingActivity) currentActivity;
+//
+//                                BookingActivity activity = (BookingActivity) currentActivity;
                                 intent2.putExtra("idbooking", (Serializable) bookingFinishContentContent.getBookingId());
 
-
-                                intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                                 currentActivity.startActivity(intent2);
                                 currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                 currentActivity.finish();

@@ -16,11 +16,14 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
+import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
 import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.vtb.parkingmap.BuildConfig;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
@@ -34,6 +37,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import io.paperdb.Paper;
@@ -52,6 +56,18 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
     private RecyclerView recyclerView;
     private int IMAGE_REQUEST_ID = 1;
     private long id;
+    private ParkingLot parkingLot;
+    double mylat;
+    double mylong;
+    double position3lat;
+    double position3long;
+    int tmpType;
+    private String licensePlate;
+    private String amountOfParkingHourString;
+    private Booking currentBooking;
+    byte[] imageData;
+    private BookingProcessingContent bookingProcessingContent;
+    boolean accepted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +79,19 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
         name = "VU TUONG BACH";
         Intent intent = getIntent();
         id = (long) intent.getSerializableExtra("idparkinglot");
+        parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
+        mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
+        mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
+        position3lat = intent.getDoubleExtra("postion3lat", 1234);
+        position3long = intent.getDoubleExtra("postion3long", 1234);
+        tmpType = (int) intent.getSerializableExtra("placedetailtype");
+        licensePlate = intent.getStringExtra("licenseplate");
+        amountOfParkingHourString = intent.getStringExtra("parkinghour");
+        currentBooking = (Booking) intent.getSerializableExtra("Booking");
+        imageData = (byte[]) intent.getSerializableExtra("QRcode");
+        accepted = (Boolean) intent.getSerializableExtra("accept");
+        bookingProcessingContent = (BookingProcessingContent) intent.getSerializableExtra("bookingProcessingContent");
+
     }
 
     @Override
@@ -103,6 +132,10 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void webSocketSetStateAccept() {
+        accepted = true;
     }
 
     private class SocketListener extends WebSocketListener {
@@ -271,6 +304,25 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
 
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent1 = new Intent(ChatActivity.this, BookingActivity.class);
+        intent1.putExtra("parkingLot", (Serializable) parkingLot);
+        intent1.putExtra("mylatfromplacedetail", (Serializable) mylat);
+        intent1.putExtra("mylongfromplacedetail", (Serializable) mylong);
+        intent1.putExtra("postion3lat", (Serializable) position3lat);
+        intent1.putExtra("postion3long", (Serializable) position3long);
+        intent1.putExtra("placedetailtype", (Serializable) tmpType);
+        intent1.putExtra("licenseplate", (Serializable) licensePlate);
+        intent1.putExtra("parkinghour", (Serializable) amountOfParkingHourString);
+        intent1.putExtra("Booking", (Serializable) currentBooking);
+        intent1.putExtra("QRcode", (Serializable) imageData);
+        intent1.putExtra("bookingProcessingContent", bookingProcessingContent);
+        intent1.putExtra("accept", accepted);
+        startActivity(intent1);
+        super.onBackPressed();
     }
 
     private void sendImage(Bitmap image) {

@@ -76,9 +76,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     //Booking
     private Booking currentBooking;
     byte[] imageData;
+    boolean accepted = false;
 
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +101,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             amountOfParkingHourString = intent.getStringExtra("parkinghour");
             currentBooking = (Booking) intent.getSerializableExtra("Booking");
             imageData = (byte[]) intent.getSerializableExtra("QRcode");
+            if ((Boolean) intent.getSerializableExtra("accept") != null) {
+                accepted = (Boolean) intent.getSerializableExtra("accept");
+            }
         } else {
             parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
             mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
@@ -137,7 +140,20 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         btnimgchat.setOnClickListener(view -> {
             Intent intent1 = new Intent(BookingActivity.this, ChatActivity.class);
             intent1.putExtra("idparkinglot", (Serializable) id);
+            intent1.putExtra("parkingLot", (Serializable) parkingLot);
+            intent1.putExtra("mylatfromplacedetail", (Serializable) mylat);
+            intent1.putExtra("mylongfromplacedetail", (Serializable) mylong);
+            intent1.putExtra("postion3lat", (Serializable) position3lat);
+            intent1.putExtra("postion3long", (Serializable) position3long);
+            intent1.putExtra("placedetailtype", (Serializable) tmpType);
+            intent1.putExtra("licenseplate", (Serializable) licensePlate);
+            intent1.putExtra("parkinghour", (Serializable) amountOfParkingHourString);
+            intent1.putExtra("Booking", (Serializable) currentBooking);
+            intent1.putExtra("QRcode", (Serializable) imageData);
+            intent1.putExtra("accept", accepted);
+            intent1.putExtra("bookingProcessingContent", bookingProcessingContent);
             startActivity(intent1);
+            finish();
         });
     }
 
@@ -174,18 +190,27 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         }
 
         Intent intent = new Intent(BookingActivity.this, ViewDrawDirectionActivity.class);
+        intent.putExtra("parkingLot", (Serializable) parkingLot);
+
         intent.putExtra("placedetaillat", (Serializable) latitude);
         intent.putExtra("placedetaillong", (Serializable) longitude);
         intent.putExtra("mylatfromplacedetail", (Serializable) mylat);
         intent.putExtra("mylongfromplacedetail", (Serializable) mylong);
         intent.putExtra("placedetailtype", (Serializable) tmpType);
         intent.putExtra("idplacedetail", (Serializable) id);
+        intent.putExtra("licenseplate", (Serializable) licensePlate);
+        intent.putExtra("parkinghour", (Serializable) amountOfParkingHourString);
+        intent.putExtra("Booking", (Serializable) currentBooking);
+        intent.putExtra("QRcode", (Serializable) imageData);
+        intent.putExtra("accept", accepted);
+        intent.putExtra("bookingProcessingContent", bookingProcessingContent);
         double tmp = 1234;
         if (position3lat != tmp) {
             intent.putExtra("position3lat", (Serializable) position3lat);
             intent.putExtra("position3long", (Serializable) position3long);
         }
         startActivity(intent);
+        finish();
     }
 
     public class Broadcast extends BroadcastReceiver {
@@ -253,10 +278,15 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             txtCreatedAt.setText(bookingProcessingContent.getCreatedAt());
             txtParking.setText(parkingLot.getInformation().getName());
             txtAddress.setText(parkingLot.getInformation().getAddress());
-            txtStatus.setText("Processing");
-            iconPendding.setVisibility(View.VISIBLE);
-            iconAccept.setVisibility(View.GONE);
-
+            if (accepted) {
+                txtStatus.setText("Accepted");
+                iconPendding.setVisibility(View.GONE);
+                iconAccept.setVisibility(View.VISIBLE);
+            } else {
+                txtStatus.setText("Processing");
+                iconPendding.setVisibility(View.VISIBLE);
+                iconAccept.setVisibility(View.GONE);
+            }
         } else {
             txtBookingID.setText(reducedBookingId);
             txtParking.setText(parkingLot.getInformation().getName());
@@ -306,6 +336,10 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             Paper.book().delete("historymessage");
         }
 
+    }
+
+    public void webSocketSetStateAccept() {
+        accepted = true;
     }
 
     @Override

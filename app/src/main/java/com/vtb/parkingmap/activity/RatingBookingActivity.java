@@ -48,7 +48,7 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
             public void onClick(View v) {
 
                 Intent feedbacklater = new Intent(RatingBookingActivity.this, MapActivity.class);
-                feedbacklater.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                feedbacklater.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(feedbacklater);
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
@@ -100,7 +100,9 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
                                     @Override
                                     public void onNext(Empty value) {
                                         Log.d("BachMap", "create rating successfully");
-
+//                                        Intent sendFeedBack = new Intent(RatingBookingActivity.this, PlaceDetailsActivity.class);
+//                                        startActivity(sendFeedBack);
+//                                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                         finish();
                                     }
 
