@@ -57,6 +57,7 @@
         <item name="android:statusBarColor">@color/primary_darker</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 
     <style name="hint_text_size" parent="TextAppearance.Design.Hint">

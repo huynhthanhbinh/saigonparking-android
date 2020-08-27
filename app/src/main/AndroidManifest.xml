@@ -85,7 +85,8 @@
             android:theme="@style/AppTheme.PlaceDetail" />
         <activity
             android:name=".activity.CommentRatingActivity"
-            android:label="@string/title_activity_comment" />
+            android:label="@string/title_activity_comment"
+            android:theme="@style/AppTheme.PlaceDetail" />
 
         <service android:name=".service.HiddenService" />
     </application>

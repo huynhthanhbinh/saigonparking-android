@@ -944,7 +944,17 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-                boolean temp = snipFirstClick.equals(marker.getSnippet());
+                boolean temp = false;
+                if (marker.getSnippet() == null) {
+                    temp = false;
+                } else {
+                    if (snipFirstClick.equals(marker.getSnippet())) {
+                        temp = true;
+                    } else {
+                        temp = false;
+                        snipFirstClick = marker.getSnippet();
+                    }
+                }
 
                 if (temp) {
                     if (marker.getSnippet() != null && "saigon-parking-parking-lot".equals(marker.getTag())) {
@@ -977,7 +987,6 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
                             latLngOfPlace, 18);
                     mMap.animateCamera(location, 500, null);
-                    snipFirstClick = marker.getSnippet();
                 }
 //                Log.d("TTT",marker.getSnippet());
 //                if(marker.getSnippet()!=null)

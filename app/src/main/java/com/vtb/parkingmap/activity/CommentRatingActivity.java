@@ -65,7 +65,7 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
         parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         bookingServiceBlockingStub = serviceStubs.getBookingServiceBlockingStub();
         setContentView(R.layout.activity_comment_rating);
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView2);
         lvProduct = (ListView) findViewById(R.id.listview_product);
         txtcount = (TextView) findViewById(R.id.countallcomment);
 

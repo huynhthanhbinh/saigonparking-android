@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -512,7 +514,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);
         intent.putExtra("idplacedetail", (Serializable) id);
         intent.putExtra("parkinglot", (Serializable) parkingLot);
-        startActivityWithLoading(intent);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,
+                Pair.create(view, "imagePlaceDetail"));
+        startActivityWithLoadingAndOption(intent, options);
     }
 
 

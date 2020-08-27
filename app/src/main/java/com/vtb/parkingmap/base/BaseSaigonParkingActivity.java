@@ -1,6 +1,7 @@
 package com.vtb.parkingmap.base;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -91,6 +92,11 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
     public void startActivityWithLoading(Intent intent) {
         showProgressDialog();
         startActivity(intent);
+    }
+
+    public void startActivityWithLoadingAndOption(Intent intent, ActivityOptions options) {
+        showProgressDialog();
+        startActivity(intent, options.toBundle());
     }
 
     private void showProgressDialog() {
