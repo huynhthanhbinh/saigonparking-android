@@ -2,6 +2,7 @@ package com.vtb.parkingmap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -60,6 +61,7 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         });
 
 
+        getWindow().setSharedElementEnterTransition(new ChangeBounds().setDuration(500));
         parkingLotName = findViewById(R.id.txtParkingLotName);
         licensePlate = findViewById(R.id.txtLicensePlate);
         createAt = findViewById(R.id.txtCreateAt);
