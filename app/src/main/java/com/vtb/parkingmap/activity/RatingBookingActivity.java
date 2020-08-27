@@ -100,9 +100,6 @@ public final class RatingBookingActivity extends BaseSaigonParkingActivity {
                                     @Override
                                     public void onNext(Empty value) {
                                         Log.d("BachMap", "create rating successfully");
-//                                        Intent sendFeedBack = new Intent(RatingBookingActivity.this, PlaceDetailsActivity.class);
-//                                        startActivity(sendFeedBack);
-//                                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                         finish();
                                     }
 

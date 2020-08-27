@@ -16,7 +16,6 @@ import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.google.protobuf.Empty;
-import com.google.protobuf.StringValue;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.support.BookingHistoryListAdapter;
@@ -102,13 +101,8 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
 
         lvProduct.setOnItemClickListener((parent, view, position, id) -> {
 
-            /* send booking detail to BookingDetailActivity */
+            /* send booking detail to BookingHistoryDetailsActivity */
             String originBookingId = view.getTag().toString();
-//            Log.d("BachMap", "ID: " + originBookingId);
-            callApiWithExceptionHandling(() -> {
-                Log.d("BachMap", "Booking Detail: \n" + bookingServiceBlockingStub
-                        .getBookingDetailByBookingId(StringValue.of(originBookingId)));
-            });
             Intent historydetail = new Intent(HistoryActivity.this, BookingHistoryDetailsActivity.class);
             historydetail.putExtra("originBookingId", (Serializable) originBookingId);
             startActivityWithLoading(historydetail);

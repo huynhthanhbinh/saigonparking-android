@@ -348,8 +348,6 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
         layoutParams.setMargins(0, 0, 80, 180);
 
 
-        mMap.addMarker(place1).showInfoWindow();
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(place1.getPosition().latitude, place1.getPosition().longitude), 14));
         mMap.addMarker(place2).showInfoWindow();
         double tmp = 1234;
