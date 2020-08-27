@@ -2,6 +2,7 @@ package com.vtb.parkingmap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -70,6 +71,7 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         });
 
 
+        getWindow().setSharedElementEnterTransition(new ChangeBounds().setDuration(500));
         parkingLotName = findViewById(R.id.txtParkingLotName);
         licensePlate = findViewById(R.id.txtLicensePlate);
         createAt = findViewById(R.id.txtCreateAt);
@@ -166,5 +168,9 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
                 booking = Booking.newBuilder(booking).setIsRated(false).build();
             }
         }
+    }
+    public void onBackPressed() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }
