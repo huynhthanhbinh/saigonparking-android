@@ -38,6 +38,8 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
     public View ftView;
     public boolean isLoading = false;
     private BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
+    private TextView tv_name;
+    private TextView tv_description;
     private LinearLayout lnHistoryItem;
 
     // page
@@ -104,14 +106,18 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
 
         lvProduct.setOnItemClickListener((parent, view, position, id) -> {
             lnHistoryItem = view.findViewById(R.id.lnHistoryItem);
+            tv_name = view.findViewById(R.id.tv_name);
+            tv_description = view.findViewById(R.id.tv_description);
             /* send booking detail to BookingHistoryDetailsActivity */
             String originBookingId = view.getTag().toString();
             Intent historydetail = new Intent(HistoryActivity.this, BookingHistoryDetailsActivity.class);
             historydetail.putExtra("originBookingId", (Serializable) originBookingId);
 
+            Pair<View, String> p1 = Pair.create(tv_name, "ParkingLotName");
+            Pair<View, String> p2 = Pair.create(tv_description, "LicensePlate");
             Pair<View, String> p3 = Pair.create(lnHistoryItem, "linearLayout");
 
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, p3);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, p3, p2, p1);
             startActivityWithLoadingAndOption(historydetail, options);
         });
 
