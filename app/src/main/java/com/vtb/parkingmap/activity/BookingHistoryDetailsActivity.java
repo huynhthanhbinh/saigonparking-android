@@ -126,4 +126,10 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
 
 
     }
+
+    @Override
+    public void onBackPressed() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
 }

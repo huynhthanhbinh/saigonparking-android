@@ -1,14 +1,17 @@
 package com.vtb.parkingmap.activity;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,7 +38,7 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
     public View ftView;
     public boolean isLoading = false;
     private BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
-
+    private LinearLayout lnHistoryItem;
 
     // page
     //ID
@@ -54,7 +57,6 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
 
         lvProduct = findViewById(R.id.listview_history);
         txtcount = findViewById(R.id.countallcomment);
-
 
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ftView = li.inflate(R.layout.footer_view, null);
@@ -101,13 +103,16 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
         }
 
         lvProduct.setOnItemClickListener((parent, view, position, id) -> {
-
+            lnHistoryItem = view.findViewById(R.id.lnHistoryItem);
             /* send booking detail to BookingHistoryDetailsActivity */
             String originBookingId = view.getTag().toString();
             Intent historydetail = new Intent(HistoryActivity.this, BookingHistoryDetailsActivity.class);
             historydetail.putExtra("originBookingId", (Serializable) originBookingId);
-            startActivityWithLoading(historydetail);
-            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+
+            Pair<View, String> p3 = Pair.create(lnHistoryItem, "linearLayout");
+
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, p3);
+            startActivityWithLoadingAndOption(historydetail, options);
         });
 
         lvProduct.setOnScrollListener(new AbsListView.OnScrollListener() {
