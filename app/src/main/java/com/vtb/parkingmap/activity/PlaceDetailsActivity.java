@@ -515,7 +515,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         intent.putExtra("idplacedetail", (Serializable) id);
         intent.putExtra("parkinglot", (Serializable) parkingLot);
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,
-                Pair.create(view, "imagePlaceDetail"));
+                Pair.create(imageView, "imagePlaceDetail"));
         startActivityWithLoadingAndOption(intent, options);
     }
 
