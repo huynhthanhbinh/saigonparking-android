@@ -5,10 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="10dp"
+        android:focusable="true"
+        app:cardElevation="0dp"
+        android:checkable="true"
+        android:clickable="true"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:backgroundTint="@color/near_white">
@@ -72,6 +76,6 @@
                 android:textColor="@color/black" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

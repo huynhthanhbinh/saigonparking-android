@@ -218,7 +218,6 @@
                         android:paddingTop="5dp">
 
                         <TextView
-                            android:textStyle="bold"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -296,7 +295,6 @@
                         android:visibility="gone">
 
                         <TextView
-                            android:textStyle="bold"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -375,6 +373,7 @@
                     android:layout_marginStart="-10dp"
                     android:layout_marginEnd="-10dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:id="@+id/commentViewPaper"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
