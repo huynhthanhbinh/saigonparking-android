@@ -12,11 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
-import com.bht.saigonparking.api.grpc.booking.Booking;
-import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeRequest;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
-import com.google.protobuf.Empty;
-import com.google.protobuf.Int64Value;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -24,10 +19,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.vtb.parkingmap.R;
-import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
-
-import java.io.Serializable;
 
 public final class PermissionsActivity extends BaseSaigonParkingActivity {
 
@@ -43,21 +35,7 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
                 onNotYetLoggedIn();
 
             } else { /* Already Logged In */
-                callApiWithExceptionHandling(() -> {
-                    boolean isCustomerHasOnGoingBooking = serviceStubs
-                            .getBookingServiceBlockingStub()
-                            .checkCustomerHasOnGoingBooking(Empty.getDefaultInstance())
-                            .getValue();
-
-                    ((SaigonParkingApplication) getApplicationContext()).setIsBooked(isCustomerHasOnGoingBooking);
-
-                    if (isCustomerHasOnGoingBooking) {  /* Already Logged In, Has On Going Booking */
-                        onAlreadyLoggedInHasOnGoingBooking();
-
-                    } else { /* Already Logged In, Not Has On Going Booking */
-                        onAlreadyLoggedInNotHasOnGoingBooking();
-                    }
-                });
+                onAlreadyLoggedIn();
             }
         }
     }
@@ -67,39 +45,8 @@ public final class PermissionsActivity extends BaseSaigonParkingActivity {
         finish();
     }
 
-    private void onAlreadyLoggedInNotHasOnGoingBooking() {
+    private void onAlreadyLoggedIn() {
         changeActivity(MapActivity.class);
-        finish();
-    }
-
-    private void onAlreadyLoggedInHasOnGoingBooking() {
-        Booking currentBooking = serviceStubs
-                .getBookingServiceBlockingStub()
-                .getCustomerOnGoingBooking(Empty.getDefaultInstance());
-
-        byte[] qrCode = serviceStubs
-                .getBookingServiceBlockingStub()
-                .generateBookingQrCode(GenerateBookingQrCodeRequest.newBuilder()
-                        .setBookingId(currentBooking.getId())
-                        .build())
-                .getQrCode()
-                .toByteArray();
-
-        ParkingLot currentParkingLot = serviceStubs
-                .getParkingLotServiceBlockingStub()
-                .getParkingLotById(Int64Value.of(currentBooking.getParkingLotId()));
-
-        Intent intent = new Intent(PermissionsActivity.this, BookingActivity.class);
-        intent.putExtra("parkingLot", currentParkingLot);
-        intent.putExtra("mylatfromplacedetail", saigonParkingDatabase.getBookingEntity().getMylat());
-        intent.putExtra("mylongfromplacedetail", saigonParkingDatabase.getBookingEntity().getLongitude());
-        intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
-        intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
-        intent.putExtra("placedetailtype", saigonParkingDatabase.getCurrentBookingEntity().getTmpType());
-        intent.putExtra("Booking", currentBooking);
-        intent.putExtra("QRcode", (Serializable) qrCode);
-
-        startActivity(intent);
         finish();
     }
 

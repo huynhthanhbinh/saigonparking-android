@@ -42,7 +42,6 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -91,6 +90,7 @@ import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.models.MyPlaces;
 import com.vtb.parkingmap.models.Results;
 import com.vtb.parkingmap.remotes.GoogleApiService;
+import com.vtb.parkingmap.support.MapActivitySupport;
 import com.vtb.parkingmap.support.ParkingListAdapter;
 import com.vtb.parkingmap.support.TouchableWrapper;
 
@@ -98,7 +98,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -107,14 +106,19 @@ import java.util.stream.Collectors;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 import io.grpc.StatusRuntimeException;
+import lombok.Getter;
+import lombok.Setter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Getter
+@Setter
 @SuppressLint("all")
 @SuppressWarnings("all")
 public final class MapActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener, NavigationView.OnNavigationItemSelectedListener {
 
+    private MapActivitySupport mapActivitySupport;
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     //biến lưu vị trí khi touch màn hình trước đó
@@ -196,8 +200,9 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
+        mapActivitySupport = new MapActivitySupport(this, (SaigonParkingApplication) getApplicationContext());
 
+        parkingLotServiceBlockingStub = serviceStubs.getParkingLotServiceBlockingStub();
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -416,7 +421,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                             a.set(i, parkingLotResult);
                                         }
 
-                                        ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(a));
+                                        ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this,
+                                                R.layout.adapter_view_layout, mapActivitySupport.sortParkingLotResultList(a));
                                         listView.setAdapter(adapter);
 
                                     } catch (StatusRuntimeException exception) {
@@ -459,6 +465,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     materialSearchBar.disableSearch();
                     materialSearchBar.clearSuggestions();
                     materialSearchBar.hideSuggestionsList();
+
                 } else if (buttonCode == MaterialSearchBar.BUTTON_SPEECH) {
                     Intent voiceIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -610,7 +617,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                                                 .build();
                                         parkingLotResultList.set(i, parkingLotResult);
                                     }
-                                    ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
+                                    ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this,
+                                            R.layout.adapter_view_layout, mapActivitySupport.sortParkingLotResultList(parkingLotResultList));
                                     listView.setAdapter(adapter);
                                 } catch (StatusRuntimeException exception) {
                                     saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
@@ -684,7 +692,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     parkingLotResultList.set(i, parkingLot);
                 }
 
-                ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
+                ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this,
+                        R.layout.adapter_view_layout, mapActivitySupport.sortParkingLotResultList(parkingLotResultList));
                 listView.setAdapter(adapter);
 
             } catch (StatusRuntimeException exception) {
@@ -804,7 +813,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     }
 
 
-                    ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this, R.layout.adapter_view_layout, sortParkingLotResultList(parkingLotResultList));
+                    ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this,
+                            R.layout.adapter_view_layout, mapActivitySupport.sortParkingLotResultList(parkingLotResultList));
                     listView.setAdapter(adapter);
 
 
@@ -834,49 +844,13 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
             }
         });
-    }
 
-    private List<ParkingLotResult> sortParkingLotResultList(List<ParkingLotResult> parkingLotResultList) {
-        return parkingLotResultList.stream()
-                .sorted(Comparator.comparing(ParkingLotResult::getDistance))
-                .collect(Collectors.toList());
-    }
-
-    void setMarkerParkingLot(ParkingLotResult parkingLotResult) {
-        MarkerOptions markerOptions = new MarkerOptions();
-
-        double lat = parkingLotResult.getLatitude();
-        double lng = parkingLotResult.getLongitude();
-
-        String placeName = parkingLotResult.getName();
-
-        ParkingLotType type = parkingLotResult.getType();
-
-        LatLng latLng = new LatLng(lat, lng);
-        markerOptions.position(latLng);
-        markerOptions.title(placeName);
-        if (type.equals(ParkingLotType.PRIVATE)) {
-            int drawableResourceId = getResources().getIdentifier("plprivate", "drawable", getPackageName());
-
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.makerprivate));
-        }
-        if (type.equals(ParkingLotType.BUILDING)) {
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.makerbuilding));
-        }
-        if (type.equals(ParkingLotType.STREET)) {
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.makerstreet));
-        }
-
-        markerOptions.snippet(String.valueOf(parkingLotResult.getId()));
-        marker = mMap.addMarker(markerOptions);
-        marker.setTag("saigon-parking-parking-lot");
+        mapActivitySupport.checkCustomerHasOnGoingBooking();
     }
 
     void setAllMarkerParkingLot(Collection<ParkingLotResult> parkingLotResultSet) {
-
-        parkingLotResultSet.forEach(this::setMarkerParkingLot);
+        parkingLotResultSet.forEach(mapActivitySupport::setMarkerParkingLot);
     }
-
 
     @SuppressLint("MissingPermission")
     @Override
@@ -1282,8 +1256,4 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         }
         return true;
     }
-
-
 }
-
-

@@ -58,6 +58,8 @@ public final class SaigonParkingExceptionHandler {
             }
 
             saigonParkingDatabase.saveNewAccessToken(refreshTokenResponse.getAccessToken());
+            ((SaigonParkingApplication) applicationContext).initWebsocketConnection();
+            ((SaigonParkingApplication) applicationContext).getCurrentActivity().reload();
 
         } catch (StatusRuntimeException exception) {
             String internalErrorCode = exception.getStatus().getDescription();

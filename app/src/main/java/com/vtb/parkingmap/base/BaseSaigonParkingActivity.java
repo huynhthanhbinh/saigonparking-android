@@ -127,7 +127,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
         webSocket.send(message);
     }
 
-    protected final void callApiWithExceptionHandling(Runnable action) {
+    public final void callApiWithExceptionHandling(Runnable action) {
         try {
             action.run();
         } catch (StatusRuntimeException exception) {
