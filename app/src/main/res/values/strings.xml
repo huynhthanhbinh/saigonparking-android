@@ -19,4 +19,5 @@
     <string name="nav_icon">nav_icon</string>
     <string name="center_position">crop</string>
     <string name="see_all">See All</string>
+    <string name="lastupdated">lastupdated</string>
 </resources>
