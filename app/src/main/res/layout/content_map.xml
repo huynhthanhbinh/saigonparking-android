@@ -57,7 +57,9 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="40dp"
             app:mt_navIconEnabled="true"
+            app:mt_borderlessRippleEnabled="true"
             android:elevation="5dp"
+            app:mt_searchIconDrawable="@drawable/ic_baseline_search_24"
             app:mt_placeholder="Search a place"
             android:imeOptions="actionDone"
             app:mt_roundedSearchBarEnabled="true" />

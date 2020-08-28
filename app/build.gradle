@@ -82,7 +82,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.github.mancj:MaterialSearchBar:0.8.1'
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
     implementation 'com.google.android.libraries.places:places:1.1.0'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:2.0.3'
     implementation 'com.romandanylyk:pageindicatorview:1.0.2@aar'

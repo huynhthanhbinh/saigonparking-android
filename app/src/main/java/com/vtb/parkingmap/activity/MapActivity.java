@@ -116,7 +116,7 @@ import retrofit2.Response;
 @Setter
 @SuppressLint("all")
 @SuppressWarnings("all")
-public final class MapActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener, NavigationView.OnNavigationItemSelectedListener {
+public final class MapActivity extends BaseSaigonParkingActivity implements OnMapReadyCallback, TouchableWrapper.TouchActionDown, TouchableWrapper.TouchActionUp, View.OnKeyListener, NavigationView.OnNavigationItemSelectedListener, MaterialSearchBar.OnSearchActionListener {
 
     private MapActivitySupport mapActivitySupport;
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
@@ -179,6 +179,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private ImageView profileLottie;
     private ImageView saigonParking;
     private LinearLayout lnHeader;
+    private ListView listView;
 
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
@@ -210,7 +211,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         setContentView(R.layout.activity_map);
         parkingLotResultSet = new HashSet<>();
         recommendedParkingLotResultList = new ArrayList<>();
-        ListView listView = findViewById(R.id.listview);
+        listView = findViewById(R.id.listview);
 
         //độ zoom
         zoomRadiusMap = new SparseIntArray(4);
@@ -331,161 +332,12 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         // Action when search
         materialSearchBar.setSpeechMode(true);
         materialSearchBar.isSpeechModeEnabled();
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
-            @Override
-            public void onSearchStateChanged(boolean enabled) {
-                materialSearchBar.clearSuggestions();
-                materialSearchBar.hideSuggestionsList();
-            }
-
-            //Event button Enter when search
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-                if (materialSearchBar.isSuggestionsVisible() == true && predictionList.size() > 0) {
-                    AutocompletePrediction selectedPrediction = predictionList.get(0);
-                    String suggestion = materialSearchBar.getLastSuggestions().get(0).toString();
-                    materialSearchBar.setText(suggestion);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            materialSearchBar.clearSuggestions();
-                            materialSearchBar.hideSuggestionsList();
-                        }
-                    }, 1000);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-                    }
-                    String placeId = selectedPrediction.getPlaceId();
-                    List<Place.Field> placeFields = Arrays.asList(Place.Field.LAT_LNG);
-
-                    FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(placeId, placeFields).build();
-                    placesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                        @Override
-                        public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                            Place place = fetchPlaceResponse.getPlace();
-                            Log.i("mytag", "Place found: " + place.getName());
-                            LatLng latLngOfPlace = place.getLatLng();
-                            if (latLngOfPlace != null) {
-
-
-                                if (position3 != null) {
-                                    position3 = null;
-                                } else {
-                                    if (flatdrawdirection == 0) {
-                                        position3 = null;
-                                    } else {
-                                        position3 = latLngOfPlace;
-                                    }
-                                }
-                                Log.d("Bach", "Tim kiem" + latLngOfPlace.toString());
-                                // tim kiem dia diem noi den
-                                if (recommendedParkingLotResultList != null) {
-                                    recommendedParkingLotResultList.clear();
-
-                                }
-                                if (mMap != null) {
-                                    mMap.clear();
-                                }
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngOfPlace, DEFAULT_ZOOM));
-                                MarkerOptions tmpMaker = new MarkerOptions()
-                                        .position(new LatLng(latLngOfPlace.latitude, latLngOfPlace.longitude))
-                                        .title("Location you Find")
-
-                                        .icon(BitmapDescriptorFactory.defaultMarker());
-                                mMap.addMarker(tmpMaker).showInfoWindow();
-                                if (option == 1) {
-                                    try {
-                                        Objects.requireNonNull(recommendedParkingLotResultList)
-                                                .addAll(parkingLotServiceBlockingStub
-                                                        .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
-                                                                .setLatitude(latLngOfPlace.latitude)
-                                                                .setLongitude(latLngOfPlace.longitude)
-                                                                .setRadiusToScan(3)
-                                                                .setNResult(10)
-                                                                .build())
-                                                        .getParkingLotResultList());
-
-                                        setAllMarkerParkingLot(recommendedParkingLotResultList);
-
-                                        List<ParkingLotResult> a = new ArrayList<>(recommendedParkingLotResultList);
-                                        for (int i = 0; i < a.size(); i++) {
-                                            Double distance = SphericalUtil.computeDistanceBetween(
-                                                    new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()),
-                                                    new LatLng(a.get(i).getLatitude(), a.get(i).getLongitude()));
-
-                                            ParkingLotResult parkingLotResult = a.get(i).toBuilder()
-                                                    .setDistance(distance / 1000)
-                                                    .build();
-                                            a.set(i, parkingLotResult);
-                                        }
-
-                                        ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this,
-                                                R.layout.adapter_view_layout, mapActivitySupport.sortParkingLotResultList(a));
-                                        listView.setAdapter(adapter);
-
-                                    } catch (StatusRuntimeException exception) {
-                                        saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
-                                    } catch (Exception e) {
-                                        Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-//                                if (option == 2) {
-//                                    nearbyPlaces("restaurant");
-//
-//                                }
-//                                if (option == 3) {
-//                                    nearbyPlaces("hospital");
-//
-//                                }
-//                                if (option == 4) {
-//                                    nearbyPlaces("gas station");
-//
-//                                }
-                            }
-                        }
-                    }).addOnFailureListener(e -> {
-                        if (e instanceof ApiException) {
-                            ApiException apiException = (ApiException) e;
-                            apiException.printStackTrace();
-                            int statusCode = apiException.getStatusCode();
-                            Log.i("mytag", "place not found: " + e.getMessage());
-                            Log.i("mytag", "status code: " + statusCode);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-                if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
-                    drawer.openDrawer(GravityCompat.START);
-                } else if (buttonCode == MaterialSearchBar.BUTTON_BACK) {
-                    materialSearchBar.disableSearch();
-                    materialSearchBar.clearSuggestions();
-                    materialSearchBar.hideSuggestionsList();
-
-                } else if (buttonCode == MaterialSearchBar.BUTTON_SPEECH) {
-                    Intent voiceIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    voiceIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
-                    try {
-                        startActivityForResult(voiceIntent, RECOGNIZER_REQ_CODE);
-                    } catch (ActivityNotFoundException a) {
-                        Toast.makeText(getApplicationContext(),
-                                getString(R.string.speech_not_supported),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+        materialSearchBar.setOnSearchActionListener(this);
         //event text change when search
 
         materialSearchBar.addTextChangeListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -521,16 +373,16 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (s.length() == 0) {
+                    materialSearchBar.clearSuggestions();
                     position3 = null;
-                }
+                } else materialSearchBar.openSearch();
 
             }
         });
 
         //Event click one optional on suggestion when search
-        materialSearchBar.setSuggstionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
+        materialSearchBar.setSuggestionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
             @Override
             public void OnItemClickListener(int position, View v) {
                 if (position >= predictionList.size()) {
@@ -914,8 +766,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                     materialSearchBar.clearSuggestions();
                 }
                 materialSearchBar.hideSuggestionsList();
-                if (materialSearchBar.isSearchEnabled()) {
-                    materialSearchBar.disableSearch();
+                if (materialSearchBar.isSearchOpened()) {
+                    materialSearchBar.closeSearch();
                 }
                 materialSearchBar.clearSuggestions();
                 materialSearchBar.hideSuggestionsList();
@@ -1028,7 +880,7 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 ArrayList<String> result = data
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 materialSearchBar.setText(result.get(0));
-                materialSearchBar.enableSearch();
+                materialSearchBar.openSearch();
             }
         }
     }
@@ -1255,5 +1107,155 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+        materialSearchBar.clearSuggestions();
+        materialSearchBar.hideSuggestionsList();
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+        if (materialSearchBar.isSuggestionsVisible() == true && predictionList.size() > 0) {
+            AutocompletePrediction selectedPrediction = predictionList.get(0);
+            String suggestion = materialSearchBar.getLastSuggestions().get(0).toString();
+            materialSearchBar.setText(suggestion);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    materialSearchBar.clearSuggestions();
+                    materialSearchBar.hideSuggestionsList();
+                }
+            }, 1000);
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+            String placeId = selectedPrediction.getPlaceId();
+            List<Place.Field> placeFields = Arrays.asList(Place.Field.LAT_LNG);
+
+            FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(placeId, placeFields).build();
+            placesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                @Override
+                public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                    Place place = fetchPlaceResponse.getPlace();
+                    Log.i("mytag", "Place found: " + place.getName());
+                    LatLng latLngOfPlace = place.getLatLng();
+                    if (latLngOfPlace != null) {
+
+
+                        if (position3 != null) {
+                            position3 = null;
+                        } else {
+                            if (flatdrawdirection == 0) {
+                                position3 = null;
+                            } else {
+                                position3 = latLngOfPlace;
+                            }
+                        }
+                        Log.d("Bach", "Tim kiem" + latLngOfPlace.toString());
+                        // tim kiem dia diem noi den
+                        if (recommendedParkingLotResultList != null) {
+                            recommendedParkingLotResultList.clear();
+
+                        }
+                        if (mMap != null) {
+                            mMap.clear();
+                        }
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngOfPlace, DEFAULT_ZOOM));
+                        MarkerOptions tmpMaker = new MarkerOptions()
+                                .position(new LatLng(latLngOfPlace.latitude, latLngOfPlace.longitude))
+                                .title("Location you Find")
+
+                                .icon(BitmapDescriptorFactory.defaultMarker());
+                        mMap.addMarker(tmpMaker).showInfoWindow();
+                        if (option == 1) {
+                            try {
+                                Objects.requireNonNull(recommendedParkingLotResultList)
+                                        .addAll(parkingLotServiceBlockingStub
+                                                .getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest.newBuilder()
+                                                        .setLatitude(latLngOfPlace.latitude)
+                                                        .setLongitude(latLngOfPlace.longitude)
+                                                        .setRadiusToScan(3)
+                                                        .setNResult(10)
+                                                        .build())
+                                                .getParkingLotResultList());
+
+                                setAllMarkerParkingLot(recommendedParkingLotResultList);
+
+                                List<ParkingLotResult> a = new ArrayList<>(recommendedParkingLotResultList);
+                                for (int i = 0; i < a.size(); i++) {
+                                    Double distance = SphericalUtil.computeDistanceBetween(
+                                            new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()),
+                                            new LatLng(a.get(i).getLatitude(), a.get(i).getLongitude()));
+
+                                    ParkingLotResult parkingLotResult = a.get(i).toBuilder()
+                                            .setDistance(distance / 1000)
+                                            .build();
+                                    a.set(i, parkingLotResult);
+                                }
+
+                                ParkingListAdapter adapter = new ParkingListAdapter(MapActivity.this,
+                                        R.layout.adapter_view_layout, mapActivitySupport.sortParkingLotResultList(a));
+                                listView.setAdapter(adapter);
+
+                            } catch (StatusRuntimeException exception) {
+                                saigonParkingExceptionHandler.handleCommunicationException(exception, MapActivity.this);
+                            } catch (Exception e) {
+                                Toast.makeText(MapActivity.this, "Co loi khi load ve Server: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+            }).addOnFailureListener(e -> {
+                if (e instanceof ApiException) {
+                    ApiException apiException = (ApiException) e;
+                    apiException.printStackTrace();
+                    int statusCode = apiException.getStatusCode();
+                    Log.i("mytag", "place not found: " + e.getMessage());
+                    Log.i("mytag", "status code: " + statusCode);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {
+        switch (buttonCode) {
+            case MaterialSearchBar.BUTTON_NAVIGATION:
+                drawer.openDrawer(GravityCompat.START);
+                materialSearchBar.hideSuggestionsList();
+                break;
+            case MaterialSearchBar.BUTTON_SPEECH:
+                Intent voiceIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                voiceIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
+                try {
+                    startActivityForResult(voiceIntent, RECOGNIZER_REQ_CODE);
+                } catch (ActivityNotFoundException a) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.speech_not_supported),
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MaterialSearchBar.BUTTON_BACK:
+                materialSearchBar.closeSearch();
+                materialSearchBar.clearFocus();
+                break;
+            default:
+                break;
+        }
     }
 }
