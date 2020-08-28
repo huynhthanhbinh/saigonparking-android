@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".activity.BookingHistoryDetailsActivity">
+    tools:context=".activity.BookingHistoryDetailsActivity"
+    android:transitionName="linearLayout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,72 +27,66 @@
             android:padding='20dp'>
 
             <LinearLayout
+                android:id="@+id/lnHistoryItem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="20dp">
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:padding="15dp"
+                android:background="@drawable/comment_item_background"
+                android:orientation="vertical"
+                android:transitionName="linearLayout">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1.5"
-                    android:padding="5dp"
-                    android:text="Parkinglot Name: "
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/txtParkingLotName"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtParkingLotName"
+                    android:text="Name"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="10dp"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textStyle="bold"
                     android:transitionName="ParkingLotName" />
-            </LinearLayout>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1.5"
-                    android:padding="5dp"
-                    android:text="License Plate: "
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:weightSum="4"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/txtLicensePlate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtLicensePlate"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:transitionName="LicensePlate" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtLicensePlate"
+                        android:text="Plate"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:layout_weight="1"
+                        android:transitionName="LicensePlate" />
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="end">
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_access_time_24" />
+
+                        <TextView
+                            android:layout_marginStart="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_lastupdated"
+                            android:text="lastupdated"
+                            android:textSize="16sp"
+                            android:textColor="#000" />
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
