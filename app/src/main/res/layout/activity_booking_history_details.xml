@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".activity.BookingHistoryDetailsActivity"
     android:transitionName="linearLayout">
@@ -24,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding='20dp'>
+            android:padding='20dp'
+            tools:ignore="ExtraText">
 
             <LinearLayout
                 android:id="@+id/lnHistoryItem"
@@ -35,16 +37,6 @@
                 android:background="@drawable/comment_item_background"
                 android:orientation="vertical"
                 android:transitionName="linearLayout">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1.5"
-                    android:padding="5dp"
-                    android:text="Parking-lot: "
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/txtParkingLotName"
@@ -106,26 +98,56 @@
                 android:paddingRight="2dp"
                 android:paddingTop="5dp">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    app:lottie_rawRes="@raw/successed"
+                    app:lottie_autoPlay="true" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Requested: "
+                    android:text="Requested"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtCreateAt"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtCreateAt"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/txtCreateAt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="txtCreateAt"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+            //Accept
+
+            <LinearLayout
+                android:id="@+id/lnAcceptLine"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:background="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -139,26 +161,57 @@
                 android:paddingRight="2dp"
                 android:paddingTop="5dp">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    app:lottie_rawRes="@raw/successed"
+                    app:lottie_autoPlay="true" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Accepted: "
+                    android:text="Accepted"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtAccept"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtAccept"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/txtAccept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="txtAccept"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            //Reject
+
+            <LinearLayout
+                android:id="@+id/lnRejectLine"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:background="@color/black" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -172,26 +225,60 @@
                 android:paddingRight="2dp"
                 android:paddingTop="5dp">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    app:lottie_rawRes="@raw/error"
+                    app:lottie_autoPlay="true" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Rejected: "
+                    android:text="Rejected"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtReject"
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtReject"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/txtReject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="txtReject"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            //cancel
+
+            <LinearLayout
+                android:id="@+id/lnCancelLine"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:background="@color/black" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -205,38 +292,12 @@
                 android:paddingRight="2dp"
                 android:paddingTop="5dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1.5"
-                    android:padding="5dp"
-                    android:text="Cancelled: "
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/txtCancel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtCancel"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lnRating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:paddingBottom="5dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="5dp">
+                    app:lottie_rawRes="@raw/error"
+                    app:lottie_autoPlay="true" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -244,27 +305,46 @@
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Rating: "
+                    android:text="Cancelled"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
+
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="2.5"
-                    android:gravity="center_vertical">
+                    android:gravity="end">
 
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        style="?android:attr/ratingBarStyleSmall"
+                    <TextView
+                        android:id="@+id/txtCancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:progressTint="#f0750f"
-                        android:rating="5"
-                        android:stepSize="1" />
+                        android:padding="5dp"
+                        android:text="txtCancel"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
                 </LinearLayout>
+
+            </LinearLayout>
+
+            //Finished
+
+            <LinearLayout
+                android:id="@+id/lnFinishLine"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:background="@color/black" />
 
             </LinearLayout>
 
@@ -279,59 +359,133 @@
                 android:paddingRight="2dp"
                 android:paddingTop="5dp">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    app:lottie_rawRes="@raw/successed"
+                    app:lottie_autoPlay="true" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Finished: "
+                    android:text="Finished"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtFinish"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtFinish"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/txtFinish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="txtFinish"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:paddingBottom="5dp"
+                android:paddingRight="2dp"
+                android:paddingTop="5dp">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.5dp"
+                    android:background="@color/near_white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1.5"
+                        android:padding="5dp"
+                        android:text="Rating"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="end">
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:progressTint="#f0750f"
+                            android:rating="5"
+                            android:stepSize="1"
+                            android:layout_gravity="center" />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lnComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
                 android:visibility="gone"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="5dp">
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Comment: "
+                    android:text="Comment"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/txtComment"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2.5"
-                    android:padding="5dp"
-                    android:text="txtComment"
-                    android:minLines="3"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:background="@drawable/corner_comment">
+
+                    <TextView
+                        android:id="@+id/txtComment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2.5"
+                        android:padding="5dp"
+                        android:text="txtComment"
+                        android:minLines="3"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

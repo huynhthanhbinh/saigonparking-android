@@ -39,6 +39,10 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
     private LinearLayout lnReject;
     private LinearLayout lnFinish;
     private LinearLayout lnCancel;
+    private LinearLayout lnAcceptLine;
+    private LinearLayout lnRejectLine;
+    private LinearLayout lnFinishLine;
+    private LinearLayout lnCancelLine;
     private LinearLayout lnRating;
     private LinearLayout lnComment;
     private RatingBar ratingBar;
@@ -89,6 +93,10 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         lnReject = findViewById(R.id.lnReject);
         lnFinish = findViewById(R.id.lnFinish);
         lnCancel = findViewById(R.id.lnCancel);
+        lnAcceptLine = findViewById(R.id.lnAcceptLine);
+        lnRejectLine = findViewById(R.id.lnRejectLine);
+        lnFinishLine = findViewById(R.id.lnFinishLine);
+        lnCancelLine = findViewById(R.id.lnCancelLine);
         ratingBar = findViewById(R.id.ratingBar);
         comment = findViewById(R.id.txtComment);
         lnComment = findViewById(R.id.lnComment);
@@ -126,18 +134,22 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
                 case REJECTED:
                     rejected.setText(history.getTimestamp());
                     lnReject.setVisibility(View.VISIBLE);
+                    lnRejectLine.setVisibility(View.VISIBLE);
                     break;
                 case ACCEPTED:
                     acceptAt.setText(history.getTimestamp());
                     lnAccept.setVisibility(View.VISIBLE);
+                    lnAcceptLine.setVisibility(View.VISIBLE);
                     break;
                 case CANCELLED:
                     canceled.setText(history.getTimestamp());
                     lnCancel.setVisibility(View.VISIBLE);
+                    lnCancelLine.setVisibility(View.VISIBLE);
                     break;
                 case FINISHED:
                     finishAt.setText(history.getTimestamp());
                     lnFinish.setVisibility(View.VISIBLE);
+                    lnFinishLine.setVisibility(View.VISIBLE);
                     break;
                 default:
                     break;
