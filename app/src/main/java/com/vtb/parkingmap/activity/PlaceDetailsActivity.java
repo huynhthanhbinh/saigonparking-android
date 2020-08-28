@@ -200,17 +200,34 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 AlertDialog.Builder alert = new AlertDialog.Builder(PlaceDetailsActivity.this);
                 alert
                         .setTitle("Booking Ongoing Warning")
-                        .setMessage("You have on going booking !")
-                        .setNegativeButton("OK", (dialogInterface, i) ->
-                                Toast.makeText(PlaceDetailsActivity.this,
-                                        "Please complete booking before!", Toast.LENGTH_SHORT).show());
-
+                        .setMessage("You have on going booking. Please finish booking before!")
+                        .setPositiveButton("OK", null);
                 AlertDialog dialog = alert.create();
-                dialog.show();
+                dialog.setOnShowListener(dialogInterface -> {
+                    Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(v -> {
+                        Intent intent2 = new Intent(PlaceDetailsActivity.this, BookingActivity.class);
+//                        intent.putExtra("parkingLot", activity.getParkingLot());
+//                        intent.putExtra("placedetaillat", (Serializable) activity.getLatitude());
+//                        intent.putExtra("placedetaillong", (Serializable) activity.getLongitude());
+//                        intent.putExtra("mylatfromplacedetail", (Serializable) activity.getMylat());
+//                        intent.putExtra("mylongfromplacedetail", (Serializable) activity.getMylong());
+//                        intent.putExtra("postion3lat", (Serializable) activity.getPosition3lat());
+//                        intent.putExtra("postion3long", (Serializable) activity.getPosition3long());
+//                        intent.putExtra("placedetailtype", (Serializable) activity.getTmpType());
+//                        intent.putExtra("idplacedetail", (Serializable) activity.getId());
+//                        intent.putExtra("licenseplate", (Serializable) activity.getLicensePlate());
+//                        intent.putExtra("parkinghour", (Serializable) activity.getAmountOfParkingHourString());
+//                        intent.putExtra("bookingProcessingContent", bookingProcessingContent);
+                        startActivity(intent2);
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        finish();
+                    });
+                });
 
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                        .setTextColor(getResources()
-                                .getColor(R.color.colorPrimary));
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
     }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +29,9 @@ import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.activity.BookingActivity;
 import com.vtb.parkingmap.activity.ChatActivity;
+import com.vtb.parkingmap.activity.CreateRatingActivity;
 import com.vtb.parkingmap.activity.MapActivity;
 import com.vtb.parkingmap.activity.PlaceDetailsActivity;
-import com.vtb.parkingmap.activity.RatingBookingActivity;
 import com.vtb.parkingmap.activity.ViewDrawDirectionActivity;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
@@ -79,15 +80,22 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             AlertDialog.Builder alert = new AlertDialog.Builder(currentActivity);
                             alert
                                     .setTitle("Booking Confirm")
-                                    .setMessage("You have on going booking !")
-                                    .setNegativeButton("OK", (dialogInterface, i) ->
-                                            Toast.makeText(currentActivity,
-                                                    "Cancel booking successfully!", Toast.LENGTH_SHORT).show());
-
+                                    .setMessage("You have on going booking. Please finish booking before!")
+                                    .setPositiveButton("OK", null);
                             AlertDialog dialog = alert.create();
+                            dialog.setOnShowListener(dialogInterface -> {
+                                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                                button.setOnClickListener(v -> {
+                                    Intent intent2 = new Intent(currentActivity, BookingActivity.class);
+                                    currentActivity.startActivity(intent2);
+                                    currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                    currentActivity.finish();
+                                });
+                            });
+
                             dialog.show();
 
-                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                                     .setTextColor(currentActivity
                                             .getResources()
                                             .getColor(R.color.colorPrimary));
@@ -246,9 +254,8 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 //xóa history message
                                 Paper.book().delete("historymessage");
 
-                                Intent intent2 = new Intent(currentActivity, RatingBookingActivity.class);
-//
-//                                BookingActivity activity = (BookingActivity) currentActivity;
+                                Intent intent2 = new Intent(currentActivity, CreateRatingActivity.class);
+                                intent2.putExtra("isStartForResult", false);
                                 intent2.putExtra("idbooking", (Serializable) bookingFinishContentContent.getBookingId());
 
                                 currentActivity.startActivity(intent2);

@@ -10,12 +10,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingHistory;
 import com.bht.saigonparking.api.grpc.booking.BookingRating;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.CreateBookingRatingRequest;
 import com.bht.saigonparking.api.grpc.booking.GetBookingRatingRequest;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingRatingRequest;
 import com.google.protobuf.StringValue;
@@ -42,10 +44,14 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
     private RatingBar ratingBar;
     private TextView comment;
     private Button btnUpdate;
-    private static final int UPDATE_RATING_REQUEST_CODE = 12;
-    public static final int UPDATE_RATING_RESULT_CODE = 14;
-    public static final int DELETE_RATING_RESULT_CODE = 16;
 
+    /* request code: 1X, result code: 2X */
+    private static final int UPDATE_RATING_REQUEST_CODE = 12;
+    public static final int UPDATE_RATING_RESULT_CODE = 22;
+    public static final int DELETE_RATING_RESULT_CODE = 24;
+
+    private static final int CREATE_RATING_REQUEST_CODE = 14;
+    public static final int CREATE_RATING_RESULT_CODE = 26;
 
     private String originBookingId;
     private Booking booking;
@@ -93,7 +99,6 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         parkingLotName.setText(booking.getParkingLotName());
         licensePlate.setText(booking.getLicensePlate().toUpperCase());
         if (booking.getIsRated()) {
-
             callApiWithExceptionHandling(() -> {
                 GetBookingRatingRequest getBookingRatingRequest = GetBookingRatingRequest.newBuilder()
                         .setBookingId(originBookingId)
@@ -109,18 +114,9 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
                 ratingBar.setRating(bookingRating.getRating());
                 lnRating.setVisibility(View.VISIBLE);
             });
-            btnUpdate.setOnClickListener(view -> {
-                if (booking.getIsRated()) {
-                    Intent intent1 = new Intent(BookingHistoryDetailsActivity.this, UpdateRatingActivity.class);
-                    intent1.putExtra("bookingRating", bookingRating);
-                    startActivityForResult(intent1, UPDATE_RATING_REQUEST_CODE);
-                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
-            });
-        } else {
-
         }
 
+        initOnButtonUpdateClicked();
 
         bookingHistoryList.forEach(history -> {
             switch (history.getStatus()) {
@@ -151,24 +147,97 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
 
     }
 
+    private void initOnButtonUpdateClicked() {
+        btnUpdate.setOnClickListener(view -> {
+            if (booking.getIsRated()) {
+                Intent intent1 = new Intent(BookingHistoryDetailsActivity.this, UpdateRatingActivity.class);
+                intent1.putExtra("bookingRating", bookingRating);
+                startActivityForResult(intent1, UPDATE_RATING_REQUEST_CODE);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            } else {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+                alert.setTitle("Notice!");
+                alert.setMessage("You didn't rated before! Do you want to rate this booking?");
+                alert.setNegativeButton("Yes", (dialogInterface, i) -> {
+                    Intent intent2 = new Intent(BookingHistoryDetailsActivity.this
+                            , CreateRatingActivity.class);
+                    intent2.putExtra("isStartForResult", true);
+                    intent2.putExtra("idbooking", originBookingId);
+                    startActivityForResult(intent2, CREATE_RATING_REQUEST_CODE);
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                });
+                alert.setPositiveButton("No", (dialogInterface, i) -> {
+
+                });
+                AlertDialog dialog = alert.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(getResources().getColor(R.color.colorPrimary));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                        .setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPDATE_RATING_REQUEST_CODE) {
             if (resultCode == UPDATE_RATING_RESULT_CODE) {
                 UpdateBookingRatingRequest request = (UpdateBookingRatingRequest) Objects
-                        .requireNonNull(data).getSerializableExtra("updateBookingRatingRequest");
-                comment.setText(request.getComment());
-                ratingBar.setRating(request.getRating());
-                lnComment.setVisibility(request.getComment().isEmpty() ? View.GONE : View.VISIBLE);
+                        .requireNonNull(data)
+                        .getSerializableExtra("updateBookingRatingRequest");
 
-            } else { //requestCode == DELETE_RATING_RESULT_CODE
+                int updatedRating = request.getRating();
+                String updatedComment = request.getComment();
+
+                comment.setText(updatedComment);
+                ratingBar.setRating(updatedRating);
+                lnComment.setVisibility(updatedComment.isEmpty() ? View.GONE : View.VISIBLE);
+
+                bookingRating = BookingRating.newBuilder(bookingRating)
+                        .setComment(updatedComment)
+                        .setRating(updatedRating)
+                        .build();
+
+            } else if (resultCode == DELETE_RATING_RESULT_CODE) {
                 lnComment.setVisibility(View.GONE);
                 lnRating.setVisibility(View.GONE);
                 booking = Booking.newBuilder(booking).setIsRated(false).build();
+
+            } else { /* resultCode == 0 (CANCEL/BACKPRESS from another activity) */
+                // ...
+            }
+        } else if (requestCode == CREATE_RATING_REQUEST_CODE) {
+            if (resultCode == CREATE_RATING_RESULT_CODE) {
+                CreateBookingRatingRequest request = (CreateBookingRatingRequest) Objects
+                        .requireNonNull(data)
+                        .getSerializableExtra("createBookingRatingRequest");
+
+                int createdRating = request.getRating();
+                String createdComment = request.getComment();
+
+                comment.setText(createdComment);
+                ratingBar.setRating(createdRating);
+
+                bookingRating = BookingRating.newBuilder(bookingRating)
+                        .setComment(createdComment)
+                        .setRating(createdRating)
+                        .build();
+
+                lnComment.setVisibility(createdComment.isEmpty() ? View.GONE : View.VISIBLE);
+                lnRating.setVisibility(View.VISIBLE);
+                booking = Booking.newBuilder(booking).setIsRated(true).build();
+
+            } else { /* resultCode == 0 (CANCEL/BACKPRESS from another activity) */
+                // ...
             }
         }
     }
+
+    @Override
     public void onBackPressed() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();

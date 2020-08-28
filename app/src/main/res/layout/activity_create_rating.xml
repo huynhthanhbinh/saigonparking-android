@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.vtb.parkingmap.activity.RatingBookingActivity">
+    tools:context="com.vtb.parkingmap.activity.CreateRatingActivity">
 
     <TextView
         android:id="@+id/textView2"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/combiebutton"
-            android:text="Send feedback"
+            android:text="SEND FEEDBACK"
             android:textColor="@android:color/white" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="#f36f63"
-            android:text="Feedback Later"
+            android:text="FEEDBACK LATER"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
