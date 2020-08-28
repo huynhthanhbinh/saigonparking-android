@@ -24,4 +24,5 @@
     <string name="txt_rating_scale_3">Good</string>
     <string name="txt_rating_scale_4">Great</string>
     <string name="txt_rating_scale_5">Awesome. I love it</string>
+    <string name="lastupdated">lastupdated</string>
 </resources>

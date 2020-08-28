@@ -15,6 +15,7 @@ import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -171,6 +173,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
     private LottieAnimationView searchAnimation;
     private LottieAnimationView searchAnimationonMove;
     private ImageView profileLottie;
+    private ImageView saigonParking;
+    private LinearLayout lnHeader;
 
     private final float DEFAULT_ZOOM = 14;
     // xử lý sự kiện màn hình
@@ -227,6 +231,8 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
         searchAnimationonMove = findViewById(R.id.searchAnimationOnMove);
 
         profileLottie = navigationView.getHeaderView(0).findViewById(R.id.profileLottie);
+        saigonParking = navigationView.getHeaderView(0).findViewById(R.id.saigonParking);
+        lnHeader = navigationView.getHeaderView(0).findViewById(R.id.lnHeader);
         @Nullable Intent data;
 
 
@@ -1259,8 +1265,13 @@ public final class MapActivity extends BaseSaigonParkingActivity implements OnMa
                 break;
             case R.id.nav_account:
                 intent = new Intent(MapActivity.this, ProfileActivity.class);
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, profileLottie, "profileLottie");
-                startActivity(intent, options.toBundle());
+
+                Pair<View, String> p1 = Pair.create((ImageView) profileLottie, "profileLottie");
+                Pair<View, String> p2 = Pair.create((ImageView) saigonParking, "saigonParking");
+                Pair<View, String> p3 = Pair.create((LinearLayout) lnHeader, "lnHeader");
+
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, p3);
+                startActivityWithLoadingAndOption(intent, options);
                 break;
             case R.id.nav_history:
                 Intent intenthistory = new Intent(MapActivity.this, HistoryActivity.class);

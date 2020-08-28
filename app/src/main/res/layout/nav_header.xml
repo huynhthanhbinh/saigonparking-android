@@ -7,7 +7,9 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
     android:gravity="bottom"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:id="@+id/lnHeader"
+    android:transitionName="lnHeader">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +22,7 @@
 
         <ImageView
             android:id="@+id/profileLottie"
-            android:src="@drawable/profile"
+            android:src="@mipmap/ic_launcher_round"
             android:adjustViewBounds="true"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -28,17 +30,21 @@
             android:transitionName="profileLottie" />
 
         <ImageView
+            android:id="@+id/saigonParking"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:contentDescription="@string/nav_text"
             android:src="@drawable/textsg"
-            android:layout_weight="7" />
+            android:layout_weight="7"
+            android:transitionName="saigonParking" />
     </LinearLayout>
 
     <TextView
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#7c828e"
+        android:textColor="#000"
+        android:textStyle="bold"
         android:text="@string/homepage" />
 
     <TextView

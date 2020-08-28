@@ -44,7 +44,7 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
     private RatingBar ratingBar;
     private TextView comment;
     private Button btnUpdate;
-
+    private TextView tv_lastupdated;
     /* request code: 1X, result code: 2X */
     private static final int UPDATE_RATING_REQUEST_CODE = 12;
     public static final int UPDATE_RATING_RESULT_CODE = 22;
@@ -94,7 +94,7 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         lnComment = findViewById(R.id.lnComment);
         lnRating = findViewById(R.id.lnRating);
         btnUpdate = findViewById(R.id.btnUpdateRating);
-
+        tv_lastupdated = findViewById(R.id.tv_lastupdated);
 
         parkingLotName.setText(booking.getParkingLotName());
         licensePlate.setText(booking.getLicensePlate().toUpperCase());
@@ -117,7 +117,7 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
         }
 
         initOnButtonUpdateClicked();
-
+        tv_lastupdated.setText(booking.getCreatedAt());
         bookingHistoryList.forEach(history -> {
             switch (history.getStatus()) {
                 case CREATED:
