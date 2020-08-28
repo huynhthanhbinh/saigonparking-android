@@ -40,7 +40,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:padding="5dp"
-                    android:text="Parkinglot Name: "
+                    android:text="Parking-lot: "
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
