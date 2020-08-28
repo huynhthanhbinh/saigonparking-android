@@ -7,7 +7,7 @@ import android.util.Log;
 import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
 import com.google.protobuf.Empty;
 import com.vtb.parkingmap.SaigonParkingApplication;
-import com.vtb.parkingmap.activity.PermissionsActivity;
+import com.vtb.parkingmap.activity.LoginActivity;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
@@ -58,7 +58,6 @@ public final class SaigonParkingExceptionHandler {
             }
 
             saigonParkingDatabase.saveNewAccessToken(refreshTokenResponse.getAccessToken());
-            //currentActivity.reload();
 
         } catch (StatusRuntimeException exception) {
             String internalErrorCode = exception.getStatus().getDescription();
@@ -71,7 +70,7 @@ public final class SaigonParkingExceptionHandler {
 
                 /* BachMap bat user dang nhap lai: back to login activity */
                 if (currentActivityOrService instanceof BaseSaigonParkingActivity) {
-                    ((BaseSaigonParkingActivity) currentActivityOrService).changeActivity(PermissionsActivity.class);
+                    ((BaseSaigonParkingActivity) currentActivityOrService).changeActivity(LoginActivity.class);
                 }
             }
         }
