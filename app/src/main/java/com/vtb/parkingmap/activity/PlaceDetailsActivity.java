@@ -46,6 +46,7 @@ import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
+import com.vtb.parkingmap.activity.commentAdapter.commentAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.models.Cardcomment;
@@ -62,7 +63,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import commentAdapter.commentAdapter;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
 
@@ -511,8 +511,8 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         commentAdapter = new commentAdapter(this, modelArrayList);
         commentViewPaper.setOffscreenPageLimit(10);
         commentViewPaper.setAdapter(commentAdapter);
+        commentViewPaper.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
-
 
     public void funcXemChiTietDanhGia(View view) {
         Intent intent = new Intent(PlaceDetailsActivity.this, CommentRatingActivity.class);

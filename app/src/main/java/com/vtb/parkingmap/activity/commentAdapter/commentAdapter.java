@@ -1,4 +1,4 @@
-package commentAdapter;
+package com.vtb.parkingmap.activity.commentAdapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
