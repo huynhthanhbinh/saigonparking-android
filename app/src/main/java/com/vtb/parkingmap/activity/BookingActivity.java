@@ -98,8 +98,8 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             tmpType = (int) intent.getSerializableExtra("placedetailtype");
             licensePlate = intent.getStringExtra("licenseplate");
             amountOfParkingHourString = intent.getStringExtra("parkinghour");
-            currentBooking = (Booking) intent.getSerializableExtra("Booking");
-            imageData = (byte[]) intent.getSerializableExtra("QRcode");
+            imageData = bookingProcessingContent.getQrCode().toByteArray();
+
             if ((Boolean) intent.getSerializableExtra("accept") != null) {
                 accepted = (Boolean) intent.getSerializableExtra("accept");
             }
@@ -316,7 +316,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         if (((SaigonParkingApplication) getApplicationContext()).getIsBooked()) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
-                    .setBookingId(currentBooking.getId())
+                    .setBookingId((bookingProcessingContent == null)
+                            ? currentBooking.getId()
+                            : bookingProcessingContent.getBookingId())
                     .setReason("DON'T WANT TO BOOK")
                     .build();
             SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
