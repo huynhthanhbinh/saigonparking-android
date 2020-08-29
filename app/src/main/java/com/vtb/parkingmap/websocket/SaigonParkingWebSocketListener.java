@@ -230,6 +230,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             });
                             AlertDialog dialog = alert2.create();
                             dialog.show();
+                            dialog.setCanceledOnTouchOutside(false);
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                                     .setTextColor(currentActivity.getResources().getColor(R.color.colorPrimary));
                         } catch (InvalidProtocolBufferException e) {
@@ -264,6 +265,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             });
                             AlertDialog dialog = alert.create();
                             dialog.show();
+                            dialog.setCanceledOnTouchOutside(false);
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                                     .setTextColor(currentActivity.getResources().getColor(R.color.colorPrimary));
                         } catch (InvalidProtocolBufferException e) {

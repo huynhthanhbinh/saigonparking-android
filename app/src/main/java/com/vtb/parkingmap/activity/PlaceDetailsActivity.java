@@ -303,6 +303,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         });
 
         dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
     }

@@ -111,6 +111,9 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             tmpType = (int) intent.getSerializableExtra("placedetailtype");
             mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
             mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
+            if ((Boolean) intent.getSerializableExtra("accept") != null) {
+                accepted = (Boolean) intent.getSerializableExtra("accept");
+            }
 
             //Handle null when reInstall App
             position3lat = intent.getDoubleExtra("postion3lat", 1234);
