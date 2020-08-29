@@ -72,13 +72,15 @@ public class MapActivitySupport {
 
         Intent intent = new Intent(mapActivity, BookingActivity.class);
         intent.putExtra("parkingLot", currentParkingLot);
-        intent.putExtra("mylatfromplacedetail", saigonParkingDatabase.getBookingEntity().getMylat());
-        intent.putExtra("mylongfromplacedetail", saigonParkingDatabase.getBookingEntity().getLongitude());
-        intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
-        intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
-        intent.putExtra("placedetailtype", saigonParkingDatabase.getCurrentBookingEntity().getTmpType());
         intent.putExtra("Booking", currentBooking);
         intent.putExtra("QRcode", (Serializable) qrCode);
+        intent.putExtra("placedetailtype", currentParkingLot.getTypeValue());
+        intent.putExtra("mylatfromplacedetail", currentParkingLot.getLatitude());
+        intent.putExtra("mylongfromplacedetail", currentParkingLot.getLongitude());
+
+        //handle null value when reInstall app
+        intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
+        intent.putExtra("postion3long", saigonParkingDatabase.getBookingEntity().getPosition3long());
         mapActivity.startActivityWithLoading(intent);
     }
 

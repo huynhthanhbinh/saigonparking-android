@@ -25,7 +25,6 @@ import com.vtb.parkingmap.BuildConfig;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
-import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -106,14 +105,16 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             }
         } else {
             parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
-            mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
-            mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
-            position3lat = intent.getDoubleExtra("postion3lat", 1234);
-            position3long = intent.getDoubleExtra("postion3long", 1234);
             currentBooking = (Booking) intent.getSerializableExtra("Booking");
-            tmpType = (int) intent.getSerializableExtra("placedetailtype");
             licensePlate = currentBooking.getLicensePlate();
             imageData = (byte[]) intent.getSerializableExtra("QRcode");
+            tmpType = (int) intent.getSerializableExtra("placedetailtype");
+            mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
+            mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
+
+            //Handle null when reInstall App
+            position3lat = intent.getDoubleExtra("postion3lat", 1234);
+            position3long = intent.getDoubleExtra("postion3long", 1234);
 
             Log.d("BachMap", "sau khi tat app: " + parkingLot);
         }
@@ -312,10 +313,10 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     }
 
     private void cancelBooking() {
-        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
+        if (((SaigonParkingApplication) getApplicationContext()).getIsBooked()) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
-                    .setBookingId(saigonParkingDatabase.getBookingEntity().getBookingId())
+                    .setBookingId(currentBooking.getId())
                     .setReason("DON'T WANT TO BOOK")
                     .build();
             SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()

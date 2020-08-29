@@ -234,15 +234,14 @@ public final class BookingHistoryDetailsActivity extends BaseSaigonParkingActivi
                 comment.setText(createdComment);
                 ratingBar.setRating(createdRating);
 
-                bookingRating = BookingRating.newBuilder(bookingRating)
-                        .setComment(createdComment)
-                        .setRating(createdRating)
-                        .build();
-
                 lnComment.setVisibility(createdComment.isEmpty() ? View.GONE : View.VISIBLE);
                 lnRating.setVisibility(View.VISIBLE);
-                booking = Booking.newBuilder(booking).setIsRated(true).build();
 
+                bookingRating = (booking.getIsRated())
+                        ? BookingRating.newBuilder(bookingRating).setComment(createdComment).setRating(createdRating).build()
+                        : BookingRating.newBuilder().setBookingId(booking.getId()).setComment(createdComment).setRating(createdRating).build();
+
+                booking = Booking.newBuilder(booking).setIsRated(true).build();
             } else { /* resultCode == 0 (CANCEL/BACKPRESS from another activity) */
                 // ...
             }

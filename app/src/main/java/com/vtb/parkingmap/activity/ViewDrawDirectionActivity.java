@@ -26,6 +26,7 @@ import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -233,19 +234,19 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
 
         place1 = new MarkerOptions().position(new LatLng(mylatfromplacedetail, mylongfromplacedetail)).title("My Location");
         switch (type) {
-            case 2:
+            case ParkingLotType.STREET_VALUE:
                 place2 = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.makerstreet))
                         .position(new LatLng(placedetaillat, placedetaillong)).title("Parking Lot ");
 
                 break;
-            case 1:
+            case ParkingLotType.PRIVATE_VALUE:
                 place2 = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.makerprivate))
                         .position(new LatLng(placedetaillat, placedetaillong)).title("Parking Lot ");
 
                 break;
-            case 0:
+            case ParkingLotType.BUILDING_VALUE:
                 place2 = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.makerbuilding))
                         .position(new LatLng(placedetaillat, placedetaillong)).title("Parking Lot ");

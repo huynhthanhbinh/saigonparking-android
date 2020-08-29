@@ -353,15 +353,15 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         switch (type) {
             case STREET:
                 iconType.setImageResource(R.drawable.plstreet);
-                tmpType = 2;
+                tmpType = ParkingLotType.STREET_VALUE;
                 break;
             case PRIVATE:
                 iconType.setImageResource(R.drawable.plprivate);
-                tmpType = 1;
+                tmpType = ParkingLotType.PRIVATE_VALUE;
                 break;
             case BUILDING:
                 iconType.setImageResource(R.drawable.plbuilding);
-                tmpType = 0;
+                tmpType = ParkingLotType.BUILDING_VALUE;
                 break;
             default:
                 break;

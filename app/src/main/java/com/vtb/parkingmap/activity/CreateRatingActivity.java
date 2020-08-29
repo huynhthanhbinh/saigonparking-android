@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRatingRequest;
-import com.google.protobuf.Empty;
+import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 
@@ -91,9 +91,10 @@ public final class CreateRatingActivity extends BaseSaigonParkingActivity {
                     .build();
 
             callApiWithExceptionHandling(() -> serviceStubs.getBookingServiceStub()
-                    .createBookingRating(request, new StreamObserver<Empty>() {
+                    .createBookingRating(request, new StreamObserver<Int64Value>() {
+
                         @Override
-                        public void onNext(Empty value) {
+                        public void onNext(Int64Value value) {
                             Log.d("BachMap", "create rating successfully");
                         }
 
@@ -116,6 +117,7 @@ public final class CreateRatingActivity extends BaseSaigonParkingActivity {
         }
     }
 
+    @SuppressWarnings("unused")
     private void onClickFeedBackLaterBackToMapActivity(View view) {
         Intent feedbacklater = new Intent(CreateRatingActivity.this, MapActivity.class);
         feedbacklater.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -123,6 +125,7 @@ public final class CreateRatingActivity extends BaseSaigonParkingActivity {
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
+    @SuppressWarnings("unused")
     private void onClickFeedBackLaterBackToBookingDetailActivity(View view) {
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);

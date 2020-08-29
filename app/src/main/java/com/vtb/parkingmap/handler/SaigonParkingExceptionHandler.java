@@ -12,6 +12,7 @@ import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
 /**
@@ -33,6 +34,10 @@ public final class SaigonParkingExceptionHandler {
     }
 
     public void handleCommunicationException(StatusRuntimeException exception, ContextWrapper currentActivityOrService) {
+        if (Status.UNAVAILABLE.equals(exception.getStatus())) {
+            
+        }
+
         String internalErrorCode = exception.getStatus().getDescription();
         Log.d("BachMap", String
                 .format("onHandleCommunicationException: %s, currentActivity: %s",
