@@ -33,7 +33,6 @@ import com.bht.saigonparking.api.grpc.booking.BookingRating;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.ParkingLotBookingAndRatingStatistic;
-import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
@@ -49,7 +48,6 @@ import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
-import com.vtb.parkingmap.database.SaigonParkingDatabaseEntity;
 import com.vtb.parkingmap.models.Cardcomment;
 import com.vtb.parkingmap.models.Photos;
 import com.vtb.parkingmap.models.Results;
@@ -65,7 +63,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 import commentAdapter.commentAdapter;
-import io.paperdb.Paper;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
 
@@ -86,6 +83,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private LinearLayout linearLayoutRating;
     private LinearLayout linearLayoutShowDistanceOnMap;
     private LinearLayout btnimgshow;
+    private LinearLayout linearLayoutPrice;
     private TextView txtOpen;
     private TextView txtClose;
     private TextView txtStatus;
@@ -206,22 +204,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 dialog.setOnShowListener(dialogInterface -> {
                     Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     button.setOnClickListener(v -> {
-                        Intent intent2 = new Intent(PlaceDetailsActivity.this, BookingActivity.class);
-//                        intent.putExtra("parkingLot", activity.getParkingLot());
-//                        intent.putExtra("placedetaillat", (Serializable) activity.getLatitude());
-//                        intent.putExtra("placedetaillong", (Serializable) activity.getLongitude());
-//                        intent.putExtra("mylatfromplacedetail", (Serializable) activity.getMylat());
-//                        intent.putExtra("mylongfromplacedetail", (Serializable) activity.getMylong());
-//                        intent.putExtra("postion3lat", (Serializable) activity.getPosition3lat());
-//                        intent.putExtra("postion3long", (Serializable) activity.getPosition3long());
-//                        intent.putExtra("placedetailtype", (Serializable) activity.getTmpType());
-//                        intent.putExtra("idplacedetail", (Serializable) activity.getId());
-//                        intent.putExtra("licenseplate", (Serializable) activity.getLicensePlate());
-//                        intent.putExtra("parkinghour", (Serializable) activity.getAmountOfParkingHourString());
-//                        intent.putExtra("bookingProcessingContent", bookingProcessingContent);
-                        startActivity(intent2);
-                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                        finish();
+                        dialog.dismiss();
                     });
                 });
 
@@ -274,8 +257,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                 .setTitle("Booking Confirm")
                 .setMessage("Please input your License Plate and Parking Hour!")
                 .setPositiveButton("Yes", null)
-                .setNegativeButton("No", (dialogInterface, i) ->
-                        Toast.makeText(PlaceDetailsActivity.this, "Cancel booking successfully!", Toast.LENGTH_SHORT).show());
+                .setNegativeButton("No", null);
 
         txtlicensePlate = view.findViewById(R.id.txtlicensePlate);
         txtAmountOfParkingHour = view.findViewById(R.id.txtAmountOfParkingHour);
@@ -342,6 +324,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private void initEventListeners() {
         linearLayoutShowDistanceOnMap.setOnClickListener(this::onClickShowDistanceOnGoogleMap);
+        linearLayoutPrice.setOnClickListener(this::onClickShowPriceOfParking);
     }
 
     @SuppressLint("SetTextI18n")
@@ -404,13 +387,13 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         imageData = information.getImageData().toByteArray();
     }
 
+
     /**
-     * on click drawn direction
+     * on click show distance on map
      */
 
-
     /**
-     * on click show distion on map
+     * on click show parking's price
      */
     private void onClickShowDistanceOnGoogleMap(View view) {
 
@@ -437,31 +420,36 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     }
 
+    private void onClickShowPriceOfParking(View view) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(PlaceDetailsActivity.this);
+        alert
+                .setTitle("Pricing per hour")
+                .setMessage("First hour: 25.000VND/h\n" +
+                        "Two hours after: 20.000VND/h\n" +
+                        "The next hours: 15.000VND/h")
+                .setPositiveButton("OK", null);
+        AlertDialog dialog = alert.create();
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(v -> {
+                dialog.dismiss();
+            });
+        });
+
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
     private void init() {
         imageView = findViewById(R.id.imageView);
         btnimgshow = findViewById(R.id.imgshow);
         lblPhone = findViewById(R.id.lblPhone);
-        //đã có dự lieu booking
-//        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
-//            // hien nut cancel + chat + huong di bai xe ( flagbook = false )
-//            btnimgshow.setVisibility(View.INVISIBLE);
-//            flagbook = false;
-//            btnimgcancel.setVisibility(View.VISIBLE);
-//            btnimgchat.setVisibility(View.VISIBLE);
-//            btnimgdirection.setVisibility(View.VISIBLE);
-//
-//        } else {//chua co
-//            // hien nut booking thoi
-//            btnimgshow.setVisibility(View.VISIBLE);
-//            flagbook = true;
-//            btnimgchat.setVisibility(View.INVISIBLE);
-//            btnimgdirection.setVisibility(View.INVISIBLE);
-//            btnimgcancel.setVisibility(View.INVISIBLE);
-//        }
-
 
         linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutShowDistanceOnMap = findViewById(R.id.linearLayoutShowDistanceOnMap);
+        linearLayoutPrice = findViewById(R.id.imgPrice);
         textViewName = findViewById(R.id.textViewName);
         textViewRating = findViewById(R.id.textViewRating);
         textViewAddress = findViewById(R.id.textViewAddress);
@@ -550,39 +538,6 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
         }
 
-    }
-
-    private void cancelbooking() {
-        if (!saigonParkingDatabase.getCurrentBookingEntity().equals(SaigonParkingDatabaseEntity.DEFAULT_INSTANCE)) {
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            BookingCancellationContent bookingCancellationContent = BookingCancellationContent.newBuilder()
-                    .setBookingId(saigonParkingDatabase.getBookingEntity().getBookingId())
-                    .setReason("DON'T WANT TO BOOK")
-                    .build();
-            SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
-                    .setReceiverId(id)
-                    .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
-                    .setType(SaigonParkingMessage.Type.BOOKING_CANCELLATION)
-                    .setTimestamp(timestamp.toString())
-                    .setContent(bookingCancellationContent.toByteString())
-                    .build();
-
-            sendWebSocketBinaryMessage(saigonParkingMessage);
-
-            //xử lý gọi database
-            saigonParkingDatabase.DeleteBookTable();
-            ((SaigonParkingApplication) getApplicationContext()).setIsBooked(false);
-            //xóa history message
-            Paper.book().delete("historymessage");
-
-            runOnUiThread(() -> {
-                btnimgshow.setVisibility(View.VISIBLE);
-                btnimgcancel.setVisibility(View.INVISIBLE);
-                btnimgchat.setVisibility(View.INVISIBLE);
-            });
-
-
-        }
     }
 
 
