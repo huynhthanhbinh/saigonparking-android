@@ -184,6 +184,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             intent.putExtra("licenseplate", (Serializable) activity.getLicensePlate());
                             intent.putExtra("parkinghour", (Serializable) activity.getAmountOfParkingHourString());
                             intent.putExtra("bookingProcessingContent", bookingProcessingContent);
+                            intent.putExtra("accept", (boolean) false);
 
                             if (activity.getPosition3lat() != 1234) {
                                 intent.putExtra("position3lat", (Serializable) activity.getPosition3lat());

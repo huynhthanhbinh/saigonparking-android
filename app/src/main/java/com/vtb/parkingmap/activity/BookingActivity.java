@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bht.saigonparking.api.grpc.booking.Booking;
-import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
 import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
@@ -86,9 +85,6 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
         bookingProcessingContent = (BookingProcessingContent) intent.getSerializableExtra("bookingProcessingContent");
         setContentView(R.layout.activity_booking);
         if (bookingProcessingContent != null) {
-            Log.d("BachMap", "\n\nbooking id: " + bookingProcessingContent.getBookingId());
-            Log.d("BachMap", "\n\ncreated at: " + bookingProcessingContent.getCreatedAt());
-            Log.d("BachMap", "\n\nQR code: " + bookingProcessingContent.getQrCode());
 
             parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
             mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
@@ -103,6 +99,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             if ((Boolean) intent.getSerializableExtra("accept") != null) {
                 accepted = (Boolean) intent.getSerializableExtra("accept");
             }
+
         } else {
             parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
             currentBooking = (Booking) intent.getSerializableExtra("Booking");
@@ -111,9 +108,7 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             tmpType = (int) intent.getSerializableExtra("placedetailtype");
             mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
             mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
-            if ((Boolean) intent.getSerializableExtra("accept") != null) {
-                accepted = (Boolean) intent.getSerializableExtra("accept");
-            }
+            accepted = (Boolean) intent.getSerializableExtra("accept");
 
             //Handle null when reInstall App
             position3lat = intent.getDoubleExtra("postion3lat", 1234);
@@ -297,15 +292,15 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
             txtAddress.setText(parkingLot.getInformation().getAddress());
             txtCreatedAt.setText(currentBooking.getCreatedAt());
             Log.d("BachMap", "current booking" + currentBooking.getLatestStatus());
-            txtStatus.setText(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
-                    ? "Processing"
-                    : "Accepted");
-            iconPendding.setVisibility(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
-                    ? View.VISIBLE
-                    : View.GONE);
-            iconAccept.setVisibility(currentBooking.getLatestStatus().equals(BookingStatus.CREATED)
-                    ? View.GONE
-                    : View.VISIBLE);
+            if (accepted) {
+                txtStatus.setText("Accepted");
+                iconPendding.setVisibility(View.GONE);
+                iconAccept.setVisibility(View.VISIBLE);
+            } else {
+                txtStatus.setText("Processing");
+                iconPendding.setVisibility(View.VISIBLE);
+                iconAccept.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.vtb.parkingmap.support;
 import android.content.Intent;
 
 import com.bht.saigonparking.api.grpc.booking.Booking;
+import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
@@ -77,6 +78,11 @@ public class MapActivitySupport {
         intent.putExtra("placedetailtype", currentParkingLot.getTypeValue());
         intent.putExtra("mylatfromplacedetail", currentParkingLot.getLatitude());
         intent.putExtra("mylongfromplacedetail", currentParkingLot.getLongitude());
+        if (currentBooking.getLatestStatus().equals(BookingStatus.ACCEPTED)) {
+            intent.putExtra("accept", (boolean) true);
+        } else {
+            intent.putExtra("accept", (boolean) false);
+        }
 
         //handle null value when reInstall app
         intent.putExtra("postion3lat", saigonParkingDatabase.getBookingEntity().getPosition3lat());
