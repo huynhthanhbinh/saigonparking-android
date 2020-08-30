@@ -424,10 +424,10 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private void onClickShowPriceOfParking(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(PlaceDetailsActivity.this);
         alert
-                .setTitle("Pricing per hour")
+                .setTitle("Parking Unit Price")
                 .setMessage("First hour: 25.000VND/h\n" +
-                        "Two hours after: 20.000VND/h\n" +
-                        "The next hours: 15.000VND/h")
+                        "Next two hours: 20.000VND/h\n" +
+                        "Following hours: 15.000VND/h")
                 .setPositiveButton("OK", null);
         AlertDialog dialog = alert.create();
         dialog.setOnShowListener(dialogInterface -> {
