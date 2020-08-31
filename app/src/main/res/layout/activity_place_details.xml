@@ -23,6 +23,7 @@
             android:transitionName="imagePlaceDetail" />
 
         <LinearLayout
+            android:id="@+id/mainLnLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -170,6 +171,7 @@
                     android:textColor="@color/black" />
 
                 <LinearLayout
+                    android:id="@+id/infoLnLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -358,6 +360,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/ratingLnLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -437,7 +440,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_attach_money_black_24dp" />
+                    android:src="@drawable/ic_baseline_commute_24" />
 
                 <TextView
                     android:layout_width="wrap_content"

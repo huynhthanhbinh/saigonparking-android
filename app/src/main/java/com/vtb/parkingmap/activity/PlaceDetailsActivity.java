@@ -17,6 +17,8 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -123,6 +125,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
     private double ratingAverage;
     private long numberOfRating;
     private byte[] imageData;
+    private LinearLayout mainLnLayout;
+    private LinearLayout infoLnLayout;
+    private LinearLayout ratingLnLayout;
 
     private OkHttpClient client;
     private RecyclerView recyclerView;
@@ -213,6 +218,18 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
                         .setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
+
+        //Animation Element on Start Activity
+        Animation trans = AnimationUtils.loadAnimation(this, R.anim.fade_item);
+        imageView.startAnimation(trans);
+        trans = AnimationUtils.loadAnimation(this, R.anim.fade_item_2);
+        mainLnLayout.startAnimation(trans);
+        trans = AnimationUtils.loadAnimation(this, R.anim.fade_item_3);
+        infoLnLayout.startAnimation(trans);
+        trans = AnimationUtils.loadAnimation(this, R.anim.fade_item_4);
+        ratingLnLayout.startAnimation(trans);
+        trans = AnimationUtils.loadAnimation(this, R.anim.fade_item_5);
+        commentViewPaper.startAnimation(trans);
     }
 
     @Override
@@ -457,7 +474,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         textViewAvailability = findViewById(R.id.textViewAvailability);
         texttotalSlot = findViewById(R.id.TotalSlot);
         ratingBar = findViewById(R.id.ratingBar);
-
+        mainLnLayout = findViewById(R.id.mainLnLayout);
+        infoLnLayout = findViewById(R.id.infoLnLayout);
+        ratingLnLayout = findViewById(R.id.ratingLnLayout);
 
         txtOpen = findViewById(R.id.txtOpen);
         txtClose = findViewById(R.id.txtClose);
