@@ -99,7 +99,11 @@ public final class HistoryActivity extends BaseSaigonParkingActivity {
         adapter = new BookingHistoryListAdapter(getApplicationContext(), mProductList);
         lvProduct.setAdapter(adapter);
         if (countallhistory != 0) {
-            txtcount.setText(((pagenumber * 10) + "/" + (countallhistory)));
+            if (countallhistory < 10) {
+                txtcount.setText(((countallhistory) + "/" + (countallhistory)));
+            } else {
+                txtcount.setText(((pagenumber * 10) + "/" + (countallhistory)));
+            }
         } else {
             txtcount.setText(((0) + "/" + (countallhistory)));
         }

@@ -110,6 +110,9 @@ public final class CommentRatingActivity extends BaseSaigonParkingActivity {
         adapter = new ProductListAdapter(getApplicationContext(), mProductList);
         lvProduct.setAdapter(adapter);
         if (countallrating != 0) {
+            if (countallrating < 10) {
+                txtcount.setText(String.valueOf((countallrating) + "/" + String.valueOf(countallrating)));
+            }
             txtcount.setText(String.valueOf((pagenumber * 10) + "/" + String.valueOf(countallrating)));
         } else {
             txtcount.setText(String.valueOf((0) + "/" + String.valueOf(countallrating)));
