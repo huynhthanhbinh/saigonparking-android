@@ -86,10 +86,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             dialog.setOnShowListener(dialogInterface -> {
                                 Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                                 button.setOnClickListener(v -> {
-                                    Intent intent2 = new Intent(currentActivity, BookingActivity.class);
-                                    currentActivity.startActivity(intent2);
-                                    currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                    currentActivity.finish();
+                                    dialog.dismiss();
                                 });
                             });
 
