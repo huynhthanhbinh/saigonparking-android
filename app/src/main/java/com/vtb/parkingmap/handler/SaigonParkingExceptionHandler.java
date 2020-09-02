@@ -3,6 +3,7 @@ package com.vtb.parkingmap.handler;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
 import com.google.protobuf.Empty;
@@ -35,7 +36,7 @@ public final class SaigonParkingExceptionHandler {
 
     public void handleCommunicationException(StatusRuntimeException exception, ContextWrapper currentActivityOrService) {
         if (Status.UNAVAILABLE.equals(exception.getStatus())) {
-            
+            Toast.makeText(currentActivityOrService.getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
         }
 
         String internalErrorCode = exception.getStatus().getDescription();
