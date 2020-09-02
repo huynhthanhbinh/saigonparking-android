@@ -28,6 +28,15 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".activity.SplashScreenActivity"
+            android:theme="@style/AppTheme.NoStatusBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.BookingHistoryDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.UpdateRatingActivity" />
@@ -58,13 +67,7 @@
             android:theme="@style/AppTheme.PlaceDetail" />
         <activity
             android:name=".activity.PermissionsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SignupActivity"
             android:theme="@style/AppTheme.NoActionBar" />

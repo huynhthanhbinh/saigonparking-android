@@ -19,7 +19,8 @@
             android:orientation="vertical"
             android:paddingTop="250dp"
             android:paddingStart="24dp"
-            android:paddingEnd="24dp">
+            android:paddingEnd="24dp"
+            android:clipToPadding="false">
             <!-- Name Label -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -141,7 +142,7 @@
 
 
             <!-- Signup Button -->
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_signup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
