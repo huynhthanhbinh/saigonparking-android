@@ -185,17 +185,32 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
 
         if (username.isEmpty()) {
-            _username.setError("Pls input UserName");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _username.setError("Pls input UserName");
+                }
+            });
             return "Empty";
 
         }
 
         if (password.isEmpty()) {
-            _passwordText.setError("Pls Input password");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _passwordText.setError("Pls Input password");
+                }
+            });
             return "Empty";
         }
         if (password.length() < 4 || password.length() > 10) {
-            _passwordText.setError(" PassWord between 4 and 10 alphanumeric characters");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _passwordText.setError(" PassWord between 4 and 10 alphanumeric characters");
+                }
+            });
             return "Empty";
         }
 
