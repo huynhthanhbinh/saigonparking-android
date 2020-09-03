@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.vtb.parkingmap.activity.UpdateRatingActivity">
+    tools:context="com.vtb.parkingmap.activity.UpdateRatingActivity"
+    android:background="@color/primary">
 
     <TextView
         android:id="@+id/textView2"

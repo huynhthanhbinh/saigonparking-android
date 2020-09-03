@@ -101,6 +101,7 @@ public abstract class BaseSaigonParkingActivity extends AppCompatActivity {
 
     private void showProgressDialog() {
         ((SaigonParkingApplication) getApplicationContext()).setCurrentProgressDialog(progressDialog);
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 

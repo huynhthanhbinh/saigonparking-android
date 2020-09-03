@@ -23,7 +23,8 @@
         android:paddingLeft="24dp"
         android:paddingTop="56dp"
         android:paddingRight="24dp"
-        android:weightSum="10">
+        android:weightSum="10"
+        android:clipToPadding="false">
 
         <androidx.legacy.widget.Space
             android:layout_width="match_parent"
@@ -77,14 +78,36 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <RelativeLayout
             android:id="@+id/btn_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/loginbutton"
-            android:text="Login"
-            android:textColor="#000" />
+            android:clickable="true"
+            android:elevation="8dp">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loadingLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                app:lottie_rawRes="@raw/loading"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/textLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="LOGIN"
+                android:layout_centerInParent="true"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:visibility="visible"
+                android:gravity="center" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/link_signup"

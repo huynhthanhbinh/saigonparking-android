@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
@@ -37,9 +38,13 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
     @BindView(R.id.input_password)
     EditText _passwordText;
     @BindView(R.id.btn_login)
-    Button _loginButton;
+    RelativeLayout _loginButton;
     @BindView(R.id.link_signup)
     TextView _signupLink;
+    @BindView(R.id.loadingLogin)
+    LottieAnimationView loadingLogin;
+    @BindView(R.id.textLogin)
+    TextView textLogin;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,24 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
             @Override
             public void onClick(View v) {
-                login(v);
+                textLogin.setVisibility(View.GONE);
+                loadingLogin.setVisibility(View.VISIBLE);
+                v.setClickable(false);
+
+                Thread StartActivityPermission = new Thread() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            super.run();
+                        } catch (Exception e) {
+
+                        } finally {
+                            login(v);
+                        }
+                    }
+                };
+                StartActivityPermission.start();
             }
         });
 
@@ -78,13 +100,37 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
         switch (val) {
             case "Empty":
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textLogin.setVisibility(View.VISIBLE);
+                        loadingLogin.setVisibility(View.GONE);
+                        v.setClickable(true);
+                    }
+                });
                 return;
             case "Success":
                 break;
             case "UNAVAILABLE":
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textLogin.setVisibility(View.VISIBLE);
+                        loadingLogin.setVisibility(View.GONE);
+                        v.setClickable(true);
+                    }
+                });
                 onLoginFailed(v, "Can't connect to Server!");
                 return;
             default:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textLogin.setVisibility(View.VISIBLE);
+                        loadingLogin.setVisibility(View.GONE);
+                        v.setClickable(true);
+                    }
+                });
                 onLoginFailed(v, "Username or Password was Wrong!");
                 return;
         }
@@ -139,17 +185,32 @@ public final class LoginActivity extends BaseSaigonParkingActivity {
 
 
         if (username.isEmpty()) {
-            _username.setError("Pls input UserName");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _username.setError("Pls input UserName");
+                }
+            });
             return "Empty";
 
         }
 
         if (password.isEmpty()) {
-            _passwordText.setError("Pls Input password");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _passwordText.setError("Pls Input password");
+                }
+            });
             return "Empty";
         }
         if (password.length() < 4 || password.length() > 10) {
-            _passwordText.setError(" PassWord between 4 and 10 alphanumeric characters");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _passwordText.setError(" PassWord between 4 and 10 alphanumeric characters");
+                }
+            });
             return "Empty";
         }
 

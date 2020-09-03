@@ -531,6 +531,9 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
         commentViewPaper.setOffscreenPageLimit(10);
         commentViewPaper.setAdapter(commentAdapter);
         commentViewPaper.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        if (modelArrayList.isEmpty()) {
+            commentViewPaper.setVisibility(View.GONE);
+        }
     }
 
     public void funcXemChiTietDanhGia(View view) {
