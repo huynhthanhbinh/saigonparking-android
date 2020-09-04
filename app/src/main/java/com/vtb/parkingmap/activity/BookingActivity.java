@@ -1,6 +1,5 @@
 package com.vtb.parkingmap.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -148,14 +147,11 @@ public final class BookingActivity extends BaseSaigonParkingActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CHAT_REQUEST_CODE || requestCode == DRAW_DIRECTION_REQUEST_CODE) {
-            Toast.makeText(BookingActivity.this, "TAISMILE RESULTCODE: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_CODE_ACCEPTED) {
                 accepted = true;
                 txtStatus.setText("Accepted");
                 iconPendding.setVisibility(View.GONE);
                 iconAccept.setVisibility(View.VISIBLE);
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(BookingActivity.this, "TAISMILE", Toast.LENGTH_SHORT).show();
             }
         }
     }

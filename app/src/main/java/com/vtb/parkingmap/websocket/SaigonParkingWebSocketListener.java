@@ -111,7 +111,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                             jsonObject.put("message", textMessageContent.getMessage());
                             jsonObject.put("isSent", false);
                             applicationContext.getMessageAdapter().addItem(jsonObject);
-                            addNotification(textMessageContent.getSender(), textMessageContent.getMessage());
+                            addNotification(textMessageContent.getSender(), textMessageContent.getMessage(), message.getSenderId());
 
                         } catch (Exception exception) {
                             Log.d("BachMap", exception.getMessage());
@@ -119,7 +119,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                     }
                     break;
                     case BOOKING_ACCEPTANCE:
-                        Toast.makeText(currentActivity, "Accepted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(currentActivity, "Parkinglot Accepted!", Toast.LENGTH_SHORT).show();
                         BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
 
                         if (currentActivity instanceof ChatActivity) {
@@ -300,7 +300,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
     }
 
-    private void addNotification(String name, String message) {
+    private void addNotification(String name, String message, Long parkingLotId) {
 
         // Builds your notification
         ComponentName componentName;
@@ -313,15 +313,16 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
 
 
         if (!tmp.equals(componentName.getShortClassName())) {
-            Intent notificationIntent = new Intent(currentActivity, BookingActivity.class);
+            Intent notificationIntent = new Intent(currentActivity, ChatActivity.class);
+            notificationIntent.putExtra("idparkinglot", (Serializable) parkingLotId);
             notificationIntent.setAction(Intent.ACTION_MAIN);
             notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             PendingIntent contentIntent = PendingIntent.getActivity(currentActivity, 0,
                     notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(currentActivity,
-                    "ID_Notification")
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(currentActivity, "ID_Notification")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle(name)
@@ -335,7 +336,6 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
             // Add as notification
             NotificationManager manager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.notify(0, builder.build());
-
         }
     }
 }
