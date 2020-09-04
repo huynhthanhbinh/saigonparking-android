@@ -143,8 +143,7 @@ public final class SignupActivity extends BaseSaigonParkingActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(getBaseContext(), "Sign up failed", Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
