@@ -47,7 +47,9 @@
         <activity
             android:name=".activity.HistoryActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.ChatActivity" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:label="Chat" />
         <activity android:name=".activity.MainChatActivity" />
         <activity
             android:name=".activity.ViewDrawDirectionActivity"

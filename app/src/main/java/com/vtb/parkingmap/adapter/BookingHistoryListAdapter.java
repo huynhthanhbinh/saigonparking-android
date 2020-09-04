@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.support;
+package com.vtb.parkingmap.adapter;
 
 
 import android.content.Context;
@@ -10,13 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.models.History;
 
 import java.util.List;
 
 /**
  * Created by vtb
  */
-public class BookingHistoryListAdapter extends BaseAdapter {
+public final class BookingHistoryListAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<History> mProductList;

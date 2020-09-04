@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.CommentRating;
+package com.vtb.parkingmap.models;
 
 
 /**

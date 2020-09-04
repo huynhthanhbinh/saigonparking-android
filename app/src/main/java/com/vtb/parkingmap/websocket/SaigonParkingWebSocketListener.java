@@ -119,6 +119,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                     }
                     break;
                     case BOOKING_ACCEPTANCE:
+                        Toast.makeText(currentActivity, "Accepted!", Toast.LENGTH_SHORT).show();
                         BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
 
                         if (currentActivity instanceof ChatActivity) {
@@ -237,7 +238,6 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                         break;
 
                     case BOOKING_FINISH:
-
                         try {
                             Log.d("BachMap", "ĐTAI");
                             BookingFinishContent bookingFinishContentContent = BookingFinishContent.parseFrom(message.getContent());
@@ -254,12 +254,13 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
                                 Paper.book().delete("historymessage");
 
                                 Intent intent2 = new Intent(currentActivity, CreateRatingActivity.class);
+                                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent2.putExtra("isStartForResult", false);
                                 intent2.putExtra("idbooking", (Serializable) bookingFinishContentContent.getBookingId());
 
                                 currentActivity.startActivity(intent2);
                                 currentActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                currentActivity.finish();
+                                currentActivity.finishAffinity();
                             });
                             AlertDialog dialog = alert.create();
                             dialog.show();
@@ -310,11 +311,14 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
         componentName = activityManager.getRunningTasks(1).get(0).topActivity;
         String tmp = "com.vtb.parkingmap.activity.ChatActivity";
 
-        if (!tmp.equals(componentName.getShortClassName())) {
 
-            Intent notificationIntent = new Intent(currentActivity, ChatActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(currentActivity,
-                    0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (!tmp.equals(componentName.getShortClassName())) {
+            Intent notificationIntent = new Intent(currentActivity, BookingActivity.class);
+            notificationIntent.setAction(Intent.ACTION_MAIN);
+            notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            PendingIntent contentIntent = PendingIntent.getActivity(currentActivity, 0,
+                    notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(currentActivity,
                     "ID_Notification")
@@ -331,6 +335,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
             // Add as notification
             NotificationManager manager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.notify(0, builder.build());
+
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.CommentRating;
+package com.vtb.parkingmap.adapter;
 
 
 import android.content.Context;
@@ -9,13 +9,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.models.Product;
 
 import java.util.List;
 
 /**
  * Created by vtb
  */
-public class ProductListAdapter extends BaseAdapter {
+public final class ProductListAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<Product> mProductList;

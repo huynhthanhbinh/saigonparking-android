@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.activity.commentAdapter;
+package com.vtb.parkingmap.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,11 +15,11 @@ import com.vtb.parkingmap.models.Cardcomment;
 
 import java.util.ArrayList;
 
-public class commentAdapter extends PagerAdapter {
+public final class CommentAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<Cardcomment> modelArrayList;
 
-    public commentAdapter(Context context, ArrayList<Cardcomment> modelArrayList) {
+    public CommentAdapter(Context context, ArrayList<Cardcomment> modelArrayList) {
         this.context = context;
         this.modelArrayList = modelArrayList;
     }

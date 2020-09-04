@@ -86,12 +86,12 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mancj.slideup.SlideUp;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
+import com.vtb.parkingmap.adapter.ParkingListAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.models.MyPlaces;
 import com.vtb.parkingmap.models.Results;
 import com.vtb.parkingmap.remotes.GoogleApiService;
 import com.vtb.parkingmap.support.MapActivitySupport;
-import com.vtb.parkingmap.support.ParkingListAdapter;
 import com.vtb.parkingmap.support.TouchableWrapper;
 
 import java.io.Serializable;

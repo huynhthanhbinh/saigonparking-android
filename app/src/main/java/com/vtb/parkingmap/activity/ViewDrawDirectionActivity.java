@@ -2,6 +2,7 @@ package com.vtb.parkingmap.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,11 +41,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 import com.google.protobuf.Int64Value;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.adapter.ParkingListAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.directionhelpers.FetchURL;
 import com.vtb.parkingmap.directionhelpers.TaskLoadedCallback;
 import com.vtb.parkingmap.service.HiddenService;
-import com.vtb.parkingmap.support.ParkingListAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -94,6 +95,8 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
     byte[] imageData;
     private BookingProcessingContent bookingProcessingContent;
     boolean accepted = false;
+
+    private BookingActivity parentActivity;
 
     List<ParkingLotResult> recommendedParkingLotResultList;
     ParkingListAdapter adapter;
@@ -196,20 +199,12 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
             Log.d(TAG, "gps provider does not exist " + ex.getMessage());
         }
 
-        parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
         mylatfromplacedetail = (double) intent.getSerializableExtra("mylatfromplacedetail");
         mylongfromplacedetail = (double) intent.getSerializableExtra("mylongfromplacedetail");
         placedetaillat = (double) intent.getSerializableExtra("placedetaillat");
         placedetaillong = (double) intent.getSerializableExtra("placedetaillong");
         type = (int) intent.getSerializableExtra("placedetailtype");
         idplacedetail = (long) intent.getSerializableExtra("idplacedetail");
-        licensePlate = intent.getStringExtra("licenseplate");
-        amountOfParkingHourString = intent.getStringExtra("parkinghour");
-        currentBooking = (Booking) intent.getSerializableExtra("Booking");
-        imageData = (byte[]) intent.getSerializableExtra("QRcode");
-        accepted = (Boolean) intent.getSerializableExtra("accept");
-        bookingProcessingContent = (BookingProcessingContent) intent.getSerializableExtra("bookingProcessingContent");
-
 
         myposition3lat = intent.getDoubleExtra("position3lat", 1234);
         myposition3long = intent.getDoubleExtra("position3long", 1234);
@@ -294,21 +289,8 @@ public final class ViewDrawDirectionActivity extends BaseSaigonParkingActivity i
 
     @Override
     public void onBackPressed() {
-        Intent intent1 = new Intent(ViewDrawDirectionActivity.this, BookingActivity.class);
-        intent1.putExtra("parkingLot", (Serializable) parkingLot);
-        intent1.putExtra("mylatfromplacedetail", (Serializable) mylatfromplacedetail);
-        intent1.putExtra("mylongfromplacedetail", (Serializable) mylongfromplacedetail);
-        intent1.putExtra("postion3lat", (Serializable) myposition3lat);
-        intent1.putExtra("postion3long", (Serializable) myposition3long);
-        intent1.putExtra("placedetailtype", (Serializable) type);
-        intent1.putExtra("licenseplate", (Serializable) licensePlate);
-        intent1.putExtra("parkinghour", (Serializable) amountOfParkingHourString);
-        intent1.putExtra("Booking", (Serializable) currentBooking);
-        intent1.putExtra("QRcode", (Serializable) imageData);
-        intent1.putExtra("bookingProcessingContent", bookingProcessingContent);
-        intent1.putExtra("accept", accepted);
-        startActivity(intent1);
-        super.onBackPressed();
+        setResult(accepted ? BookingActivity.RESULT_CODE_ACCEPTED : Activity.RESULT_CANCELED);
+        finish();
     }
 
     public void webSocketSetStateAccept() {

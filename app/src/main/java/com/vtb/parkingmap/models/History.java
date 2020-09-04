@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.support;
+package com.vtb.parkingmap.models;
 
 
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;

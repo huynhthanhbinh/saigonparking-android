@@ -12,9 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
-import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
+import com.vtb.parkingmap.adapter.MessageAdapter;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.handler.SaigonParkingExceptionHandler;

@@ -45,10 +45,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
-import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
 import com.vtb.parkingmap.R;
 import com.vtb.parkingmap.SaigonParkingApplication;
-import com.vtb.parkingmap.activity.commentAdapter.commentAdapter;
+import com.vtb.parkingmap.adapter.CommentAdapter;
+import com.vtb.parkingmap.adapter.MessageAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
 import com.vtb.parkingmap.models.Cardcomment;
@@ -138,7 +138,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
 
     private ViewPager commentViewPaper;
     private ArrayList<Cardcomment> modelArrayList;
-    private commentAdapter commentAdapter;
+    private CommentAdapter commentAdapter;
     List<BookingRating> getallcomment;
 
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
@@ -527,7 +527,7 @@ public final class PlaceDetailsActivity extends BaseSaigonParkingActivity {
             ));
         }
 
-        commentAdapter = new commentAdapter(this, modelArrayList);
+        commentAdapter = new CommentAdapter(this, modelArrayList);
         commentViewPaper.setOffscreenPageLimit(10);
         commentViewPaper.setAdapter(commentAdapter);
         commentViewPaper.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

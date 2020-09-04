@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.support;
+package com.vtb.parkingmap.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 @SuppressLint("all")
 @SuppressWarnings("all")
-public class ParkingListAdapter extends ArrayAdapter<ParkingLotResult> {
+public final class ParkingListAdapter extends ArrayAdapter<ParkingLotResult> {
 
     private static final String TAG = "ParkingListAdapter";
 

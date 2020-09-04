@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vtb.parkingmap.R;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public final class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

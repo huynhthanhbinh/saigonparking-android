@@ -1,4 +1,4 @@
-package com.vtb.parkingmap.MessageChatAdapter;
+package com.vtb.parkingmap.adapter;
 
 
 import android.graphics.Bitmap;

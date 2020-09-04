@@ -23,10 +23,10 @@ import com.bht.saigonparking.api.grpc.booking.CountAllRatingsOfParkingLotRequest
 import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
-import com.vtb.parkingmap.CommentRating.Product;
-import com.vtb.parkingmap.CommentRating.ProductListAdapter;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.adapter.ProductListAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
+import com.vtb.parkingmap.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;

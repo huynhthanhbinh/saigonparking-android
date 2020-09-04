@@ -1,5 +1,6 @@
 package com.vtb.parkingmap.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,7 +38,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 import io.paperdb.Paper;
@@ -49,6 +49,7 @@ import okio.ByteString;
 
 public final class ChatActivity extends BaseSaigonParkingActivity implements TextWatcher {
 
+    private BookingActivity parentActivity;
     private String name;
     private String SERVER_PATH = BuildConfig.WEBSOCKET_PREFIX + BuildConfig.GATEWAY_HOST + ":" + BuildConfig.GATEWAY_HTTP_PORT + "/contact";
     private EditText messageEdit;
@@ -79,19 +80,6 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
         name = "VU TUONG BACH";
         Intent intent = getIntent();
         id = (long) intent.getSerializableExtra("idparkinglot");
-        parkingLot = (ParkingLot) intent.getSerializableExtra("parkingLot");
-        mylat = (double) intent.getSerializableExtra("mylatfromplacedetail");
-        mylong = (double) intent.getSerializableExtra("mylongfromplacedetail");
-        position3lat = intent.getDoubleExtra("postion3lat", 1234);
-        position3long = intent.getDoubleExtra("postion3long", 1234);
-        tmpType = (int) intent.getSerializableExtra("placedetailtype");
-        licensePlate = intent.getStringExtra("licenseplate");
-        amountOfParkingHourString = intent.getStringExtra("parkinghour");
-        currentBooking = (Booking) intent.getSerializableExtra("Booking");
-        imageData = (byte[]) intent.getSerializableExtra("QRcode");
-        accepted = (Boolean) intent.getSerializableExtra("accept");
-        bookingProcessingContent = (BookingProcessingContent) intent.getSerializableExtra("bookingProcessingContent");
-
     }
 
     @Override
@@ -308,21 +296,8 @@ public final class ChatActivity extends BaseSaigonParkingActivity implements Tex
 
     @Override
     public void onBackPressed() {
-        Intent intent1 = new Intent(ChatActivity.this, BookingActivity.class);
-        intent1.putExtra("parkingLot", (Serializable) parkingLot);
-        intent1.putExtra("mylatfromplacedetail", (Serializable) mylat);
-        intent1.putExtra("mylongfromplacedetail", (Serializable) mylong);
-        intent1.putExtra("postion3lat", (Serializable) position3lat);
-        intent1.putExtra("postion3long", (Serializable) position3long);
-        intent1.putExtra("placedetailtype", (Serializable) tmpType);
-        intent1.putExtra("licenseplate", (Serializable) licensePlate);
-        intent1.putExtra("parkinghour", (Serializable) amountOfParkingHourString);
-        intent1.putExtra("Booking", (Serializable) currentBooking);
-        intent1.putExtra("QRcode", (Serializable) imageData);
-        intent1.putExtra("bookingProcessingContent", bookingProcessingContent);
-        intent1.putExtra("accept", accepted);
-        startActivity(intent1);
-        super.onBackPressed();
+        setResult(accepted ? BookingActivity.RESULT_CODE_ACCEPTED : Activity.RESULT_CANCELED);
+        finish();
     }
 
     private void sendImage(Bitmap image) {

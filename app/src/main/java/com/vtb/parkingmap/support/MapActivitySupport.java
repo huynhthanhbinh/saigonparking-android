@@ -45,6 +45,7 @@ public class MapActivitySupport {
 
             if (isCustomerHasOnGoingBooking) {
                 onCustomerHasOnGoingBooking();
+                saigonParkingApplication.initWebsocketConnection();
             }
         });
     }

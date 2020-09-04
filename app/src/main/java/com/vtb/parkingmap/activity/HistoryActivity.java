@@ -20,9 +20,9 @@ import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.google.protobuf.Empty;
 import com.vtb.parkingmap.R;
+import com.vtb.parkingmap.adapter.BookingHistoryListAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
-import com.vtb.parkingmap.support.BookingHistoryListAdapter;
-import com.vtb.parkingmap.support.History;
+import com.vtb.parkingmap.models.History;
 
 import java.io.Serializable;
 import java.util.ArrayList;

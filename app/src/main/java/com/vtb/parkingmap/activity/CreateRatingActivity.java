@@ -110,6 +110,8 @@ public final class CreateRatingActivity extends BaseSaigonParkingActivity {
                                 Intent result = new Intent();
                                 result.putExtra("createBookingRatingRequest", request);
                                 setResult(BookingHistoryDetailsActivity.CREATE_RATING_RESULT_CODE, result);
+                            } else {
+                                changeActivity(MapActivity.class);
                             }
                             finish();
                         }

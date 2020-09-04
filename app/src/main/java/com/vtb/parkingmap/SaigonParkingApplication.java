@@ -6,7 +6,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 
-import com.vtb.parkingmap.MessageChatAdapter.MessageAdapter;
+import com.vtb.parkingmap.adapter.MessageAdapter;
 import com.vtb.parkingmap.base.BaseSaigonParkingActivity;
 import com.vtb.parkingmap.communication.SaigonParkingServiceStubs;
 import com.vtb.parkingmap.database.SaigonParkingDatabase;
