@@ -35,6 +35,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="50dp"
             android:layout_marginRight="16dp"
+            android:visibility="gone"
             app:ss_animationDuration="600"
             app:ss_iconPadding="10dp"
             app:ss_iconSize="20dp"
