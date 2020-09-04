@@ -317,7 +317,7 @@ public final class SaigonParkingWebSocketListener extends WebSocketListener {
             notificationIntent.putExtra("idparkinglot", (Serializable) parkingLotId);
             notificationIntent.setAction(Intent.ACTION_MAIN);
             notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             PendingIntent contentIntent = PendingIntent.getActivity(currentActivity, 0,
                     notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
